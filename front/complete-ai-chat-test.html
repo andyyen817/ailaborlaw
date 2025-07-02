@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完整AI聊天功能診斷</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .section { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .success { color: #28a745; } .error { color: #dc3545; } .warning { color: #ffc107; }
+        .button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .button:hover { background: #0056b3; }
+        .result { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin: 10px 0; font-family: monospace; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
+        .input-group { margin: 10px 0; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input, .input-group textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .progress { width: 100%; background: #f0f0f0; border-radius: 4px; margin: 10px 0; }
+        .progress-bar { height: 20px; background: #007bff; border-radius: 4px; transition: width 0.3s; text-align: center; color: white; line-height: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🤖 AI聊天功能完整診斷工具</h1>
+    
+    <!-- 認證測試 -->
+    <div class="section">
+        <h2>🔐 步驟1: 認證測試</h2>
+        <div class="input-group">
+            <label>測試用戶郵箱:</label>
+            <input type="email" id="testEmail" value="test@example.com">
+        </div>
+        <div class="input-group">
+            <label>測試用戶密碼:</label>
+            <input type="password" id="testPassword" value="test123">
+        </div>
+        <button class="button" onclick="testLogin()">1. 測試登錄</button>
+        <button class="button" onclick="checkAuthStatus()">2. 檢查認證狀態</button>
+        <div id="authResult" class="result"></div>
+    </div>
+
+    <!-- 會話管理測試 -->
+    <div class="section">
+        <h2>💬 步驟2: 會話管理測試</h2>
+        <button class="button" onclick="testSessionList()">1. 測試獲取會話列表</button>
+        <button class="button" onclick="testCreateSession()">2. 測試創建會話</button>
+        <button class="button" onclick="testSessionDetails()">3. 測試獲取會話詳情</button>
+        <div id="sessionResult" class="result"></div>
+    </div>
+
+    <!-- 消息發送測試 -->
+    <div class="section">
+        <h2>🚀 步驟3: 消息發送測試</h2>
+        <div class="input-group">
+            <label>測試消息內容:</label>
+            <textarea id="testMessage" rows="3">請問加班費如何計算？</textarea>
+        </div>
+        <button class="button" onclick="testSendMessage()">發送測試消息</button>
+        <div id="messageResult" class="result"></div>
+    </div>
+
+    <!-- 前端頁面測試 -->
+    <div class="section">
+        <h2>🖥️ 步驟4: 前端頁面測試</h2>
+        <button class="button" onclick="testHomePageAPI()">測試首頁"最近諮詢"</button>
+        <button class="button" onclick="testMobilePageAPI()">測試移動端"最近諮詢"</button>
+        <button class="button" onclick="testChatPageAPI()">測試聊天頁面API</button>
+        <div id="frontendResult" class="result"></div>
+    </div>
+
+    <!-- 綜合測試 -->
+    <div class="section">
+        <h2>🎯 步驟5: 完整流程測試</h2>
+        <div class="progress">
+            <div id="progressBar" class="progress-bar" style="width: 0%">0%</div>
+        </div>
+        <button class="button" onclick="runCompleteTest()">執行完整測試流程</button>
+        <div id="completeResult" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/api/v1';
+        let currentToken = '';
+        let currentSessionId = '';
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : '📝';
+            return `[${timestamp}] ${prefix} ${message}`;
+        }
+        
+        async function apiRequest(url, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            
+            if (currentToken) {
+                headers['Authorization'] = currentToken.startsWith('Bearer ') ? currentToken : `Bearer ${currentToken}`;
+            }
+            
+            const response = await fetch(`${API_BASE_URL}${url}`, {
+                ...options,
+                headers
+            });
+            
+            const data = await response.json();
+            
+            return {
+                response,
+                data,
+                ok: response.ok,
+                status: response.status
+            };
+        }
+        
+        async function testLogin() {
+            const resultEl = document.getElementById('authResult');
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            resultEl.textContent = log('正在測試登錄...');
+            
+            try {
+                const result = await apiRequest('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
+                
+                resultEl.textContent = log('登錄請求完成') + '\n\n' +
+                    `狀態碼: ${result.status}\n` +
+                    `響應: ${JSON.stringify(result.data, null, 2)}`;
+                
+                if (result.ok && result.data.success && result.data.data.token) {
+                    currentToken = result.data.data.token;
+                    localStorage.setItem('auth_token', currentToken);
+                    if (result.data.data.user) {
+                        localStorage.setItem('auth_user', JSON.stringify(result.data.data.user));
+                        if (result.data.data.user.id) {
+                            localStorage.setItem('auth_user_id', result.data.data.user.id);
+                        }
+                    }
+                    resultEl.textContent += '\n\n' + log('登錄成功！Token已保存', 'success');
+                } else {
+                    resultEl.textContent += '\n\n' + log(`登錄失敗：${result.data.message || '未知錯誤'}`, 'error');
+                }
+            } catch (error) {
+                resultEl.textContent = log(`網絡錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function checkAuthStatus() {
+            const resultEl = document.getElementById('authResult');
+            
+            currentToken = localStorage.getItem('auth_token') || currentToken;
+            
+            if (!currentToken) {
+                resultEl.textContent = log('未找到認證Token', 'error');
+                return;
+            }
+            
+            resultEl.textContent = log('檢查認證狀態...');
+            
+            try {
+                const result = await apiRequest('/users/me');
+                
+                resultEl.textContent = log('認證檢查完成') + '\n\n' +
+                    `Token: ${currentToken.substring(0, 20)}...\n` +
+                    `狀態碼: ${result.status}\n` +
+                    `響應: ${JSON.stringify(result.data, null, 2)}`;
+                
+                if (result.ok && result.data.success) {
+                    resultEl.textContent += '\n\n' + log('認證有效！', 'success');
+                } else {
+                    resultEl.textContent += '\n\n' + log(`認證失敗：${result.data.message || '未知錯誤'}`, 'error');
+                }
+            } catch (error) {
+                resultEl.textContent = log(`認證檢查錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function testSessionList() {
+            const resultEl = document.getElementById('sessionResult');
+            
+            if (!currentToken) {
+                resultEl.textContent = log('請先完成登錄', 'error');
+                return;
+            }
+            
+            resultEl.textContent = log('測試獲取會話列表...');
+            
+            try {
+                const result = await apiRequest('/chat/sessions', {
+                    method: 'GET'
+                });
+                
+                resultEl.textContent = log('會話列表請求完成') + '\n\n' +
+                    `狀態碼: ${result.status}\n` +
+                    `響應: ${JSON.stringify(result.data, null, 2)}`;
+                
+                if (result.ok && result.data.success) {
+                    resultEl.textContent += '\n\n' + log('會話列表獲取成功！', 'success');
+                    if (result.data.data.sessions && result.data.data.sessions.length > 0) {
+                        currentSessionId = result.data.data.sessions[0].sessionId;
+                        resultEl.textContent += '\n' + log(`已選擇第一個會話ID: ${currentSessionId}`);
+                    }
+                } else {
+                    resultEl.textContent += '\n\n' + log(`會話列表獲取失敗：${result.data.message || '未知錯誤'}`, 'error');
+                }
+            } catch (error) {
+                resultEl.textContent = log(`網絡錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function testCreateSession() {
+            const resultEl = document.getElementById('sessionResult');
+            
+            if (!currentToken) {
+                resultEl.textContent = log('請先完成登錄', 'error');
+                return;
+            }
+            
+            resultEl.textContent = log('測試創建新會話...');
+            
+            try {
+                const result = await apiRequest('/chat/sessions', {
+                    method: 'POST',
+                    body: JSON.stringify({ title: '診斷測試會話' })
+                });
+                
+                resultEl.textContent = log('創建會話請求完成') + '\n\n' +
+                    `狀態碼: ${result.status}\n` +
+                    `響應: ${JSON.stringify(result.data, null, 2)}`;
+                
+                if (result.ok && result.data.success) {
+                    currentSessionId = result.data.data.sessionId;
+                    resultEl.textContent += '\n\n' + log(`會話創建成功！ID: ${currentSessionId}`, 'success');
+                } else {
+                    resultEl.textContent += '\n\n' + log(`會話創建失敗：${result.data.message || '未知錯誤'}`, 'error');
+                }
+            } catch (error) {
+                resultEl.textContent = log(`網絡錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function testSessionDetails() {
+            const resultEl = document.getElementById('sessionResult');
+            
+            if (!currentToken || !currentSessionId) {
+                resultEl.textContent = log('請先創建會話或獲取會話列表', 'error');
+                return;
+            }
+            
+            resultEl.textContent = log('測試獲取會話詳情...');
+            
+            try {
+                const result = await apiRequest(`/chat/sessions/${currentSessionId}`, {
+                    method: 'GET'
+                });
+                
+                resultEl.textContent = log('會話詳情請求完成') + '\n\n' +
+                    `會話ID: ${currentSessionId}\n` +
+                    `狀態碼: ${result.status}\n` +
+                    `響應: ${JSON.stringify(result.data, null, 2)}`;
+                
+                if (result.ok && result.data.success) {
+                    resultEl.textContent += '\n\n' + log('會話詳情獲取成功！', 'success');
+                } else {
+                    resultEl.textContent += '\n\n' + log(`會話詳情獲取失敗：${result.data.message || '未知錯誤'}`, 'error');
+                }
+            } catch (error) {
+                resultEl.textContent = log(`網絡錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function testSendMessage() {
+            const resultEl = document.getElementById('messageResult');
+            const message = document.getElementById('testMessage').value;
+            
+            if (!currentToken || !currentSessionId) {
+                resultEl.textContent = log('請先創建會話', 'error');
+                return;
+            }
+            
+            if (!message.trim()) {
+                resultEl.textContent = log('請輸入測試消息', 'error');
+                return;
+            }
+            
+            resultEl.textContent = log('測試發送消息...');
+            
+            try {
+                const result = await apiRequest(`/chat/sessions/${currentSessionId}/messages`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        content: message,
+                        messageType: 'question'
+                    })
+                });
+                
+                resultEl.textContent = log('發送消息請求完成') + '\n\n' +
+                    `會話ID: ${currentSessionId}\n` +
+                    `消息內容: ${message}\n` +
+                    `狀態碼: ${result.status}\n` +
+                    `響應: ${JSON.stringify(result.data, null, 2)}`;
+                
+                if (result.ok && result.data.success) {
+                    resultEl.textContent += '\n\n' + log('消息發送成功！', 'success');
+                    if (result.data.data.aiResponse) {
+                        const aiContent = result.data.data.aiResponse.content;
+                        const preview = aiContent.length > 200 ? aiContent.substring(0, 200) + '...' : aiContent;
+                        resultEl.textContent += '\n\nAI回復預覽:\n' + preview;
+                    }
+                } else {
+                    resultEl.textContent += '\n\n' + log(`消息發送失敗：${result.data.message || '未知錯誤'}`, 'error');
+                }
+            } catch (error) {
+                resultEl.textContent = log(`網絡錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function testHomePageAPI() {
+            const resultEl = document.getElementById('frontendResult');
+            
+            if (!currentToken) {
+                resultEl.textContent = log('請先完成登錄', 'error');
+                return;
+            }
+            
+            resultEl.textContent = log('測試首頁"最近諮詢"API...');
+            
+            try {
+                // 模擬首頁的API調用
+                const result = await apiRequest('/chat/sessions', {
+                    method: 'GET'
+                });
+                
+                resultEl.textContent = log('首頁API測試完成') + '\n\n' +
+                    `API端點: /chat/sessions\n` +
+                    `狀態碼: ${result.status}\n` +
+                    `響應: ${JSON.stringify(result.data, null, 2)}`;
+                
+                if (result.ok && result.data.success) {
+                    resultEl.textContent += '\n\n' + log('首頁API正常！', 'success');
+                    if (result.data.data.sessions) {
+                        resultEl.textContent += '\n' + log(`找到 ${result.data.data.sessions.length} 個會話`);
+                    }
+                } else {
+                    resultEl.textContent += '\n\n' + log(`首頁API失敗：${result.data.message || '未知錯誤'}`, 'error');
+                }
+            } catch (error) {
+                resultEl.textContent = log(`首頁API錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function testMobilePageAPI() {
+            const resultEl = document.getElementById('frontendResult');
+            
+            if (!currentToken) {
+                resultEl.textContent = log('請先完成登錄', 'error');
+                return;
+            }
+            
+            resultEl.textContent = log('測試移動端"最近諮詢"API...');
+            
+            try {
+                // 模擬移動端的API調用（與首頁相同）
+                const result = await apiRequest('/chat/sessions', {
+                    method: 'GET'
+                });
+                
+                resultEl.textContent = log('移動端API測試完成') + '\n\n' +
+                    `API端點: /chat/sessions\n` +
+                    `狀態碼: ${result.status}\n` +
+                    `響應: ${JSON.stringify(result.data, null, 2)}`;
+                
+                if (result.ok && result.data.success) {
+                    resultEl.textContent += '\n\n' + log('移動端API正常！', 'success');
+                } else {
+                    resultEl.textContent += '\n\n' + log(`移動端API失敗：${result.data.message || '未知錯誤'}`, 'error');
+                }
+            } catch (error) {
+                resultEl.textContent = log(`移動端API錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function testChatPageAPI() {
+            const resultEl = document.getElementById('frontendResult');
+            
+            if (!currentToken) {
+                resultEl.textContent = log('請先完成登錄', 'error');
+                return;
+            }
+            
+            resultEl.textContent = log('測試聊天頁面API...');
+            
+            try {
+                // 模擬聊天頁面的所有API調用
+                const tests = [
+                    { name: '獲取會話列表', endpoint: '/chat/sessions' },
+                    { name: '創建會話', endpoint: '/chat/sessions', method: 'POST', body: { title: '測試會話' } }
+                ];
+                
+                let allResults = '';
+                let allPassed = true;
+                
+                for (const test of tests) {
+                    try {
+                        const result = await apiRequest(test.endpoint, {
+                            method: test.method || 'GET',
+                            body: test.body ? JSON.stringify(test.body) : undefined
+                        });
+                        
+                        allResults += `\n${test.name}: ${result.ok ? '✅ 成功' : '❌ 失敗'}`;
+                        if (!result.ok) {
+                            allPassed = false;
+                            allResults += ` - ${result.data.message}`;
+                        }
+                    } catch (error) {
+                        allResults += `\n${test.name}: ❌ 錯誤 - ${error.message}`;
+                        allPassed = false;
+                    }
+                }
+                
+                resultEl.textContent = log('聊天頁面API測試完成') + allResults + '\n\n' +
+                    log(allPassed ? '所有聊天頁面API正常！' : '部分聊天頁面API存在問題', allPassed ? 'success' : 'error');
+                
+            } catch (error) {
+                resultEl.textContent = log(`聊天頁面API錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function runCompleteTest() {
+            const progressBar = document.getElementById('progressBar');
+            const resultEl = document.getElementById('completeResult');
+            
+            resultEl.textContent = log('開始執行完整測試流程...');
+            
+            const steps = [
+                { name: '登錄測試', func: testLogin },
+                { name: '認證檢查', func: checkAuthStatus },
+                { name: '會話列表', func: testSessionList },
+                { name: '創建會話', func: testCreateSession },
+                { name: '發送消息', func: testSendMessage },
+                { name: '首頁API', func: testHomePageAPI }
+            ];
+            
+            let passedTests = 0;
+            
+            for (let i = 0; i < steps.length; i++) {
+                const progress = ((i + 1) / steps.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                progressBar.textContent = `${Math.round(progress)}%`;
+                
+                try {
+                    await steps[i].func();
+                    passedTests++;
+                    resultEl.textContent += '\n' + log(`${steps[i].name}: 完成`, 'success');
+                } catch (error) {
+                    resultEl.textContent += '\n' + log(`${steps[i].name}: 失敗 - ${error.message}`, 'error');
+                }
+                
+                // 添加延遲以便觀察進度
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            const finalResult = passedTests === steps.length ? 
+                `🎉 完整測試完成！所有 ${steps.length} 項測試通過` :
+                `⚠️ 測試完成：${passedTests}/${steps.length} 項通過`;
+            
+            resultEl.textContent += '\n\n' + log(finalResult, passedTests === steps.length ? 'success' : 'warning');
+        }
+        
+        // 頁面載入時檢查認證狀態
+        window.addEventListener('load', function() {
+            const savedToken = localStorage.getItem('auth_token');
+            if (savedToken) {
+                currentToken = savedToken;
+                document.getElementById('authResult').textContent = log('檢測到已保存的Token，可直接進行測試');
+            }
+        });
+    </script>
+</body>
+</html> 

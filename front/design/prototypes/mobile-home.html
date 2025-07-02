@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>首页 - AI劳基法顾问</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义移动样式 -->
+  <link rel="stylesheet" href="css/mobile-styles.css">
+</head>
+<body>
+  <!-- iPhone 16模拟容器 -->
+  <div class="iphone-container">
+    <!-- 动态岛 -->
+    <div class="dynamic-island"></div>
+    
+    <!-- 状态栏 -->
+    <div class="status-bar">
+      <div class="status-bar-time">20:28</div>
+      <div class="status-bar-icons">
+        <i class="fas fa-signal"></i>
+        <i class="fas fa-wifi"></i>
+        <i class="fas fa-battery-three-quarters"></i>
+      </div>
+    </div>
+    
+    <!-- 应用内容区 -->
+    <div class="app-content">
+      <div class="page-container">
+        <!-- 欢迎横幅 -->
+        <div class="card" style="background-color: var(--primary); color: white; padding: 20px;">
+          <h1 class="text-xl font-bold">欢迎，张先生！</h1>
+          <p class="mt-2 text-sm opacity-90">您的AI劳基法顾问已准备就绪</p>
+        </div>
+        
+        <!-- 咨询次数卡片 -->
+        <div class="card mt-4 flex justify-between items-center p-4">
+          <div>
+            <span class="text-sm text-gray-500">剩余咨询次数</span>
+            <h2 class="text-2xl font-bold text-primary">10次</h2>
+          </div>
+          <button class="bg-blue-100 text-primary px-4 py-2 rounded-full text-sm font-medium">
+            获取更多
+          </button>
+        </div>
+        
+        <!-- 快速操作 -->
+        <h2 class="text-lg font-semibold mt-6 mb-3">快速操作</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <a href="mobile-ai-chat.html" class="card p-4">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                <i class="fas fa-comment-alt"></i>
+              </div>
+              <div class="ml-3">
+                <h3 class="font-medium">AI咨询</h3>
+                <p class="text-xs text-gray-500">智能解答法规问题</p>
+              </div>
+            </div>
+          </a>
+          
+          <a href="mobile-expert-consult.html" class="card p-4">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div class="ml-3">
+                <h3 class="font-medium">专家咨询</h3>
+                <p class="text-xs text-gray-500">真人专家解答</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        
+        <!-- 热门话题 -->
+        <h2 class="text-lg font-semibold mt-6 mb-3">热门话题</h2>
+        <div class="card">
+          <ul class="divide-y divide-gray-100">
+            <li>
+              <a href="mobile-ai-chat.html" class="flex items-center p-3">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div class="ml-3 flex-1">
+                  <h4 class="text-sm font-medium">工时与加班费计算</h4>
+                  <p class="text-xs text-gray-500">了解工时上限与计算方式</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </a>
+            </li>
+            
+            <li>
+              <a href="mobile-ai-chat.html" class="flex items-center p-3">
+                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                  <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="ml-3 flex-1">
+                  <h4 class="text-sm font-medium">特休假与请假规定</h4>
+                  <p class="text-xs text-gray-500">特休假计算与权益说明</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </a>
+            </li>
+            
+            <li>
+              <a href="mobile-ai-chat.html" class="flex items-center p-3">
+                <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-red-600">
+                  <i class="fas fa-file-contract"></i>
+                </div>
+                <div class="ml-3 flex-1">
+                  <h4 class="text-sm font-medium">劳动合同与解雇条件</h4>
+                  <p class="text-xs text-gray-500">合法解雇条件与资遣费计算</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- 最新资讯 -->
+        <h2 class="text-lg font-semibold mt-6 mb-3">最新资讯</h2>
+        <div class="space-y-4">
+          <div class="card overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="会议场景" class="w-full h-32 object-cover">
+            <div class="p-3">
+              <div class="flex items-center mb-2">
+                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">政策更新</span>
+                <span class="ml-2 text-xs text-gray-500">2025/05/01</span>
+              </div>
+              <h3 class="text-sm font-medium mb-1">台湾《劳动基准法》最新修订要点</h3>
+              <p class="text-xs text-gray-600 line-clamp-2">最新《劳动基准法》修订提高加班费计算标准，并对特休假的计算方式做出调整，这些变化将从今年7月1日起正式实施...</p>
+              <a href="#" class="text-xs text-primary font-medium mt-2 inline-block">阅读全文</a>
+            </div>
+          </div>
+          
+          <div class="card overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1585974738771-84483dd9f89f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="法律文件" class="w-full h-32 object-cover">
+            <div class="p-3">
+              <div class="flex items-center mb-2">
+                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">案例分析</span>
+                <span class="ml-2 text-xs text-gray-500">2025/04/20</span>
+              </div>
+              <h3 class="text-sm font-medium mb-1">重要判例：雇主解雇员工的合法边界</h3>
+              <p class="text-xs text-gray-600 line-clamp-2">最高法院最新判决明确了雇主解雇员工必须满足的条件，并强调了资遣费计算需包含员工固定获得的各项津贴...</p>
+              <a href="#" class="text-xs text-primary font-medium mt-2 inline-block">阅读全文</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 底部导航栏 -->
+    <div class="bottom-nav">
+      <a href="mobile-home.html" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>首页</span>
+      </a>
+      <a href="mobile-ai-chat.html" class="nav-item">
+        <i class="fas fa-comment-alt"></i>
+        <span>咨询</span>
+      </a>
+      <a href="mobile-chat-history.html" class="nav-item">
+        <i class="fas fa-history"></i>
+        <span>历史</span>
+      </a>
+      <a href="mobile-profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>我的</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 自定义脚本 -->
+  <script>
+    // 设置当前时间
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
+                         now.getMinutes().toString().padStart(2, '0');
+      document.querySelector('.status-bar-time').textContent = timeString;
+    }
+    
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      updateTime();
+      setInterval(updateTime, 60000); // 每分钟更新一次
+    });
+  </script>
+</body>
+</html>

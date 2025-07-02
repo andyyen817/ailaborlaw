@@ -1,0 +1,38 @@
+# AI劳基法顾问项目环境变量配置
+
+# ========================================
+# 前端URL配置 (重要：上线时需要修改)
+# ========================================
+FRONTEND_URL=http://localhost:3000
+
+# 生产环境示例:
+# FRONTEND_URL=https://your-frontend-domain.com
+
+# ========================================
+# 数据库配置
+# ========================================
+MONGODB_URI=mongodb://localhost:27017/ailaborlaw
+
+# ========================================
+# JWT配置  
+# ========================================
+JWT_SECRET=your-super-secret-jwt-key-here
+JWT_EXPIRES_IN=7d
+JWT_REFRESH_SECRET=your-refresh-token-secret
+JWT_REFRESH_EXPIRES_IN=30d
+
+# ========================================
+# 服务器配置
+# ========================================
+PORT=7070
+NODE_ENV=development
+
+# ========================================
+# 日志配置
+# ========================================
+LOG_LEVEL=info
+
+# ========================================
+# CORS配置
+# ========================================
+CORS_ORIGIN=http://localhost:3000,https://your-frontend-domain.com 

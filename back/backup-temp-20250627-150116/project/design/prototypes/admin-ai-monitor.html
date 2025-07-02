@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI咨询监控 - 管理后台</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/admin-styles.css">
+</head>
+<body class="bg-slate-100">
+  <div class="flex h-screen bg-gray-50">
+    <!-- 侧边栏 -->
+    <aside class="w-64 bg-gray-800 text-white">
+      <div class="p-4 border-b border-gray-700">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-balance-scale text-2xl"></i>
+          <span class="text-lg font-semibold">AI劳基法顾问</span>
+        </div>
+      </div>
+      
+      <nav class="mt-4">
+        <ul>
+          <li class="mb-1">
+            <a href="admin-dashboard.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-tachometer-alt w-5 mr-3"></i>
+              <span>仪表盘</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-users.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-users w-5 mr-3"></i>
+              <span>用户管理</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-ai-monitor.html" class="flex items-center px-4 py-3 bg-blue-600 text-white rounded">
+              <i class="fas fa-robot w-5 mr-3"></i>
+              <span>AI咨询监控</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-expert-consults.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-user-tie w-5 mr-3"></i>
+              <span>专家咨询管理</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-knowledge.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-book w-5 mr-3"></i>
+              <span>知识库管理</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-reports.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-chart-bar w-5 mr-3"></i>
+              <span>统计报表</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-settings.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-cog w-5 mr-3"></i>
+              <span>系统设置</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="absolute bottom-0 w-64 p-4 border-t border-gray-700">
+        <a href="#" class="flex items-center text-gray-300 hover:text-white">
+          <i class="fas fa-sign-out-alt mr-3"></i>
+          <span>退出登录</span>
+        </a>
+      </div>
+    </aside>
+    
+    <!-- 主内容区 -->
+    <main class="flex-1 overflow-y-auto">
+      <!-- 顶部栏 -->
+      <div class="flex justify-between items-center p-4 bg-white border-b">
+        <h1 class="text-2xl font-semibold text-gray-800">AI咨询监控</h1>
+        
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <input type="text" placeholder="搜索会话..." class="pl-10 pr-4 py-2 border rounded-lg w-64">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <i class="fas fa-bell text-gray-500 text-xl"></i>
+              <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                A
+              </div>
+              <span class="text-gray-700">Admin</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 内容部分 -->
+      <div class="p-6">
+        <!-- 监控概览卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+              <i class="fas fa-comment-dots text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">今日咨询总量</div>
+              <div class="text-2xl font-semibold">56</div>
+              <div class="text-xs text-green-500 mt-1">
+                <i class="fas fa-arrow-up"></i> 8% 较昨日
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+              <i class="fas fa-check-circle text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">满意度</div>
+              <div class="text-2xl font-semibold">92%</div>
+              <div class="text-xs text-green-500 mt-1">
+                <i class="fas fa-arrow-up"></i> 3% 较上周
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+              <i class="fas fa-clock text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">平均响应时间</div>
+              <div class="text-2xl font-semibold">2.5秒</div>
+              <div class="text-xs text-green-500 mt-1">
+                <i class="fas fa-arrow-down"></i> 0.3秒 较上周
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-red-100 text-red-600 mr-4">
+              <i class="fas fa-exclamation-triangle text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">待修正回答</div>
+              <div class="text-2xl font-semibold">5</div>
+              <div class="text-xs text-red-500 mt-1">
+                <i class="fas fa-arrow-up"></i> 2 较昨日
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 图表区域 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <!-- 咨询量趋势图 -->
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-4 border-b flex justify-between items-center">
+              <h2 class="font-semibold text-gray-800">咨询量趋势</h2>
+              <div class="flex space-x-2">
+                <button class="px-3 py-1 text-sm rounded">日</button>
+                <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded">周</button>
+                <button class="px-3 py-1 text-sm rounded">月</button>
+              </div>
+            </div>
+            <div class="p-4 h-80">
+              <canvas id="consultationTrendsChart"></canvas>
+            </div>
+          </div>
+          
+          <!-- 热门咨询主题 -->
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-4 border-b">
+              <h2 class="font-semibold text-gray-800">热门咨询主题</h2>
+            </div>
+            <div class="p-4 h-80">
+              <canvas id="topicsChart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 筛选区域 -->
+        <div class="bg-white rounded-lg shadow mb-6">
+          <div class="p-4 flex flex-wrap gap-4 items-center justify-between">
+            <div class="flex flex-wrap gap-4 items-center">
+              <div>
+                <label for="status-filter" class="block text-sm font-medium text-gray-700 mb-1">状态</label>
+                <select id="status-filter" class="border rounded-md py-2 px-3 w-40">
+                  <option value="all">全部状态</option>
+                  <option value="completed">已完成</option>
+                  <option value="in-progress">进行中</option>
+                  <option value="flagged">已标记</option>
+                </select>
+              </div>
+              
+              <div>
+                <label for="topic-filter" class="block text-sm font-medium text-gray-700 mb-1">主题</label>
+                <select id="topic-filter" class="border rounded-md py-2 px-3 w-40">
+                  <option value="all">全部主题</option>
+                  <option value="work-hours">工时问题</option>
+                  <option value="salary">薪资计算</option>
+                  <option value="contract">劳动合同</option>
+                  <option value="leave">特休假</option>
+                  <option value="resignation">离职流程</option>
+                </select>
+              </div>
+              
+              <div>
+                <label for="date-filter" class="block text-sm font-medium text-gray-700 mb-1">时间范围</label>
+                <select id="date-filter" class="border rounded-md py-2 px-3 w-40">
+                  <option value="today">今天</option>
+                  <option value="yesterday">昨天</option>
+                  <option value="week">本周</option>
+                  <option value="month">本月</option>
+                </select>
+              </div>
+              
+              <div>
+                <label for="satisfaction-filter" class="block text-sm font-medium text-gray-700 mb-1">满意度</label>
+                <select id="satisfaction-filter" class="border rounded-md py-2 px-3 w-40">
+                  <option value="all">全部评价</option>
+                  <option value="positive">正面评价</option>
+                  <option value="negative">负面评价</option>
+                  <option value="no-feedback">未评价</option>
+                </select>
+              </div>
+              
+              <div class="mt-6">
+                <button class="bg-blue-600 text-white py-2 px-4 rounded-md flex items-center">
+                  <i class="fas fa-filter mr-2"></i>
+                  应用筛选
+                </button>
+              </div>
+            </div>
+            
+            <div class="flex gap-3">
+              <button class="bg-purple-600 text-white py-2 px-4 rounded-md flex items-center">
+                <i class="fas fa-file-export mr-2"></i>
+                导出数据
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 咨询会话表格 -->
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      ID
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      用户
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      主题
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      时间
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      轮次
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      满意度
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      状态
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <!-- 会话数据行 -->
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#12345</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 mr-3">张</div>
+                      <div class="text-sm font-medium text-gray-900">张先生</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">工时与加班费计算</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-15 10:30</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex text-yellow-500">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                      已完成
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a href="admin-chat-detail.html" class="text-blue-600 hover:text-blue-900">查看</a>
+                  </td>
+                </tr>
+                <tr class="bg-yellow-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#12344</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 mr-3">李</div>
+                      <div class="text-sm font-medium text-gray-900">李小姐</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">特休假与请假规定</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-15 09:15</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex text-yellow-500">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                      已标记
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a href="admin-chat-detail.html" class="text-blue-600 hover:text-blue-900">查看</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#12343</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 mr-3">王</div>
+                      <div class="text-sm font-medium text-gray-900">王先生</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">劳动合同终止</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-14 16:45</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex text-yellow-500">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                      已完成
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a href="admin-chat-detail.html" class="text-blue-600 hover:text-blue-900">查看</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#12342</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 mr-3">陈</div>
+                      <div class="text-sm font-medium text-gray-900">陈经理</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">员工离职流程</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-14 14:20</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <span>未评价</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                      进行中
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a href="admin-chat-detail.html" class="text-blue-600 hover:text-blue-900">查看</a>
+                  </td>
+                </tr>
+                <tr class="bg-yellow-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#12341</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 mr-3">林</div>
+                      <div class="text-sm font-medium text-gray-900">林小姐</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">薪资计算方式</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-14 11:35</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex text-yellow-500">
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                      已标记
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a href="admin-chat-detail.html" class="text-blue-600 hover:text-blue-900">查看</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- 分页控件 -->
+          <div class="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+            <div class="flex-1 flex justify-between sm:hidden">
+              <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                上一页
+              </a>
+              <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                下一页
+              </a>
+            </div>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p class="text-sm text-gray-700">
+                  显示第 <span class="font-medium">1</span> 至 <span class="font-medium">5</span> 项，共 <span class="font-medium">56</span> 项结果
+                </p>
+              </div>
+              <div>
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                  <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">上一页</span>
+                    <i class="fas fa-chevron-left"></i>
+                  </a>
+                  <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600 hover:bg-blue-100">
+                    1
+                  </a>
+                  <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    2
+                  </a>
+                  <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    3
+                  </a>
+                  <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                    ...
+                  </span>
+                  <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    6
+                  </a>
+                  <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">下一页</span>
+                    <i class="fas fa-chevron-right"></i>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    // 初始化咨询量趋势图表
+    const trendsCtx = document.getElementById('consultationTrendsChart').getContext('2d');
+    const trendsChart = new Chart(trendsCtx, {
+      type: 'line',
+      data: {
+        labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+        datasets: [{
+          label: '咨询数量',
+          data: [65, 59, 80, 81, 56, 55, 40],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.1)',
+          tension: 0.3,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+    
+    // 初始化热门咨询主题图表
+    const topicsCtx = document.getElementById('topicsChart').getContext('2d');
+    const topicsChart = new Chart(topicsCtx, {
+      type: 'bar',
+      data: {
+        labels: ['工时问题', '薪资计算', '劳动合同', '特休假', '离职流程', '其他'],
+        datasets: [{
+          label: '咨询数量',
+          data: [35, 25, 15, 10, 10, 5],
+          backgroundColor: [
+            'rgba(59, 130, 246, 0.7)',
+            'rgba(16, 185, 129, 0.7)',
+            'rgba(245, 158, 11, 0.7)',
+            'rgba(239, 68, 68, 0.7)',
+            'rgba(139, 92, 246, 0.7)',
+            'rgba(107, 114, 128, 0.7)'
+          ],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html> 

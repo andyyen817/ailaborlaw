@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue应用环境调试</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .result { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin: 10px 0; font-family: monospace; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
+        .button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .success { color: #28a745; } .error { color: #dc3545; } .warning { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Vue应用环境调试</h1>
+    
+    <button class="button" onclick="testVueEnvironment()">测试Vue环境下的aiChatService</button>
+    <div id="result" class="result"></div>
+
+    <!-- 模拟Vue应用的script导入方式 -->
+    <script type="module">
+        // 设置localStorage数据（模拟用户已登录状态）
+        localStorage.setItem('auth_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODMxNDBjZTM5YTEyODlhNDFiYjkyZDQiLCJ1c2VyVHlwZSI6ImVtcGxveWVlIiwiaWF0IjoxNzQ4NTIyODQ1LCJleHAiOjE3NDg2MDkyNDV9.irgBHSCJkdteGrioqUhYe8M8JuYID3LJlxde-PRDxdU');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : '📝';
+            return `[${timestamp}] ${prefix} ${message}`;
+        }
+
+        async function testVueEnvironment() {
+            const resultEl = document.getElementById('result');
+            let result = '';
+
+            try {
+                result += log('=== 开始Vue环境测试 ===') + '\n';
+
+                // 尝试动态导入aiChatService（模拟Vue的ES模块环境）
+                result += log('正在导入aiChatService...') + '\n';
+                
+                try {
+                    // 模拟Vue应用中的导入方式
+                    const aiChatServiceModule = await import('./src/services/aiChatService.js');
+                    const aiChatService = aiChatServiceModule.default;
+                    
+                    result += log('aiChatService导入成功', 'success') + '\n';
+                    result += log(`aiChatService类型: ${typeof aiChatService}`) + '\n';
+                    
+                    // 测试getSessionList方法
+                    result += log('正在调用aiChatService.getSessionList()...') + '\n';
+                    
+                    const response = await aiChatService.getSessionList({
+                        page: 1,
+                        limit: 5
+                    });
+                    
+                    result += log('aiChatService.getSessionList() 调用完成') + '\n';
+                    result += log(`响应类型: ${typeof response}`) + '\n';
+                    result += log(`响应内容: ${JSON.stringify(response, null, 2)}`) + '\n';
+                    
+                    if (response && response.success && response.data && response.data.sessions) {
+                        result += log(`✅ Vue环境下获取到 ${response.data.sessions.length} 个会话`, 'success') + '\n';
+                        result += log('Vue环境测试成功！前端逻辑没有问题', 'success') + '\n';
+                    } else {
+                        result += log('响应格式异常', 'warning') + '\n';
+                        result += log('可能是Vue应用中的数据处理逻辑问题', 'warning') + '\n';
+                    }
+                    
+                } catch (importError) {
+                    result += log(`模块导入失败: ${importError.message}`, 'error') + '\n';
+                    result += log('这可能是Vue应用模块解析的问题', 'error') + '\n';
+                }
+
+            } catch (error) {
+                result += log(`Vue环境测试失败: ${error.message}`, 'error') + '\n';
+                result += log(`错误堆栈: ${error.stack}`, 'error') + '\n';
+            }
+
+            resultEl.textContent = result;
+        }
+
+        // 暴露函数到全局作用域
+        window.testVueEnvironment = testVueEnvironment;
+
+    </script>
+</body>
+</html> 

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>專家諮詢表單測試工具</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+  <!-- 導航欄 -->
+  <nav class="bg-blue-600 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="/" class="flex-shrink-0 flex items-center">
+            <i class="fas fa-balance-scale text-2xl mr-2"></i>
+            <span class="font-bold text-xl">勞法通AI - 測試工具</span>
+          </a>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="/" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+            <i class="fas fa-home mr-1"></i> 回到首頁
+          </a>
+          <a href="/admin" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+            <i class="fas fa-cog mr-1"></i> 後台管理
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">專家諮詢測試工具</h1>
+      <a href="javascript:history.back()" class="flex items-center text-blue-600 hover:text-blue-800">
+        <i class="fas fa-arrow-left mr-1"></i> 返回上一頁
+      </a>
+    </div>
+    
+    <div class="bg-white p-4 rounded-lg shadow mb-6">
+      <div class="flex items-center text-gray-700 mb-2">
+        <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+        <span class="font-medium">工具說明</span>
+      </div>
+      <p class="text-gray-600 text-sm">
+        此工具用於測試專家諮詢功能。您可以在此填寫測試數據並提交，然後在後台管理頁面查看提交的諮詢請求。
+        所有數據都存儲在瀏覽器的 localStorage 中，刷新頁面或關閉瀏覽器不會丟失數據。
+      </p>
+      <div class="mt-3 flex space-x-3">
+        <a href="/admin" class="text-blue-600 hover:text-blue-800 text-sm flex items-center">
+          <i class="fas fa-cog mr-1"></i> 前往後台管理查看提交結果
+        </a>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- 測試提交諮詢表單 -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4 flex items-center">
+          <i class="fas fa-edit text-blue-500 mr-2"></i>
+          測試提交諮詢表單
+        </h2>
+        <form id="testForm" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">姓名</label>
+            <input type="text" id="name" class="w-full border border-gray-300 p-2 rounded-md" value="測試用戶">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">聯絡電話</label>
+            <input type="text" id="phone" class="w-full border border-gray-300 p-2 rounded-md" value="0912345678">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Line ID</label>
+            <input type="text" id="lineId" class="w-full border border-gray-300 p-2 rounded-md" value="test_line_id">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">電子郵件</label>
+            <input type="email" id="email" class="w-full border border-gray-300 p-2 rounded-md" value="test@example.com">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">服務類型</label>
+            <select id="service" class="w-full border border-gray-300 p-2 rounded-md">
+              <option value="labor_contract">勞動契約審核</option>
+              <option value="compensation">薪資與加班費問題</option>
+              <option value="termination">終止僱傭關係</option>
+              <option value="workplace_safety">職場安全問題</option>
+              <option value="discrimination">就業歧視問題</option>
+              <option value="other">其他問題</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">諮詢時間</label>
+            <div class="flex space-x-2">
+              <select id="timeOfDay" class="border border-gray-300 p-2 rounded-md">
+                <option value="morning">上午</option>
+                <option value="afternoon">下午</option>
+              </select>
+              <input type="time" id="startTime" class="border border-gray-300 p-2 rounded-md" value="09:00">
+              <span class="self-center">-</span>
+              <input type="time" id="endTime" class="border border-gray-300 p-2 rounded-md" value="10:00">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">問題詳情</label>
+            <textarea id="details" class="w-full border border-gray-300 p-2 rounded-md" rows="3">這是一個測試問題的詳細描述。該用戶有關於勞基法第84條的疑問，希望獲得專業解答。</textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">偏好聯絡方式</label>
+            <div class="flex space-x-4">
+              <label class="flex items-center"><input type="checkbox" id="contactPhone" checked class="mr-1"> 電話</label>
+              <label class="flex items-center"><input type="checkbox" id="contactLine" checked class="mr-1"> LINE</label>
+              <label class="flex items-center"><input type="checkbox" id="contactEmail" class="mr-1"> 電子郵件</label>
+            </div>
+          </div>
+          <button type="button" id="submitBtn" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors flex items-center justify-center">
+            <i class="fas fa-paper-plane mr-2"></i> 提交測試諮詢
+          </button>
+        </form>
+      </div>
+      
+      <!-- 顯示當前諮詢請求數據 -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4 flex items-center">
+          <i class="fas fa-database text-green-500 mr-2"></i>
+          當前諮詢請求數據
+        </h2>
+        <div class="flex justify-between mb-4">
+          <button id="refreshBtn" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors flex items-center">
+            <i class="fas fa-sync-alt mr-2"></i> 刷新數據
+          </button>
+          <button id="clearBtn" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors flex items-center">
+            <i class="fas fa-trash-alt mr-2"></i> 清空數據
+          </button>
+        </div>
+        <div class="border border-gray-200 rounded-md h-[400px] overflow-auto">
+          <pre id="dataDisplay" class="text-xs p-4 text-gray-700"></pre>
+        </div>
+        <div class="mt-4 flex justify-end">
+          <span id="requestCount" class="text-sm text-gray-500">總計: 0 條請求</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="bg-gray-100 mt-8 py-4 border-t border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 text-center text-gray-500 text-sm">
+      &copy; 2023 勞法通AI - 專家諮詢測試工具
+    </div>
+  </footer>
+
+  <script>
+    // 初始化頁面
+    document.addEventListener('DOMContentLoaded', function() {
+      // 獲取元素
+      const submitBtn = document.getElementById('submitBtn');
+      const refreshBtn = document.getElementById('refreshBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const dataDisplay = document.getElementById('dataDisplay');
+      const requestCount = document.getElementById('requestCount');
+      
+      // 刷新顯示諮詢請求數據
+      function refreshData() {
+        const consultationRequests = JSON.parse(localStorage.getItem('consultationRequests') || '[]');
+        dataDisplay.textContent = JSON.stringify(consultationRequests, null, 2);
+        requestCount.textContent = `總計: ${consultationRequests.length} 條請求`;
+      }
+      
+      // 初始顯示
+      refreshData();
+      
+      // 提交測試諮詢請求
+      submitBtn.addEventListener('click', function() {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 處理中...';
+        
+        setTimeout(() => {
+          const preferredContactMethods = [];
+          if (document.getElementById('contactPhone').checked) preferredContactMethods.push('phone');
+          if (document.getElementById('contactLine').checked) preferredContactMethods.push('line');
+          if (document.getElementById('contactEmail').checked) preferredContactMethods.push('email');
+          
+          const timeOfDay = document.getElementById('timeOfDay').value;
+          const startTime = document.getElementById('startTime').value;
+          const endTime = document.getElementById('endTime').value;
+          const formattedConsultationTime = `${timeOfDay === 'morning' ? '上午' : '下午'} ${startTime || ''}-${endTime || ''}`.trim();
+          
+          const newRequest = {
+            id: `consultation_${Date.now()}`,
+            userId: localStorage.getItem('auth_user_id') || 'guest',
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            lineId: document.getElementById('lineId').value,
+            service: document.getElementById('service').value,
+            details: document.getElementById('details').value,
+            preferredContact: preferredContactMethods,
+            consultationTime: formattedConsultationTime,
+            status: 'pending',
+            createdAt: new Date().toISOString(),
+            adminNotes: ''
+          };
+          
+          // 保存到localStorage
+          const consultationRequests = JSON.parse(localStorage.getItem('consultationRequests') || '[]');
+          consultationRequests.push(newRequest);
+          localStorage.setItem('consultationRequests', JSON.stringify(consultationRequests));
+          
+          // 更新顯示
+          refreshData();
+          
+          // 恢復按鈕
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> 提交測試諮詢';
+          
+          // 顯示成功消息
+          alert('已成功提交測試諮詢請求！您可以在後台管理頁面查看該請求。');
+        }, 800);
+      });
+      
+      // 刷新數據
+      refreshBtn.addEventListener('click', function() {
+        refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 刷新中...';
+        setTimeout(() => {
+          refreshData();
+          refreshBtn.innerHTML = '<i class="fas fa-sync-alt mr-2"></i> 刷新數據';
+        }, 300);
+      });
+      
+      // 清空數據
+      clearBtn.addEventListener('click', function() {
+        if (confirm('確定要清空所有諮詢請求數據嗎？此操作不可恢復！')) {
+          clearBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 處理中...';
+          setTimeout(() => {
+            localStorage.removeItem('consultationRequests');
+            refreshData();
+            clearBtn.innerHTML = '<i class="fas fa-trash-alt mr-2"></i> 清空數據';
+            alert('已清空所有諮詢請求數據！');
+          }, 300);
+        }
+      });
+      
+      // 設置測試用戶數據（如果不存在）
+      if (!localStorage.getItem('auth_user_id')) {
+        const testUserId = 'test_user_' + Math.floor(Math.random() * 10000);
+        localStorage.setItem('auth_user_id', testUserId);
+      }
+    });
+  </script>
+</body>
+</html> 

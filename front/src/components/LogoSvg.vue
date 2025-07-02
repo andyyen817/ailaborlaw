@@ -1,0 +1,51 @@
+<template>
+  <svg :width="width" :height="height" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景圓形 -->
+    <circle cx="60" cy="60" r="55" :fill="bgColor" />
+    
+    <!-- 天平支架 -->
+    <rect x="57" y="30" width="6" height="65" fill="white" />
+    <ellipse cx="60" cy="95" rx="15" ry="5" fill="white" />
+    
+    <!-- 天平頂部 -->
+    <circle cx="60" cy="30" r="10" fill="white" />
+    <path d="M60 20 L60 10 Q60 5 65 8 L60 20" fill="white" />
+    
+    <!-- 天平左側 - 水平線 -->
+    <path d="M30 30 L60 30 L90 30" stroke="white" stroke-width="4" fill="none" />
+    <ellipse cx="30" cy="30" rx="10" ry="4" fill="white" />
+    
+    <!-- 天平右側 - 水平 -->
+    <ellipse cx="90" cy="30" rx="10" ry="4" fill="white" />
+    
+    <!-- 數據流動效果（AI元素） -->
+    <circle cx="35" cy="26" r="2" :fill="accentColor" />
+    <circle cx="45" cy="26" r="2" :fill="accentColor" />
+    <circle cx="75" cy="26" r="2" :fill="accentColor" />
+    <circle cx="85" cy="26" r="2" :fill="accentColor" />
+  </svg>
+</template>
+
+<script>
+export default {
+  name: 'LogoSvg',
+  props: {
+    width: {
+      type: [Number, String],
+      default: 32
+    },
+    height: {
+      type: [Number, String],
+      default: 32
+    },
+    bgColor: {
+      type: String,
+      default: '#3b82f6'
+    },
+    accentColor: {
+      type: String,
+      default: '#a7f3d0'
+    }
+  }
+}
+</script> 

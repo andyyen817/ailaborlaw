@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聊天记录重复问题调试工具</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; padding: 10px; border-radius: 3px; margin: 5px 0; }
+        .error { background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 3px; margin: 5px 0; }
+        .warning { background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 3px; margin: 5px 0; }
+        .info { background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 3px; margin: 5px 0; }
+        button { padding: 8px 16px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; font-size: 12px; }
+        .log { max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin: 10px 0; background: #f9f9f9; }
+        .compare-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        .compare-table th, .compare-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .compare-table th { background: #f5f5f5; }
+        .duplicate { background-color: #ffebee; }
+    </style>
+</head>
+<body>
+    <h1>🔍 聊天记录重复问题调试工具</h1>
+    
+    <div class="section">
+        <h2>📋 问题诊断步骤</h2>
+        <button onclick="step1_checkAPI()">步骤1: 检查API调用</button>
+        <button onclick="step2_checkLocalStorage()">步骤2: 检查localStorage</button>
+        <button onclick="step3_compareData()">步骤3: 对比数据源</button>
+        <button onclick="step4_findDuplicates()">步骤4: 查找重复原因</button>
+    </div>
+    
+    <div class="section">
+        <h2>📊 调试结果</h2>
+        <div id="results"></div>
+    </div>
+    
+    <div class="section">
+        <h2>📝 详细日志</h2>
+        <div class="log" id="debug-log"></div>
+        <button onclick="clearLog()">清除日志</button>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'https://wrrfvodsaofk.sealosgzg.site/api/v1';
+        const debugLog = document.getElementById('debug-log');
+        const results = document.getElementById('results');
+        
+        let apiData = null;
+        let localStorageData = null;
+        let processedLocalStorageData = null;
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            debugLog.appendChild(logEntry);
+            debugLog.scrollTop = debugLog.scrollHeight;
+            console.log(`[${timestamp}] ${message}`);
+        }
+        
+        function clearLog() {
+            debugLog.innerHTML = '';
+        }
+        
+        function addResult(title, content, type = 'info') {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = type;
+            resultDiv.innerHTML = `<h3>${title}</h3>${content}`;
+            results.appendChild(resultDiv);
+        }
+        
+        async function step1_checkAPI() {
+            log('🚀 开始步骤1: 检查API调用', 'info');
+            
+            const adminToken = localStorage.getItem('admin_access_token');
+            if (!adminToken) {
+                log('❌ 没有管理员Token', 'error');
+                addResult('API检查结果', '❌ 缺少管理员认证Token，无法调用API', 'error');
+                return;
+            }
+            
+            try {
+                const testURL = `${API_BASE_URL}/admin/chat/sessions?page=1&limit=1000&status=all`;
+                log(`🌐 调用API: ${testURL}`, 'info');
+                
+                const response = await fetch(testURL, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                log(`📊 API响应状态: ${response.status}`, response.ok ? 'success' : 'error');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    apiData = data;
+                    
+                    if (data.success && data.data && data.data.sessions) {
+                        const sessions = data.data.sessions;
+                        log(`✅ API调用成功，获取到 ${sessions.length} 个会话`, 'success');
+                        
+                        addResult('API调用结果', `
+                            <p>✅ API调用成功</p>
+                            <p>📊 会话数量: ${sessions.length}</p>
+                            <p>🔍 数据样本:</p>
+                            <pre>${JSON.stringify(sessions.slice(0, 2), null, 2)}</pre>
+                        `, 'success');
+                        
+                        // 检查是否有重复的sessionId
+                        const sessionIds = sessions.map(s => s.sessionId);
+                        const uniqueSessionIds = [...new Set(sessionIds)];
+                        
+                        if (sessionIds.length !== uniqueSessionIds.length) {
+                            log(`⚠️ API数据中发现重复的sessionId！`, 'warning');
+                            addResult('API重复检查', `
+                                <p>⚠️ 发现重复！</p>
+                                <p>总会话数: ${sessionIds.length}</p>
+                                <p>唯一会话数: ${uniqueSessionIds.length}</p>
+                                <p>重复数量: ${sessionIds.length - uniqueSessionIds.length}</p>
+                            `, 'warning');
+                        } else {
+                            log(`✅ API数据中没有重复的sessionId`, 'success');
+                            addResult('API重复检查', '✅ API数据中没有重复的会话ID', 'success');
+                        }
+                        
+                    } else {
+                        log(`❌ API响应格式异常`, 'error');
+                        addResult('API调用结果', `❌ API响应格式异常: ${JSON.stringify(data)}`, 'error');
+                    }
+                } else {
+                    log(`❌ API调用失败: ${response.status}`, 'error');
+                    const errorText = await response.text();
+                    addResult('API调用结果', `❌ API调用失败 (${response.status}): ${errorText}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ API调用异常: ${error.message}`, 'error');
+                addResult('API调用结果', `❌ API调用异常: ${error.message}`, 'error');
+            }
+        }
+        
+        async function step2_checkLocalStorage() {
+            log('🚀 开始步骤2: 检查localStorage', 'info');
+            
+            try {
+                const globalStoreKey = 'global_chat_history';
+                const globalHistory = localStorage.getItem(globalStoreKey);
+                
+                if (!globalHistory) {
+                    log('ℹ️ localStorage中没有全局聊天历史数据', 'info');
+                    addResult('localStorage检查', 'ℹ️ localStorage中没有全局聊天历史数据', 'info');
+                    return;
+                }
+                
+                const historyData = JSON.parse(globalHistory);
+                localStorageData = historyData;
+                
+                log(`📥 localStorage中有 ${historyData.length} 条原始记录`, 'info');
+                
+                // 按sessionId分组统计
+                const sessionGroups = {};
+                historyData.forEach(msg => {
+                    const sessionId = msg.conversationId || msg.sessionId;
+                    if (sessionId) {
+                        if (!sessionGroups[sessionId]) {
+                            sessionGroups[sessionId] = [];
+                        }
+                        sessionGroups[sessionId].push(msg);
+                    }
+                });
+                
+                const sessionCount = Object.keys(sessionGroups).length;
+                log(`📊 localStorage中包含 ${sessionCount} 个不同的会话`, 'info');
+                
+                // 检查每个会话的消息重复情况
+                let duplicateCount = 0;
+                for (const [sessionId, messages] of Object.entries(sessionGroups)) {
+                    const messageContents = messages.map(m => `${m.type}:${m.content}`);
+                    const uniqueContents = [...new Set(messageContents)];
+                    
+                    if (messageContents.length !== uniqueContents.length) {
+                        duplicateCount++;
+                        log(`⚠️ 会话 ${sessionId} 有重复消息: ${messageContents.length} 总数, ${uniqueContents.length} 唯一`, 'warning');
+                    }
+                }
+                
+                addResult('localStorage数据分析', `
+                    <p>📊 原始记录数: ${historyData.length}</p>
+                    <p>📊 会话数量: ${sessionCount}</p>
+                    <p>⚠️ 有重复消息的会话: ${duplicateCount}</p>
+                    <p>🔍 最近5条记录样本:</p>
+                    <pre>${JSON.stringify(historyData.slice(-5), null, 2)}</pre>
+                `, duplicateCount > 0 ? 'warning' : 'success');
+                
+            } catch (error) {
+                log(`❌ 检查localStorage失败: ${error.message}`, 'error');
+                addResult('localStorage检查', `❌ 检查失败: ${error.message}`, 'error');
+            }
+        }
+        
+        async function step3_compareData() {
+            log('🚀 开始步骤3: 对比数据源', 'info');
+            
+            if (!apiData && !localStorageData) {
+                log('❌ 需要先执行步骤1和步骤2获取数据', 'error');
+                addResult('数据对比', '❌ 请先执行步骤1和步骤2获取数据', 'error');
+                return;
+            }
+            
+            let comparison = '<table class="compare-table"><tr><th>数据源</th><th>会话数量</th><th>状态</th><th>备注</th></tr>';
+            
+            // API数据
+            if (apiData && apiData.success && apiData.data && apiData.data.sessions) {
+                const apiSessions = apiData.data.sessions;
+                comparison += `<tr><td>后端API</td><td>${apiSessions.length}</td><td class="success">✅ 正常</td><td>直接从API获取</td></tr>`;
+            } else {
+                comparison += `<tr><td>后端API</td><td>-</td><td class="error">❌ 失败</td><td>API调用失败或格式错误</td></tr>`;
+            }
+            
+            // localStorage数据
+            if (localStorageData) {
+                // 模拟convertToConversations处理
+                const sessionGroups = {};
+                localStorageData.forEach(msg => {
+                    const sessionId = msg.conversationId || msg.sessionId;
+                    if (sessionId) {
+                        if (!sessionGroups[sessionId]) {
+                            sessionGroups[sessionId] = {
+                                id: sessionId,
+                                messages: []
+                            };
+                        }
+                        sessionGroups[sessionId].messages.push(msg);
+                    }
+                });
+                
+                const convertedCount = Object.keys(sessionGroups).length;
+                processedLocalStorageData = Object.values(sessionGroups);
+                
+                comparison += `<tr><td>localStorage (原始)</td><td>${localStorageData.length} 条记录</td><td class="info">ℹ️ 原始数据</td><td>未处理的消息记录</td></tr>`;
+                comparison += `<tr><td>localStorage (处理后)</td><td>${convertedCount} 个会话</td><td class="warning">⚠️ 转换后</td><td>经过convertToConversations处理</td></tr>`;
+            } else {
+                comparison += `<tr><td>localStorage</td><td>-</td><td class="info">ℹ️ 空</td><td>没有本地数据</td></tr>`;
+            }
+            
+            comparison += '</table>';
+            
+            addResult('数据源对比', comparison, 'info');
+            
+            // 判断当前页面使用的数据源
+            if (apiData && apiData.success) {
+                log('📊 前端应该使用API数据', 'success');
+                addResult('数据源判断', '✅ 前端应该使用API数据（如果有重复，问题在API或前端处理）', 'success');
+            } else {
+                log('📊 前端会fallback到localStorage数据', 'warning');
+                addResult('数据源判断', '⚠️ 前端会fallback到localStorage数据（如果有重复，问题在localStorage或转换逻辑）', 'warning');
+            }
+        }
+        
+        async function step4_findDuplicates() {
+            log('🚀 开始步骤4: 查找重复原因', 'info');
+            
+            let duplicateAnalysis = '<h4>重复分析结果:</h4>';
+            
+            // 分析API数据重复
+            if (apiData && apiData.success && apiData.data && apiData.data.sessions) {
+                const sessions = apiData.data.sessions;
+                const sessionMap = new Map();
+                
+                sessions.forEach((session, index) => {
+                    const key = `${session.userId}-${session.title}-${session.createdAt}`;
+                    if (sessionMap.has(key)) {
+                        sessionMap.get(key).push({session, index});
+                    } else {
+                        sessionMap.set(key, [{session, index}]);
+                    }
+                });
+                
+                const duplicateGroups = Array.from(sessionMap.entries()).filter(([key, sessions]) => sessions.length > 1);
+                
+                if (duplicateGroups.length > 0) {
+                    duplicateAnalysis += `<div class="error">❌ API数据中发现 ${duplicateGroups.length} 组重复会话:</div>`;
+                    duplicateGroups.forEach(([key, sessions], groupIndex) => {
+                        duplicateAnalysis += `<div class="duplicate">重复组 ${groupIndex + 1}: ${key}<br>`;
+                        sessions.forEach(({session, index}) => {
+                            duplicateAnalysis += `&nbsp;&nbsp;- sessionId: ${session.sessionId} (索引: ${index})<br>`;
+                        });
+                        duplicateAnalysis += `</div>`;
+                    });
+                } else {
+                    duplicateAnalysis += `<div class="success">✅ API数据中没有发现重复会话</div>`;
+                }
+            }
+            
+            // 分析localStorage数据重复
+            if (processedLocalStorageData) {
+                const sessionMap = new Map();
+                
+                processedLocalStorageData.forEach((session, index) => {
+                    const firstUserMessage = session.messages.find(m => m.type === 'user');
+                    const key = firstUserMessage ? `${session.id}-${firstUserMessage.content.substring(0, 50)}` : session.id;
+                    
+                    if (sessionMap.has(key)) {
+                        sessionMap.get(key).push({session, index});
+                    } else {
+                        sessionMap.set(key, [{session, index}]);
+                    }
+                });
+                
+                const duplicateGroups = Array.from(sessionMap.entries()).filter(([key, sessions]) => sessions.length > 1);
+                
+                if (duplicateGroups.length > 0) {
+                    duplicateAnalysis += `<div class="error">❌ localStorage处理后数据中发现 ${duplicateGroups.length} 组重复会话:</div>`;
+                    duplicateGroups.forEach(([key, sessions], groupIndex) => {
+                        duplicateAnalysis += `<div class="duplicate">重复组 ${groupIndex + 1}: ${key}<br>`;
+                        sessions.forEach(({session, index}) => {
+                            duplicateAnalysis += `&nbsp;&nbsp;- sessionId: ${session.id} (索引: ${index})<br>`;
+                        });
+                        duplicateAnalysis += `</div>`;
+                    });
+                } else {
+                    duplicateAnalysis += `<div class="success">✅ localStorage处理后数据中没有发现重复会话</div>`;
+                }
+            }
+            
+            // 最终结论
+            duplicateAnalysis += '<h4>🎯 问题诊断结论:</h4>';
+            
+            if (apiData && apiData.success) {
+                duplicateAnalysis += '<div class="info">当前页面应该使用API数据。如果页面显示重复，问题可能在:</div>';
+                duplicateAnalysis += '<ul>';
+                duplicateAnalysis += '<li>1. API本身返回重复数据</li>';
+                duplicateAnalysis += '<li>2. formatSessionsForDisplay函数处理错误</li>';
+                duplicateAnalysis += '<li>3. Vue模板渲染问题</li>';
+                duplicateAnalysis += '<li>4. filteredChatRecords计算属性问题</li>';
+                duplicateAnalysis += '</ul>';
+            } else {
+                duplicateAnalysis += '<div class="warning">当前页面会fallback到localStorage数据。如果页面显示重复，问题可能在:</div>';
+                duplicateAnalysis += '<ul>';
+                duplicateAnalysis += '<li>1. localStorage原始数据有重复记录</li>';
+                duplicateAnalysis += '<li>2. convertToConversations函数处理错误</li>';
+                duplicateAnalysis += '<li>3. 去重逻辑不完善</li>';
+                duplicateAnalysis += '</ul>';
+            }
+            
+            addResult('重复原因分析', duplicateAnalysis, 'info');
+            log('✅ 重复原因分析完成', 'success');
+        }
+        
+        // 页面加载时的说明
+        window.onload = function() {
+            log('🔧 调试工具已加载，请按顺序执行步骤1-4进行问题诊断', 'info');
+            addResult('使用说明', `
+                <p>📋 请按顺序执行以下步骤来诊断重复显示问题:</p>
+                <ol>
+                    <li><strong>步骤1</strong>: 检查后端API是否正常工作，数据是否有重复</li>
+                    <li><strong>步骤2</strong>: 检查localStorage中的历史数据情况</li>
+                    <li><strong>步骤3</strong>: 对比两个数据源，判断前端实际使用哪个</li>
+                    <li><strong>步骤4</strong>: 深度分析重复的具体原因和位置</li>
+                </ol>
+                <p>🎯 目标：找到导致管理后台显示重复聊天记录的确切原因</p>
+            `, 'info');
+        };
+    </script>
+</body>
+</html> 

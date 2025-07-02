@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI咨询 - AI劳基法顾问</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义移动样式 -->
+  <link rel="stylesheet" href="css/mobile-styles.css">
+  <style>
+    /* 聊天界面特定样式 */
+    .chat-body {
+      background-color: #f5f5f5;
+      height: calc(100% - 160px); /* 调整高度，减去标题栏和输入框高度 */
+      overflow-y: auto;
+      padding: 15px;
+      margin-bottom: 60px; /* 为输入框留出空间 */
+    }
+    
+    .chat-message {
+      margin-bottom: 16px;
+      clear: both;
+    }
+    
+    .chat-message-user {
+      float: right;
+    }
+    
+    .chat-message-ai {
+      float: left;
+    }
+    
+    .chat-bubble {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      margin-bottom: 4px;
+      word-wrap: break-word;
+    }
+    
+    .chat-bubble-user {
+      background-color: #2563eb;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    
+    .chat-bubble-ai {
+      background-color: #ffffff;
+      color: #000000;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .chat-time {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 2px;
+      clear: both;
+    }
+    
+    .chat-time-user {
+      float: right;
+      margin-right: 8px;
+    }
+    
+    .chat-time-ai {
+      float: left;
+      margin-left: 8px;
+    }
+    
+    .chat-law-reference {
+      clear: both;
+      float: left;
+      max-width: 80%;
+      background-color: rgba(14, 165, 233, 0.1);
+      border-left: 3px solid #0ea5e9;
+      padding: 8px 12px;
+      margin: 8px 0;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    
+    .typing-indicator span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #94a3b8;
+      display: inline-block;
+      animation: typing 1.4s infinite ease-in-out both;
+    }
+    
+    .typing-indicator span:nth-child(1) {
+      animation-delay: 0s;
+    }
+    
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes typing {
+      0%, 100% {
+        transform: scale(0.7);
+        opacity: 0.5;
+      }
+      50% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .chat-input-container {
+      position: absolute;
+      bottom: 60px;
+      left: 0;
+      right: 0;
+      background-color: white;
+      padding: 12px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .chat-input {
+      flex: 1;
+      height: 40px;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 0 15px;
+      font-size: 15px;
+      background-color: #f8fafc;
+    }
+    
+    .chat-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      background-color: white;
+    }
+    
+    .chat-send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- iPhone 16模拟容器 -->
+  <div class="iphone-container">
+    <!-- 动态岛 -->
+    <div class="dynamic-island"></div>
+    
+    <!-- 状态栏 -->
+    <div class="status-bar">
+      <div class="status-bar-time">20:29</div>
+      <div class="status-bar-icons">
+        <i class="fas fa-signal"></i>
+        <i class="fas fa-wifi"></i>
+        <i class="fas fa-battery-three-quarters"></i>
+      </div>
+    </div>
+    
+    <!-- 聊天标题 -->
+    <div style="background-color: white; padding: 15px; border-bottom: 1px solid #e2e8f0; z-index: 5; position: relative;">
+      <div class="flex justify-between items-center">
+        <h1 class="text-lg font-semibold">AI劳基法顾问</h1>
+        <button class="p-2 rounded-full hover:bg-gray-100" aria-label="更多选项" title="更多选项">
+          <i class="fas fa-ellipsis-v text-gray-500"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- 聊天主体区域 -->
+    <div class="chat-body">
+      <!-- AI欢迎消息 -->
+      <div class="chat-message chat-message-ai">
+        <div class="chat-bubble chat-bubble-ai">
+          您好！我是您的AI劳基法顾问，有任何关于台湾劳动法规的问题，都可以向我咨询。
+        </div>
+        <div class="chat-time chat-time-ai">20:25</div>
+      </div>
+      
+      <div class="chat-message chat-message-ai">
+        <div class="chat-bubble chat-bubble-ai">
+          我可以帮您解答的问题包括：工时计算、加班费计算、特休假规定、劳资争议处理等。请问您有什么需要咨询的问题？
+        </div>
+        <div class="chat-time chat-time-ai">20:25</div>
+      </div>
+      
+      <!-- 用户消息 -->
+      <div class="chat-message chat-message-user">
+        <div class="chat-bubble chat-bubble-user">
+          请问加班费要怎么计算？
+        </div>
+        <div class="chat-time chat-time-user">20:27</div>
+      </div>
+      
+      <!-- AI回复 -->
+      <div class="chat-message chat-message-ai">
+        <div class="chat-bubble chat-bubble-ai">
+          根据台湾《劳动基准法》第24条规定，雇主延长工作时间时应依下列标准加给工资：<br><br>
+          1. 平日延长工作时间在2小时以内者，按平日每小时工资额加给三分之一以上。<br><br>
+          2. 平日延长工作时间在2小时以上者，按平日每小时工资额加给三分之二以上。<br><br>
+          3. 休息日工作8小时以内者，按平日每小时工资额加给一又三分之一以上。<br><br>
+          4. 休息日工作逾8小时者，按平日每小时工资额加给一又三分之二以上。
+        </div>
+        <div class="chat-time chat-time-ai">20:28</div>
+      </div>
+      
+      <div class="chat-law-reference">
+        <strong>法条引用：</strong> 《劳动基准法》第24条
+      </div>
+      
+      <!-- 用户消息 -->
+      <div class="chat-message chat-message-user">
+        <div class="chat-bubble chat-bubble-user">
+          那假如我月薪3万，平日加班3小时，怎么算？
+        </div>
+        <div class="chat-time chat-time-user">20:29</div>
+      </div>
+      
+      <!-- AI正在输入 -->
+      <div class="chat-message chat-message-ai">
+        <div class="chat-bubble chat-bubble-ai">
+          <div class="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 输入区域 -->
+    <div class="chat-input-container">
+      <input type="text" class="chat-input" placeholder="输入问题..." autofocus>
+      <button class="chat-send-btn" aria-label="发送消息" title="发送消息">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+    
+    <!-- 底部导航栏 -->
+    <div class="bottom-nav">
+      <a href="mobile-home.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>首页</span>
+      </a>
+      <a href="mobile-ai-chat.html" class="nav-item active">
+        <i class="fas fa-comment-alt"></i>
+        <span>咨询</span>
+      </a>
+      <a href="mobile-chat-history.html" class="nav-item">
+        <i class="fas fa-history"></i>
+        <span>历史</span>
+      </a>
+      <a href="mobile-profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>我的</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 自定义脚本 -->
+  <script>
+    // 设置当前时间
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
+                         now.getMinutes().toString().padStart(2, '0');
+      document.querySelector('.status-bar-time').textContent = timeString;
+    }
+    
+    // 滚动到底部
+    function scrollToBottom() {
+      const chatBody = document.querySelector('.chat-body');
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    
+    // 模拟发送消息
+    function setupChatInput() {
+      const chatInput = document.querySelector('.chat-input');
+      const sendButton = document.querySelector('.chat-send-btn');
+      
+      function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+        
+        // 创建用户消息元素
+        const chatBody = document.querySelector('.chat-body');
+        
+        // 移除正在输入指示器
+        const typingIndicator = document.querySelector('.typing-indicator');
+        if (typingIndicator) {
+          typingIndicator.closest('.chat-message').remove();
+        }
+        
+        // 添加用户消息
+        const now = new Date();
+        const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
+                          now.getMinutes().toString().padStart(2, '0');
+        
+        const userMessageHtml = `
+          <div class="chat-message chat-message-user">
+            <div class="chat-bubble chat-bubble-user">
+              ${message}
+            </div>
+            <div class="chat-time chat-time-user">${timeString}</div>
+          </div>
+        `;
+        
+        chatBody.insertAdjacentHTML('beforeend', userMessageHtml);
+        
+        // 清空输入框
+        chatInput.value = '';
+        
+        // 显示AI正在输入
+        const typingHtml = `
+          <div class="chat-message chat-message-ai">
+            <div class="chat-bubble chat-bubble-ai">
+              <div class="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        chatBody.insertAdjacentHTML('beforeend', typingHtml);
+        scrollToBottom();
+        
+        // 模拟AI响应（2秒后）
+        setTimeout(() => {
+          // 移除正在输入指示器
+          const typingIndicator = document.querySelector('.typing-indicator');
+          if (typingIndicator) {
+            typingIndicator.closest('.chat-message').remove();
+          }
+          
+          // 添加AI响应
+          const aiMessageHtml = `
+            <div class="chat-message chat-message-ai">
+              <div class="chat-bubble chat-bubble-ai">
+                以您月薪3万元计算，假设一个月工作天数为30天，每天工作8小时：<br><br>
+                每小时基本工资 = 30,000元 ÷ 30天 ÷ 8小时 = 125元<br><br>
+                平日加班前2小时：125元 × 1.33倍 × 2小时 = 332.5元<br><br>
+                平日加班第3小时：125元 × 1.67倍 × 1小时 = 208.75元<br><br>
+                因此，平日加班3小时的加班费总计为：332.5元 + 208.75元 = 541.25元
+              </div>
+              <div class="chat-time chat-time-ai">${timeString}</div>
+            </div>
+          `;
+          
+          chatBody.insertAdjacentHTML('beforeend', aiMessageHtml);
+          
+          // 添加法条引用
+          const referenceHtml = `
+            <div class="chat-law-reference">
+              <strong>计算依据：</strong> 《劳动基准法》第24条加班费计算标准
+            </div>
+          `;
+          
+          chatBody.insertAdjacentHTML('beforeend', referenceHtml);
+          scrollToBottom();
+        }, 2000);
+      }
+      
+      // 发送按钮点击事件
+      sendButton.addEventListener('click', sendMessage);
+      
+      // 输入框回车事件
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          sendMessage();
+          e.preventDefault();
+        }
+      });
+    }
+    
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      updateTime();
+      scrollToBottom();
+      setupChatInput();
+      setInterval(updateTime, 60000); // 每分钟更新一次
+    });
+  </script>
+</body>
+</html>

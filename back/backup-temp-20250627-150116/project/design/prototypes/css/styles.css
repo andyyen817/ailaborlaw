@@ -1,0 +1,348 @@
+/* 全局样式 */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #64748b;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #0ea5e9;
+  --light: #f8fafc;
+  --dark: #1e293b;
+  --gray: #94a3b8;
+  --gray-light: #cbd5e1;
+  --gray-dark: #475569;
+  --background: #f1f5f9;
+  --text: #334155;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* 模拟浏览器容器样式 */
+.browser-container {
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  background-color: #fff;
+}
+
+.browser-header {
+  background-color: #f1f5f9;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+}
+
+.browser-buttons {
+  display: flex;
+  gap: 8px;
+  margin-right: 16px;
+}
+
+.browser-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.browser-button-red {
+  background-color: #ef4444;
+}
+
+.browser-button-yellow {
+  background-color: #f59e0b;
+}
+
+.browser-button-green {
+  background-color: #10b981;
+}
+
+.browser-address-bar {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+}
+
+.browser-address-bar i {
+  margin-right: 8px;
+  color: #94a3b8;
+}
+
+.browser-content {
+  min-height: 500px;
+  padding: 16px;
+}
+
+/* 移动设备模拟样式 */
+.mobile-container {
+  border-radius: 36px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 12px solid #000;
+  position: relative;
+}
+
+.mobile-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 30px;
+  background-color: #000;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  z-index: 10;
+}
+
+.mobile-content {
+  min-height: 667px;
+  position: relative;
+}
+
+.mobile-status-bar {
+  height: 44px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8fafc;
+}
+
+.mobile-time {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mobile-icons {
+  display: flex;
+  gap: 6px;
+}
+
+/* 展示容器样式 */
+.showcase-container {
+  padding: 40px 20px;
+}
+
+.showcase-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--dark);
+}
+
+.showcase-description {
+  font-size: 16px;
+  color: var(--secondary);
+  margin-bottom: 24px;
+}
+
+/* 暗色模式 */
+.dark-mode {
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --secondary: #94a3b8;
+  --background: #0f172a;
+  --text: #e2e8f0;
+  
+  background-color: var(--background);
+  color: var(--text);
+}
+
+.dark-mode .browser-container {
+  background-color: #1e293b;
+}
+
+.dark-mode .browser-header {
+  background-color: #0f172a;
+  border-bottom: 1px solid #334155;
+}
+
+.dark-mode .browser-address-bar {
+  background-color: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+}
+
+/* 自定义界面元素样式 */
+.btn {
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* 聊天界面样式 */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--gray-light);
+}
+
+.chat-header {
+  background-color: var(--primary);
+  color: white;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background-color: #f8fafc;
+}
+
+.chat-message {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-message-user {
+  align-items: flex-end;
+}
+
+.chat-message-ai {
+  align-items: flex-start;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  margin-bottom: 4px;
+}
+
+.chat-bubble-user {
+  background-color: var(--primary);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble-ai {
+  background-color: var(--gray-light);
+  color: var(--dark);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-time {
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 2px;
+}
+
+.chat-law-reference {
+  background-color: rgba(14, 165, 233, 0.1);
+  border-left: 4px solid var(--info);
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.chat-footer {
+  padding: 16px;
+  background-color: white;
+  border-top: 1px solid var(--gray-light);
+}
+
+.chat-input-container {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  border: 1px solid var(--gray-light);
+  border-radius: 24px;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.chat-input:focus {
+  border-color: var(--primary);
+}
+
+.chat-send-btn {
+  background-color: var(--primary);
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chat-send-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+  .browser-container {
+    border-radius: 0;
+    box-shadow: none;
+    max-width: 100%;
+  }
+  
+  .showcase-container {
+    padding: 20px 10px;
+  }
+}

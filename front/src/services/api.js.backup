@@ -1,0 +1,278 @@
+/**
+ * API服務配置
+ * 提供與後端API通信的基礎服務
+ */
+
+// 🔧 修复：临时使用生产API URL解决代理问题
+// 直接使用生产API避免代理配置问题
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://wrrfvodsaofk.sealosgzg.site/api/v1';
+
+// 網絡錯誤重試配置
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1000; // 毫秒
+
+// 🔧 环境感知的超时配置
+const API_TIMEOUT = import.meta.env.DEV ? 30000 : 60000; // 开发环境30秒，生产环境60秒
+
+/**
+ * 延遲函數
+ * @param {number} ms - 延遲毫秒數
+ * @returns {Promise<void>}
+ */
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+/**
+ * 根據請求路徑獲取合適的認證頭
+ * @param {string} url - 請求路徑
+ * @returns {string|null} - 認證頭或null
+ */
+const getAuthHeader = (url) => {
+  // 管理員API請求
+  if (url.startsWith('/admin')) {
+    const adminToken = localStorage.getItem('admin_access_token');
+    if (adminToken) {
+      return `Bearer ${adminToken}`;
+    }
+  } else {
+    // 普通用戶API請求
+    const userToken = localStorage.getItem('auth_token');
+    if (userToken) {
+      return `Bearer ${userToken}`;
+    }
+  }
+  
+  return null;
+};
+
+/**
+ * 基礎請求方法，處理fetch請求
+ * @param {string} url - API端點路徑
+ * @param {Object} options - 請求選項
+ * @param {number} retryCount - 當前重試次數
+ * @returns {Promise<any>} - 請求結果Promise
+ */
+async function request(url, options = {}, retryCount = 0) {
+  try {
+    // 準備請求URL，處理查詢參數
+    let requestUrl = `${API_BASE_URL}${url}`;
+    
+    // 如果是GET請求並且有params參數，將其轉換為查詢字符串
+    if (options.method === 'GET' && options.params) {
+      const searchParams = new URLSearchParams();
+      for (const [key, value] of Object.entries(options.params)) {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, value.toString());
+        }
+      }
+      const queryString = searchParams.toString();
+      if (queryString) {
+        requestUrl += `?${queryString}`;
+      }
+    }
+    
+    // 默認請求頭
+    const headers = {
+      'Content-Type': 'application/json',
+      ...options.headers
+    };
+    
+    // 添加認證令牌，根據路徑選擇合適的令牌
+    const authHeader = getAuthHeader(url);
+    if (authHeader) {
+      headers['Authorization'] = authHeader;
+    }
+    
+    // 發起請求
+    console.log(`🌐 發送請求到: ${requestUrl}`);
+    const response = await fetch(requestUrl, {
+      ...options,
+      headers,
+      // 添加超時控制
+      signal: options.signal || (options.timeout ? AbortSignal.timeout(options.timeout) : undefined)
+    });
+    
+    // 解析響應數據 - 增加安全检查
+    let data;
+    try {
+      const responseText = await response.text();
+      if (!responseText.trim()) {
+        throw new Error('服务器返回空响应');
+      }
+      data = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('JSON解析错误:', parseError);
+      throw new Error(`服务器响应格式错误: ${parseError.message}`);
+    }
+    
+    // 檢查響應狀態
+    if (!response.ok) {
+      // 創建自定義錯誤對象
+      const apiError = new Error(data.message || data.error?.message || '請求失敗');
+      apiError.status = response.status;
+      apiError.data = data;
+      apiError.code = data.error?.code;
+      
+      // 處理特定的認證相關錯誤
+      if (response.status === 401) {
+        // 未認證或令牌失效
+        apiError.code = apiError.code || 'UNAUTHENTICATED';
+        apiError.message = '您的登入已過期，請重新登入';
+        
+        // 觸發事件，通知應用其他部分處理認證失敗
+        if (typeof window !== 'undefined') {
+          // 區分管理員和普通用戶的認證失敗
+          const eventName = url.startsWith('/admin') ? 'admin:unauthenticated' : 'auth:unauthenticated';
+          window.dispatchEvent(new CustomEvent(eventName, {
+            detail: { source: 'api', url }
+          }));
+        }
+      } else if (response.status === 403) {
+        // 權限不足
+        apiError.code = apiError.code || 'PERMISSION_DENIED';
+        apiError.message = '您沒有權限執行此操作';
+        
+        // 觸發權限錯誤事件，區分管理員和普通用戶
+        if (typeof window !== 'undefined') {
+          const eventName = url.startsWith('/admin') ? 'admin:permission_denied' : 'auth:permission_denied';
+          window.dispatchEvent(new CustomEvent(eventName, {
+            detail: { source: 'api', url, requiredPermission: data.error?.requiredPermission }
+          }));
+        }
+      } else if (response.status === 404) {
+        // 資源不存在
+        apiError.code = apiError.code || 'NOT_FOUND';
+        apiError.message = '請求的資源不存在';
+      } else if (response.status === 409) {
+        // 資源衝突（如註冊時郵箱已存在）
+        apiError.code = apiError.code || 'CONFLICT';
+        apiError.message = data.message || '資源衝突，操作無法完成';
+      } else if (response.status >= 500) {
+        // 伺服器錯誤
+        apiError.code = apiError.code || 'SERVER_ERROR';
+        apiError.message = '伺服器暫時無法處理您的請求，請稍後再試';
+      }
+      
+      throw apiError;
+    }
+    
+    return data;
+  } catch (error) {
+    // 網絡錯誤處理和重試邏輯
+    if (
+      (error.name === 'TypeError' && error.message === 'Failed to fetch' || 
+       error.name === 'AbortError' || 
+       error instanceof DOMException) && 
+      retryCount < MAX_RETRIES
+    ) {
+      console.warn(`📡 網絡請求失敗，正在重試 (${retryCount + 1}/${MAX_RETRIES})...`);
+      await delay(RETRY_DELAY * (retryCount + 1));
+      return request(url, options, retryCount + 1);
+    }
+    
+    // 錯誤增強，添加更多上下文信息
+    console.error('API請求錯誤:', {
+      url: `${API_BASE_URL}${url}`,
+      method: options.method || 'GET',
+      status: error.status,
+      message: error.message,
+      code: error.code,
+      retryCount
+    });
+    
+    // 將錯誤標準化為前端可理解的格式
+    const enhancedError = new Error(error.message || '網絡請求失敗');
+    enhancedError.originalError = error;
+    enhancedError.status = error.status || 0;
+    enhancedError.isNetworkError = error.name === 'TypeError' && error.message === 'Failed to fetch';
+    enhancedError.isTimeoutError = error.name === 'AbortError';
+    enhancedError.code = error.code;
+    enhancedError.data = error.data;
+    
+    // 添加容器環境特定的錯誤診斷信息
+    if (enhancedError.isNetworkError) {
+      enhancedError.message = '無法連接到API服務器。請確認網絡連接或聯繫系統管理員。';
+      enhancedError.containerHelp = '這可能是由於前後端容器間通信問題導致，請檢查API基礎URL配置是否正確。';
+      enhancedError.diagnosticInfo = {
+        apiBaseUrl: API_BASE_URL,
+        targetEndpoint: url,
+        containerNetwork: true,
+        timeStamp: new Date().toISOString()
+      };
+      console.info('容器網絡連接診斷信息:', {
+        apiBaseUrl: API_BASE_URL,
+        fullUrl: `${API_BASE_URL}${url}`,
+        possibleIssue: '容器間DNS解析或網絡連接問題',
+        corsProblem: error.message.includes('CORS'),
+        timeStamp: new Date().toISOString(),
+        retryCount
+      });
+    }
+    
+    throw enhancedError;
+  }
+}
+
+/**
+ * HTTP請求方法
+ */
+export default {
+  /**
+   * GET請求
+   * @param {string} url - API端點
+   * @param {Object} options - 請求選項
+   * @returns {Promise<any>}
+   */
+  get(url, options = {}) {
+    return request(url, {
+      method: 'GET',
+      timeout: API_TIMEOUT,
+      ...options
+    });
+  },
+  
+  /**
+   * POST請求
+   * @param {string} url - API端點
+   * @param {Object} data - 請求數據
+   * @param {Object} options - 請求選項
+   * @returns {Promise<any>}
+   */
+  post(url, data = {}, options = {}) {
+    return request(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      timeout: API_TIMEOUT,
+      ...options
+    });
+  },
+  
+  /**
+   * PUT請求
+   * @param {string} url - API端點
+   * @param {Object} data - 請求數據
+   * @param {Object} options - 請求選項
+   * @returns {Promise<any>}
+   */
+  put(url, data = {}, options = {}) {
+    return request(url, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      timeout: API_TIMEOUT,
+      ...options
+    });
+  },
+  
+  /**
+   * DELETE請求
+   * @param {string} url - API端點
+   * @param {Object} options - 請求選項
+   * @returns {Promise<any>}
+   */
+  delete(url, options = {}) {
+    return request(url, {
+      method: 'DELETE',
+      timeout: API_TIMEOUT,
+      ...options
+    });
+  }
+}; 

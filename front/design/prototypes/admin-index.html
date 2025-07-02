@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理后台 - AI劳基法顾问</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin-styles.css">
+  <style>
+    .admin-showcase {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 30px;
+    }
+    
+    .admin-showcase-header {
+      text-align: center;
+      padding: 20px;
+      background-color: #2563eb;
+      color: white;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    
+    .admin-showcase-container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+    }
+    
+    .admin-showcase-title {
+      padding: 15px 20px;
+      border-bottom: 1px solid #e5e7eb;
+      background-color: #f9fafb;
+    }
+    
+    .admin-showcase-frame {
+      width: 100%;
+      height: 700px;
+      border: none;
+    }
+    
+    @media (min-width: 1024px) {
+      .admin-showcase {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100">
+  <!-- 浏览器模拟容器 -->
+  <div class="browser-container">
+    <div class="browser-header">
+      <div class="browser-buttons">
+        <div class="browser-button browser-button-red"></div>
+        <div class="browser-button browser-button-yellow"></div>
+        <div class="browser-button browser-button-green"></div>
+      </div>
+      <div class="browser-address-bar">
+        <i class="fas fa-lock"></i>admin.ai-labor-advisor.tw
+      </div>
+    </div>
+    
+    <div class="browser-content">
+      <div class="admin-showcase-header">
+        <h1 class="text-3xl font-bold mb-2">AI劳基法顾问管理后台</h1>
+        <p class="text-lg opacity-90">管理后台高保真原型展示</p>
+      </div>
+      
+      <div class="admin-showcase">
+        <!-- 仪表盘页面 -->
+        <div class="admin-showcase-container">
+          <div class="admin-showcase-title">
+            <h2 class="text-xl font-bold text-gray-800">仪表盘</h2>
+            <p class="text-sm text-gray-500">系统概况与关键指标展示</p>
+          </div>
+          <iframe src="admin-dashboard.html" class="admin-showcase-frame"></iframe>
+        </div>
+        
+        <!-- 用户管理页面 -->
+        <div class="admin-showcase-container">
+          <div class="admin-showcase-title">
+            <h2 class="text-xl font-bold text-gray-800">用户管理</h2>
+            <p class="text-sm text-gray-500">用户列表与账户管理</p>
+          </div>
+          <iframe src="admin-users.html" class="admin-showcase-frame"></iframe>
+        </div>
+        
+        <!-- AI咨询监控页面 -->
+        <div class="admin-showcase-container">
+          <div class="admin-showcase-title">
+            <h2 class="text-xl font-bold text-gray-800">AI咨询监控</h2>
+            <p class="text-sm text-gray-500">实时监控AI咨询质量与使用情况</p>
+          </div>
+          <iframe src="admin-ai-monitor.html" class="admin-showcase-frame"></iframe>
+        </div>
+        
+        <!-- 专家咨询管理页面 -->
+        <div class="admin-showcase-container">
+          <div class="admin-showcase-title">
+            <h2 class="text-xl font-bold text-gray-800">专家咨询管理</h2>
+            <p class="text-sm text-gray-500">专家工单与咨询分配管理</p>
+          </div>
+          <iframe src="admin-expert-consults.html" class="admin-showcase-frame"></iframe>
+        </div>
+        
+        <!-- 知识库管理页面 -->
+        <div class="admin-showcase-container">
+          <div class="admin-showcase-title">
+            <h2 class="text-xl font-bold text-gray-800">知识库管理</h2>
+            <p class="text-sm text-gray-500">法规库与回答模板管理</p>
+          </div>
+          <iframe src="admin-knowledge.html" class="admin-showcase-frame"></iframe>
+        </div>
+        
+        <!-- 系统设置页面 -->
+        <div class="admin-showcase-container">
+          <div class="admin-showcase-title">
+            <h2 class="text-xl font-bold text-gray-800">系统设置</h2>
+            <p class="text-sm text-gray-500">系统参数与权限配置</p>
+          </div>
+          <iframe src="admin-settings.html" class="admin-showcase-frame"></iframe>
+        </div>
+        
+        <!-- 用户详情页面 -->
+        <div class="admin-showcase-container">
+          <div class="admin-showcase-title">
+            <h2 class="text-xl font-bold text-gray-800">用户详情</h2>
+            <p class="text-sm text-gray-500">用户详细信息与使用记录</p>
+          </div>
+          <iframe src="admin-user-detail.html" class="admin-showcase-frame"></iframe>
+        </div>
+        
+        <!-- 会话详情页面 -->
+        <div class="admin-showcase-container">
+          <div class="admin-showcase-title">
+            <h2 class="text-xl font-bold text-gray-800">会话详情</h2>
+            <p class="text-sm text-gray-500">AI咨询会话详细内容</p>
+          </div>
+          <iframe src="admin-chat-detail.html" class="admin-showcase-frame"></iframe>
+        </div>
+        
+        <!-- 统计报表页面 -->
+        <div class="admin-showcase-container">
+          <div class="admin-showcase-title">
+            <h2 class="text-xl font-bold text-gray-800">统计报表</h2>
+            <p class="text-sm text-gray-500">数据统计与分析图表</p>
+          </div>
+          <iframe src="admin-reports.html" class="admin-showcase-frame"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="js/scripts.js"></script>
+</body>
+</html> 

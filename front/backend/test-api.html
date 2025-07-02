@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勞法通AI - API測試頁面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .api-section {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .response {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>勞法通AI - API測試頁面</h1>
+    <p>這個頁面用於測試後端API功能，無需安裝額外工具。</p>
+    
+    <div class="api-section">
+        <h2>用戶註冊 API</h2>
+        <div class="form-group">
+            <label for="register-name">用戶名稱</label>
+            <input type="text" id="register-name" placeholder="請輸入用戶名稱（2-50個字符）">
+        </div>
+        <div class="form-group">
+            <label for="register-email">電子郵箱</label>
+            <input type="email" id="register-email" placeholder="請輸入有效的電子郵箱">
+        </div>
+        <div class="form-group">
+            <label for="register-password">密碼</label>
+            <input type="password" id="register-password" placeholder="請輸入密碼（至少8位，包含至少一個字母和一個數字）">
+        </div>
+        <div class="form-group">
+            <label for="register-userType">用戶類型（選填）</label>
+            <select id="register-userType">
+                <option value="employee" selected>一般員工</option>
+                <option value="employer">雇主</option>
+                <option value="hr">人資</option>
+                <option value="admin">管理員</option>
+            </select>
+        </div>
+        <button onclick="registerUser()">測試註冊</button>
+        <div class="response" id="register-response">回應將顯示在這裡...</div>
+    </div>
+    
+    <div class="api-section">
+        <h2>用戶登入 API</h2>
+        <div class="form-group">
+            <label for="login-email">電子郵箱</label>
+            <input type="email" id="login-email" placeholder="請輸入電子郵箱">
+        </div>
+        <div class="form-group">
+            <label for="login-password">密碼</label>
+            <input type="password" id="login-password" placeholder="請輸入密碼">
+        </div>
+        <button onclick="loginUser()">測試登入</button>
+        <div class="response" id="login-response">回應將顯示在這裡...</div>
+    </div>
+
+    <script>
+        // API基礎URL
+        const API_URL = 'http://localhost:5000/api/v1';
+        
+        // 測試註冊API
+        async function registerUser() {
+            const nameInput = document.getElementById('register-name');
+            const emailInput = document.getElementById('register-email');
+            const passwordInput = document.getElementById('register-password');
+            const userTypeSelect = document.getElementById('register-userType');
+            const responseDiv = document.getElementById('register-response');
+            
+            responseDiv.textContent = '正在發送請求...';
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: nameInput.value,
+                        email: emailInput.value,
+                        password: passwordInput.value,
+                        userType: userTypeSelect.value
+                    })
+                });
+                
+                const data = await response.json();
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+                
+                // 如果註冊成功，自動填充登入表單
+                if (data.success) {
+                    document.getElementById('login-email').value = emailInput.value;
+                    document.getElementById('login-password').value = passwordInput.value;
+                }
+            } catch (error) {
+                responseDiv.textContent = `錯誤: ${error.message}`;
+            }
+        }
+        
+        // 測試登入API
+        async function loginUser() {
+            const emailInput = document.getElementById('login-email');
+            const passwordInput = document.getElementById('login-password');
+            const responseDiv = document.getElementById('login-response');
+            
+            responseDiv.textContent = '正在發送請求...';
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: emailInput.value,
+                        password: passwordInput.value
+                    })
+                });
+                
+                const data = await response.json();
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                responseDiv.textContent = `錯誤: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html> 

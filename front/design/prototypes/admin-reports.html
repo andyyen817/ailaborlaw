@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>统计报表 - 管理后台</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/admin-styles.css">
+</head>
+<body class="bg-slate-100">
+  <div class="flex h-screen bg-gray-50">
+    <!-- 侧边栏 -->
+    <aside class="w-64 bg-gray-800 text-white">
+      <div class="p-4 border-b border-gray-700">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-balance-scale text-2xl"></i>
+          <span class="text-lg font-semibold">AI劳基法顾问</span>
+        </div>
+      </div>
+      
+      <nav class="mt-4">
+        <ul>
+          <li class="mb-1">
+            <a href="admin-dashboard.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-tachometer-alt w-5 mr-3"></i>
+              <span>仪表盘</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-users.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-users w-5 mr-3"></i>
+              <span>用户管理</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-ai-monitor.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-robot w-5 mr-3"></i>
+              <span>AI咨询监控</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-expert-consults.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-user-tie w-5 mr-3"></i>
+              <span>专家咨询管理</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-knowledge.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-book w-5 mr-3"></i>
+              <span>知识库管理</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-reports.html" class="flex items-center px-4 py-3 bg-blue-600 text-white rounded">
+              <i class="fas fa-chart-bar w-5 mr-3"></i>
+              <span>统计报表</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-settings.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-cog w-5 mr-3"></i>
+              <span>系统设置</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="absolute bottom-0 w-64 p-4 border-t border-gray-700">
+        <a href="#" class="flex items-center text-gray-300 hover:text-white">
+          <i class="fas fa-sign-out-alt mr-3"></i>
+          <span>退出登录</span>
+        </a>
+      </div>
+    </aside>
+    
+    <!-- 主内容区 -->
+    <main class="flex-1 overflow-y-auto">
+      <!-- 顶部栏 -->
+      <div class="flex justify-between items-center p-4 bg-white border-b">
+        <h1 class="text-2xl font-semibold text-gray-800">统计报表</h1>
+        
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2 border px-3 py-2 rounded-lg">
+            <i class="fas fa-calendar text-gray-500"></i>
+            <select id="date-range" class="bg-transparent border-none focus:outline-none text-sm">
+              <option value="week">本周</option>
+              <option value="month" selected>本月</option>
+              <option value="quarter">本季度</option>
+              <option value="year">本年度</option>
+              <option value="custom">自定义...</option>
+            </select>
+          </div>
+          
+          <button class="flex items-center gap-2 border px-3 py-2 rounded-lg hover:bg-gray-50">
+            <i class="fas fa-file-export text-gray-500"></i>
+            <span class="text-sm">导出报表</span>
+          </button>
+          
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <i class="fas fa-bell text-gray-500 text-xl"></i>
+              <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                A
+              </div>
+              <span class="text-gray-700">Admin</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 内容部分 -->
+      <div class="p-6">
+        <!-- 概览卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+              <i class="fas fa-users text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">总用户数</div>
+              <div class="text-2xl font-semibold">1,254</div>
+              <div class="text-xs text-green-500 mt-1">
+                <i class="fas fa-arrow-up"></i> 12% 较上月
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+              <i class="fas fa-comments text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">咨询总量</div>
+              <div class="text-2xl font-semibold">5,782</div>
+              <div class="text-xs text-green-500 mt-1">
+                <i class="fas fa-arrow-up"></i> 8% 较上月
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+              <i class="fas fa-money-bill-wave text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">总营收</div>
+              <div class="text-2xl font-semibold">$36,720</div>
+              <div class="text-xs text-green-500 mt-1">
+                <i class="fas fa-arrow-up"></i> 15% 较上月
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+              <i class="fas fa-star text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">满意度</div>
+              <div class="text-2xl font-semibold">4.8/5.0</div>
+              <div class="text-xs text-green-500 mt-1">
+                <i class="fas fa-arrow-up"></i> 0.2 较上月
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 图表区域第一行 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <!-- 用户增长趋势图 -->
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-4 border-b flex justify-between items-center">
+              <div>
+                <h2 class="font-semibold text-gray-800">用户增长趋势</h2>
+                <p class="text-sm text-gray-500">显示用户注册和活跃用户数据</p>
+              </div>
+              <div class="flex space-x-2">
+                <button class="px-3 py-1 text-sm text-gray-500 hover:bg-gray-100 rounded">日</button>
+                <button class="px-3 py-1 text-sm text-gray-500 hover:bg-gray-100 rounded">周</button>
+                <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded">月</button>
+                <button class="px-3 py-1 text-sm text-gray-500 hover:bg-gray-100 rounded">年</button>
+              </div>
+            </div>
+            <div class="p-4 h-80">
+              <canvas id="userGrowthChart"></canvas>
+            </div>
+          </div>
+          
+          <!-- 咨询类别占比图 -->
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-4 border-b flex justify-between items-center">
+              <div>
+                <h2 class="font-semibold text-gray-800">咨询类别占比</h2>
+                <p class="text-sm text-gray-500">不同法律咨询问题类型的分布</p>
+              </div>
+              <div>
+                <button class="px-3 py-1 text-sm flex items-center text-gray-500 hover:bg-gray-100 rounded">
+                  <i class="fas fa-filter mr-1"></i> 筛选
+                </button>
+              </div>
+            </div>
+            <div class="p-4 h-80">
+              <canvas id="consultationCategoriesChart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 图表区域第二行 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <!-- 每日AI咨询量 -->
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-4 border-b flex justify-between items-center">
+              <h2 class="font-semibold text-gray-800">每日AI咨询量</h2>
+              <div>
+                <button class="text-gray-500 hover:text-gray-700">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4 h-60">
+              <canvas id="dailyConsultationsChart"></canvas>
+            </div>
+          </div>
+          
+          <!-- 专家咨询占比 -->
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-4 border-b flex justify-between items-center">
+              <h2 class="font-semibold text-gray-800">专家咨询占比</h2>
+              <div>
+                <button class="text-gray-500 hover:text-gray-700">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4 h-60">
+              <canvas id="expertConsultationsChart"></canvas>
+            </div>
+          </div>
+          
+          <!-- 用户满意度 -->
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-4 border-b flex justify-between items-center">
+              <h2 class="font-semibold text-gray-800">用户满意度</h2>
+              <div>
+                <button class="text-gray-500 hover:text-gray-700">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4 h-60">
+              <canvas id="satisfactionChart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 详细数据表格 -->
+        <div class="bg-white rounded-lg shadow mb-6">
+          <div class="p-4 border-b flex justify-between items-center">
+            <div>
+              <h2 class="font-semibold text-gray-800">咨询详细数据</h2>
+              <p class="text-sm text-gray-500">最近30天咨询数据记录</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <input type="text" placeholder="搜索..." class="pl-8 pr-4 py-2 border rounded-md w-64">
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              </div>
+              
+              <button class="flex items-center gap-2 border px-3 py-2 rounded-md hover:bg-gray-50">
+                <i class="fas fa-filter text-gray-500"></i>
+                <span>筛选</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      日期
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      用户类型
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      咨询类别
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      AI咨询数
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      专家咨询数
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      满意度
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div class="flex items-center">
+                      营收
+                      <i class="fas fa-sort ml-1"></i>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <!-- 数据行 -->
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-05-15</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                      HR人员
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">工时规定</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">145</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">12</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex text-yellow-500">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="ml-1 text-gray-700">4.5</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1,250</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-05-14</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                      雇主
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">劳动合同</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">132</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">8</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex text-yellow-500">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <span class="ml-1 text-gray-700">5.0</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$980</td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-05-13</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                      员工
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">薪资计算</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">178</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex text-yellow-500">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <span class="ml-1 text-gray-700">4.0</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1,340</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-05-12</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                      HR人员
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">休假制度</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">156</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">11</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex text-yellow-500">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="ml-1 text-gray-700">4.5</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1,120</td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-05-11</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                      员工
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">终止聘用</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">124</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">9</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex text-yellow-500">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <span class="ml-1 text-gray-700">4.0</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$950</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- 分页控件 -->
+          <div class="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+            <div class="flex-1 flex justify-between sm:hidden">
+              <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                上一页
+              </a>
+              <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                下一页
+              </a>
+            </div>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p class="text-sm text-gray-700">
+                  显示第 <span class="font-medium">1</span> 至 <span class="font-medium">5</span> 项，共 <span class="font-medium">30</span> 项结果
+                </p>
+              </div>
+              <div>
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                  <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">上一页</span>
+                    <i class="fas fa-chevron-left"></i>
+                  </a>
+                  <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600 hover:bg-blue-100">
+                    1
+                  </a>
+                  <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    2
+                  </a>
+                  <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    3
+                  </a>
+                  <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                    ...
+                  </span>
+                  <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    6
+                  </a>
+                  <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">下一页</span>
+                    <i class="fas fa-chevron-right"></i>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    // 初始化图表
+    document.addEventListener('DOMContentLoaded', function() {
+      // 用户增长趋势图
+      const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
+      const userGrowthChart = new Chart(userGrowthCtx, {
+        type: 'line',
+        data: {
+          labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+          datasets: [
+            {
+              label: '新注册用户',
+              data: [150, 220, 180, 250, 300, 320],
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: '活跃用户',
+              data: [280, 350, 310, 380, 440, 480],
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              tension: 0.3,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      
+      // 咨询类别占比图
+      const consultationCategoriesCtx = document.getElementById('consultationCategoriesChart').getContext('2d');
+      const consultationCategoriesChart = new Chart(consultationCategoriesCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['工时规定', '薪资计算', '劳动合同', '休假制度', '终止聘用', '其他'],
+          datasets: [{
+            data: [30, 25, 20, 15, 7, 3],
+            backgroundColor: [
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(239, 68, 68, 0.7)',
+              'rgba(139, 92, 246, 0.7)',
+              'rgba(107, 114, 128, 0.7)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+            }
+          }
+        }
+      });
+      
+      // 每日AI咨询量
+      const dailyConsultationsCtx = document.getElementById('dailyConsultationsChart').getContext('2d');
+      const dailyConsultationsChart = new Chart(dailyConsultationsCtx, {
+        type: 'bar',
+        data: {
+          labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+          datasets: [{
+            label: 'AI咨询数量',
+            data: [180, 150, 195, 210, 220, 120, 90],
+            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      
+      // 专家咨询占比
+      const expertConsultationsCtx = document.getElementById('expertConsultationsChart').getContext('2d');
+      const expertConsultationsChart = new Chart(expertConsultationsCtx, {
+        type: 'pie',
+        data: {
+          labels: ['劳动合同专家', '薪资计算专家', '工时专家', '休假专家', '终止聘用专家'],
+          datasets: [{
+            data: [35, 20, 18, 15, 12],
+            backgroundColor: [
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(239, 68, 68, 0.7)',
+              'rgba(139, 92, 246, 0.7)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                font: {
+                  size: 10
+                }
+              }
+            }
+          }
+        }
+      });
+      
+      // 用户满意度
+      const satisfactionCtx = document.getElementById('satisfactionChart').getContext('2d');
+      const satisfactionChart = new Chart(satisfactionCtx, {
+        type: 'bar',
+        data: {
+          labels: ['5星', '4星', '3星', '2星', '1星'],
+          datasets: [{
+            label: '评价数量',
+            data: [350, 180, 60, 20, 10],
+            backgroundColor: [
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(244, 114, 182, 0.7)',
+              'rgba(239, 68, 68, 0.7)'
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

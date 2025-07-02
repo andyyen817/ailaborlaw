@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>仪表盘 - 管理后台</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/admin-styles.css">
+</head>
+<body class="bg-slate-100">
+  <div class="flex h-screen bg-gray-50">
+    <!-- 侧边栏 -->
+    <aside class="w-64 bg-gray-800 text-white">
+      <div class="p-4 border-b border-gray-700">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-balance-scale text-2xl"></i>
+          <span class="text-lg font-semibold">AI劳基法顾问</span>
+        </div>
+      </div>
+      
+      <nav class="mt-4">
+        <ul>
+          <li class="mb-1">
+            <a href="admin-dashboard.html" class="flex items-center px-4 py-3 bg-blue-600 text-white rounded">
+              <i class="fas fa-tachometer-alt w-5 mr-3"></i>
+              <span>仪表盘</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-users.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-users w-5 mr-3"></i>
+              <span>用户管理</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-ai-monitor.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-robot w-5 mr-3"></i>
+              <span>AI咨询监控</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-expert-consults.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-user-tie w-5 mr-3"></i>
+              <span>专家咨询管理</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-knowledge.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-book w-5 mr-3"></i>
+              <span>知识库管理</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-reports.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-chart-bar w-5 mr-3"></i>
+              <span>统计报表</span>
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="admin-settings.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded">
+              <i class="fas fa-cog w-5 mr-3"></i>
+              <span>系统设置</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="absolute bottom-0 w-64 p-4 border-t border-gray-700">
+        <a href="#" class="flex items-center text-gray-300 hover:text-white">
+          <i class="fas fa-sign-out-alt mr-3"></i>
+          <span>退出登录</span>
+        </a>
+      </div>
+    </aside>
+    
+    <!-- 主内容区 -->
+    <main class="flex-1 overflow-y-auto">
+      <!-- 顶部栏 -->
+      <div class="flex justify-between items-center p-4 bg-white border-b">
+        <h1 class="text-2xl font-semibold text-gray-800">仪表盘</h1>
+        
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <input type="text" placeholder="搜索..." class="pl-10 pr-4 py-2 border rounded-lg w-64">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <i class="fas fa-bell text-gray-500 text-xl"></i>
+              <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                A
+              </div>
+              <span class="text-gray-700">Admin</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 内容部分 -->
+      <div class="p-6">
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+              <i class="fas fa-users text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">总用户数</div>
+              <div class="text-2xl font-semibold">1,234</div>
+              <div class="text-xs text-green-500 mt-1">
+                <i class="fas fa-arrow-up"></i> 12% 较上月
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+              <i class="fas fa-comment text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">今日咨询量</div>
+              <div class="text-2xl font-semibold">56</div>
+              <div class="text-xs text-green-500 mt-1">
+                <i class="fas fa-arrow-up"></i> 8% 较昨日
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+              <i class="fas fa-user-tie text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">活跃专家数</div>
+              <div class="text-2xl font-semibold">12</div>
+              <div class="text-xs text-yellow-500 mt-1">
+                <i class="fas fa-equals"></i> 持平
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+              <i class="fas fa-exchange-alt text-2xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">转化率</div>
+              <div class="text-2xl font-semibold">15%</div>
+              <div class="text-xs text-red-500 mt-1">
+                <i class="fas fa-arrow-down"></i> 3% 较上月
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 图表区域 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div class="lg:col-span-2 bg-white rounded-lg shadow">
+            <div class="p-4 border-b flex justify-between items-center">
+              <h2 class="font-semibold text-gray-800">用户咨询统计</h2>
+              <div class="flex space-x-2">
+                <button class="px-3 py-1 text-sm rounded">日</button>
+                <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded">周</button>
+                <button class="px-3 py-1 text-sm rounded">月</button>
+              </div>
+            </div>
+            <div class="p-4 h-80">
+              <canvas id="consultationsChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-4 border-b">
+              <h2 class="font-semibold text-gray-800">咨询分类统计</h2>
+            </div>
+            <div class="p-4 h-80">
+              <canvas id="categoriesChart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 最近活动和任务 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <!-- 最近活动 -->
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-4 border-b flex justify-between items-center">
+              <h2 class="font-semibold text-gray-800">最近活动</h2>
+              <button class="text-sm text-blue-600">查看全部</button>
+            </div>
+            <div class="divide-y">
+              <div class="p-4 flex items-start">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-4">
+                  <i class="fas fa-comment"></i>
+                </div>
+                <div>
+                  <p class="font-medium">
+                    <span class="text-gray-800">张先生</span> 进行了AI咨询
+                  </p>
+                  <p class="text-sm text-gray-500 mt-1">10分钟前</p>
+                </div>
+              </div>
+              <div class="p-4 flex items-start">
+                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-4">
+                  <i class="fas fa-user-plus"></i>
+                </div>
+                <div>
+                  <p class="font-medium">
+                    <span class="text-gray-800">李小姐</span> 完成了注册
+                  </p>
+                  <p class="text-sm text-gray-500 mt-1">30分钟前</p>
+                </div>
+              </div>
+              <div class="p-4 flex items-start">
+                <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-4">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                  <p class="font-medium">
+                    <span class="text-gray-800">王专家</span> 处理了一个咨询工单
+                  </p>
+                  <p class="text-sm text-gray-500 mt-1">1小时前</p>
+                </div>
+              </div>
+              <div class="p-4 flex items-start">
+                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-4">
+                  <i class="fas fa-crown"></i>
+                </div>
+                <div>
+                  <p class="font-medium">
+                    <span class="text-gray-800">陈经理</span> 升级了企业会员
+                  </p>
+                  <p class="text-sm text-gray-500 mt-1">2小时前</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 待处理任务 -->
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-4 border-b flex justify-between items-center">
+              <h2 class="font-semibold text-gray-800">待处理任务</h2>
+              <button class="text-sm text-blue-600">查看全部</button>
+            </div>
+            <div class="divide-y">
+              <div class="p-4 flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-4">
+                    <i class="fas fa-exclamation-circle"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-800">审核新注册专家资质</p>
+                    <p class="text-sm text-gray-500 mt-1">2位专家待审核</p>
+                  </div>
+                </div>
+                <div>
+                  <span class="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full">紧急</span>
+                </div>
+              </div>
+              <div class="p-4 flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-4">
+                    <i class="fas fa-bell"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-800">回复用户反馈</p>
+                    <p class="text-sm text-gray-500 mt-1">5条反馈待处理</p>
+                  </div>
+                </div>
+                <div>
+                  <span class="px-2 py-1 bg-yellow-100 text-yellow-600 text-xs rounded-full">中等</span>
+                </div>
+              </div>
+              <div class="p-4 flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-4">
+                    <i class="fas fa-sync-alt"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-800">更新劳基法知识库</p>
+                    <p class="text-sm text-gray-500 mt-1">最近更新：7天前</p>
+                  </div>
+                </div>
+                <div>
+                  <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full">常规</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 最近咨询表格 -->
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+          <div class="p-4 border-b flex justify-between items-center">
+            <h2 class="font-semibold text-gray-800">最近咨询</h2>
+            <a href="admin-ai-monitor.html" class="text-sm text-blue-600">查看全部</a>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">用户</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">类型</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">主题</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">时间</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#12345</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 mr-3">张</div>
+                      <div class="text-sm font-medium text-gray-900">张先生</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">AI咨询</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">工时与加班费计算</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-15 10:30</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">已完成</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <a href="admin-chat-detail.html" class="text-blue-600 hover:text-blue-900">查看</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#12344</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 mr-3">李</div>
+                      <div class="text-sm font-medium text-gray-900">李小姐</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">专家咨询</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">特休假与请假规定</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-15 09:15</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">处理中</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <a href="admin-chat-detail.html" class="text-blue-600 hover:text-blue-900">查看</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#12343</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 mr-3">王</div>
+                      <div class="text-sm font-medium text-gray-900">王先生</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">AI咨询</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">劳动合同终止</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-14 16:45</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">已完成</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <a href="admin-chat-detail.html" class="text-blue-600 hover:text-blue-900">查看</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#12342</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 mr-3">陈</div>
+                      <div class="text-sm font-medium text-gray-900">陈经理</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">专家咨询</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">员工离职流程</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-14 14:20</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">待分配</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <a href="admin-chat-detail.html" class="text-blue-600 hover:text-blue-900">查看</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    // 初始化用户咨询统计图表
+    const consultationsCtx = document.getElementById('consultationsChart').getContext('2d');
+    const consultationsChart = new Chart(consultationsCtx, {
+      type: 'line',
+      data: {
+        labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+        datasets: [
+          {
+            label: 'AI咨询',
+            data: [65, 59, 80, 81, 56, 55, 40],
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+            tension: 0.3,
+            fill: true
+          },
+          {
+            label: '专家咨询',
+            data: [28, 48, 40, 19, 86, 27, 90],
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+    
+    // 初始化咨询分类统计图表
+    const categoriesCtx = document.getElementById('categoriesChart').getContext('2d');
+    const categoriesChart = new Chart(categoriesCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['工时问题', '薪资计算', '劳动合同', '特休假', '离职流程', '其他'],
+        datasets: [{
+          data: [35, 25, 15, 10, 10, 5],
+          backgroundColor: [
+            '#3b82f6',
+            '#10b981',
+            '#f59e0b',
+            '#ef4444',
+            '#8b5cf6',
+            '#6b7280'
+          ],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        },
+        cutout: '70%'
+      }
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>申请专家咨询 - AI劳基法顾问</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-100">
+  <!-- 浏览器模拟容器 -->
+  <div class="browser-container">
+    <div class="browser-header">
+      <div class="browser-buttons">
+        <div class="browser-button browser-button-red"></div>
+        <div class="browser-button browser-button-yellow"></div>
+        <div class="browser-button browser-button-green"></div>
+      </div>
+      <div class="browser-address-bar">
+        <i class="fas fa-lock"></i>ai-labor-advisor.tw/expert-consult
+      </div>
+    </div>
+    
+    <div class="browser-content">
+      <div class="min-h-full">
+        <!-- 顶部导航栏 -->
+        <nav class="bg-white shadow-sm">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 justify-between">
+              <div class="flex">
+                <div class="flex flex-shrink-0 items-center">
+                  <i class="fas fa-balance-scale text-2xl text-blue-600"></i>
+                  <span class="ml-2 text-lg font-semibold text-gray-900">AI劳基法顾问</span>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                  <a href="ai-chat.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">AI咨询</a>
+                  <a href="chat-history.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">历史记录</a>
+                  <a href="expert-consult.html" class="inline-flex items-center border-b-2 border-blue-500 px-1 pt-1 text-sm font-medium text-gray-900">专家咨询</a>
+                  <a href="profile.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">个人资料</a>
+                </div>
+              </div>
+              <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium mr-4">
+                  剩余次数: 8
+                </div>
+                <button type="button" class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none" title="通知" aria-label="查看通知">
+                  <i class="fas fa-bell"></i>
+                </button>
+                <div class="relative ml-3">
+                  <div>
+                    <button type="button" class="flex rounded-full bg-white text-sm focus:outline-none" id="user-menu-button" title="用户菜单" aria-label="打开用户菜单">
+                      <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="用户头像">
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div class="py-10">
+          <header>
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <h1 class="text-2xl font-bold leading-tight tracking-tight text-gray-900">专家咨询</h1>
+            </div>
+          </header>
+          
+          <main>
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+              <!-- 选择联系方式 -->
+              <div class="mb-8">
+                <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                  <div class="px-4 py-5 sm:p-6">
+                    <h2 class="text-lg font-medium leading-6 text-gray-900">选择联系方式</h2>
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div class="border rounded-lg p-4 bg-blue-50 border-blue-200 relative">
+                        <input id="contact-form" name="contact-method" type="radio" class="h-4 w-4 absolute top-4 right-4 text-blue-600 focus:ring-blue-500 border-gray-300" checked>
+                        <label for="contact-form" class="block cursor-pointer">
+                          <div class="flex items-center">
+                            <div class="flex-shrink-0 text-blue-700">
+                              <i class="fas fa-clipboard-list text-xl"></i>
+                            </div>
+                            <div class="ml-3">
+                              <h3 class="text-sm font-medium text-blue-800">填写咨询表单</h3>
+                              <p class="text-xs text-blue-600 mt-1">专家将在24小时内回复</p>
+                            </div>
+                          </div>
+                          <p class="mt-2 text-xs text-blue-600">适合需要详细描述问题并上传相关资料的情况</p>
+                        </label>
+                      </div>
+                      
+                      <div class="border rounded-lg p-4 bg-gray-50 border-gray-200 relative">
+                        <input id="contact-line" name="contact-method" type="radio" class="h-4 w-4 absolute top-4 right-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                        <label for="contact-line" class="block cursor-pointer">
+                          <div class="flex items-center">
+                            <div class="flex-shrink-0 text-green-700">
+                              <i class="fab fa-line text-xl"></i>
+                            </div>
+                            <div class="ml-3">
+                              <h3 class="text-sm font-medium text-gray-800">LINE即时联系</h3>
+                              <p class="text-xs text-gray-600 mt-1">扫描二维码添加好友</p>
+                            </div>
+                          </div>
+                          <p class="mt-2 text-xs text-gray-600">适合需要快速响应或实时沟通的情况</p>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 咨询表单 -->
+              <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-8">
+                <div class="px-4 py-5 sm:p-6">
+                  <h2 class="text-lg font-medium leading-6 text-gray-900 mb-4">专家咨询表单</h2>
+                  
+                  <form class="space-y-6 needs-validation" action="#" method="POST" novalidate>
+                    <div>
+                      <label for="consult-title" class="block text-sm font-medium text-gray-700">咨询主题</label>
+                      <div class="mt-1">
+                        <input type="text" id="consult-title" name="consult-title" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="例如：劳资争议处理、加班费计算问题等" required>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label for="consult-type" class="block text-sm font-medium text-gray-700">咨询类型</label>
+                      <div class="mt-1">
+                        <select id="consult-type" name="consult-type" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" aria-label="选择咨询类型" title="咨询类型选择" required>
+                          <option value="">请选择咨询类型</option>
+                          <option value="worktime">工作时间与休息</option>
+                          <option value="salary">薪资与福利</option>
+                          <option value="leave">休假与请假</option>
+                          <option value="contract">劳动合同问题</option>
+                          <option value="dispute">劳资纠纷处理</option>
+                          <option value="other">其他问题</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label for="consult-description" class="block text-sm font-medium text-gray-700">详细描述</label>
+                      <div class="mt-1">
+                        <textarea id="consult-description" name="consult-description" rows="5" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="请详细描述您的问题，包括相关背景信息，以便专家更准确地解答" required></textarea>
+                      </div>
+                      <p class="mt-1 text-xs text-gray-500">详细的问题描述有助于专家更快更准确地回答</p>
+                    </div>
+                    
+                    <div>
+                      <label for="consult-attachment" class="block text-sm font-medium text-gray-700">相关资料（选填）</label>
+                      <div class="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
+                        <div class="space-y-1 text-center">
+                          <i class="fas fa-cloud-upload-alt mx-auto h-12 w-12 text-gray-400"></i>
+                          <div class="flex text-sm text-gray-600">
+                            <label for="consult-attachment" class="relative cursor-pointer rounded-md bg-white font-medium text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:text-blue-500">
+                              <span>上传文件</span>
+                              <input id="consult-attachment" name="consult-attachment" type="file" class="sr-only">
+                            </label>
+                            <p class="pl-1">或拖拽文件到此处</p>
+                          </div>
+                          <p class="text-xs text-gray-500">支持PDF、Word、图片等格式，最大10MB</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label for="consult-priority" class="block text-sm font-medium text-gray-700">优先级</label>
+                      <div class="mt-1">
+                        <select id="consult-priority" name="consult-priority" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" aria-label="选择优先级" title="咨询优先级">
+                          <option value="normal">普通（24小时内回复）</option>
+                          <option value="urgent">紧急（4小时内回复）</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        提交咨询
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              
+              <!-- LINE联系信息 -->
+              <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-8" id="line-contact-section" style="display: none;">
+                <div class="px-4 py-5 sm:p-6 text-center">
+                  <h2 class="text-lg font-medium leading-6 text-gray-900 mb-4">扫描二维码添加专家</h2>
+                  <div class="flex justify-center">
+                    <!-- 图片来源: 使用了官方LINE QR码图像 -->
+                    <img class="h-48 w-48 border border-gray-200 rounded-md shadow-sm" src="https://qr-official.line.me/sid/L/778khair.png" alt="LINE二维码">
+                  </div>
+                  <p class="mt-4 text-sm text-gray-600">或搜索ID: <span class="font-medium">@ailabor</span></p>
+                  <div class="mt-6 bg-blue-50 border border-blue-100 rounded-md p-4">
+                    <div class="flex">
+                      <div class="flex-shrink-0">
+                        <i class="fas fa-info-circle text-blue-400"></i>
+                      </div>
+                      <div class="ml-3">
+                        <p class="text-sm text-blue-700">添加好友后，请简要描述您的问题，客服人员会将您转接到合适的专业人士</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 自定义脚本 -->
+  <script src="js/scripts.js"></script>
+  <script>
+    // LINE联系选项切换效果
+    document.addEventListener('DOMContentLoaded', function() {
+      const contactForm = document.getElementById('contact-form');
+      const contactLine = document.getElementById('contact-line');
+      const formSection = document.querySelector('form').closest('.bg-white');
+      const lineSection = document.getElementById('line-contact-section');
+      
+      contactForm.addEventListener('change', function() {
+        if (this.checked) {
+          formSection.style.display = 'block';
+          lineSection.style.display = 'none';
+        }
+      });
+      
+      contactLine.addEventListener('change', function() {
+        if (this.checked) {
+          formSection.style.display = 'none';
+          lineSection.style.display = 'block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

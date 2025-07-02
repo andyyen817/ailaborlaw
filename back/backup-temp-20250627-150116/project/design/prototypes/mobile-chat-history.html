@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史记录 - AI劳基法顾问</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义移动样式 -->
+  <link rel="stylesheet" href="css/mobile-styles.css">
+</head>
+<body>
+  <!-- iPhone 16模拟容器 -->
+  <div class="iphone-container">
+    <!-- 动态岛 -->
+    <div class="dynamic-island"></div>
+    
+    <!-- 状态栏 -->
+    <div class="status-bar">
+      <div class="status-bar-time">20:42</div>
+      <div class="status-bar-icons">
+        <i class="fas fa-signal"></i>
+        <i class="fas fa-wifi"></i>
+        <i class="fas fa-battery-three-quarters"></i>
+      </div>
+    </div>
+    
+    <!-- 页面标题 -->
+    <div style="background-color: white; padding: 15px; border-bottom: 1px solid #e2e8f0; z-index: 5; position: relative;">
+      <div class="flex justify-between items-center">
+        <h1 class="text-lg font-semibold">咨询历史</h1>
+        <button class="p-2 rounded-full hover:bg-gray-100" aria-label="筛选" title="筛选">
+          <i class="fas fa-filter text-gray-500"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- 应用内容区 -->
+    <div class="app-content">
+      <div class="page-container">
+        <!-- 搜索框 -->
+        <div class="relative mb-4">
+          <input type="text" placeholder="搜索历史咨询记录" class="w-full bg-gray-100 border-0 rounded-full py-3 pl-10 pr-4 text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white">
+          <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+        </div>
+        
+        <!-- 标签筛选 -->
+        <div class="flex overflow-x-auto space-x-2 py-2 mb-4 no-scrollbar">
+          <button class="whitespace-nowrap bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium flex-shrink-0">全部记录</button>
+          <button class="whitespace-nowrap bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-medium flex-shrink-0">工时计算</button>
+          <button class="whitespace-nowrap bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-medium flex-shrink-0">特休假</button>
+          <button class="whitespace-nowrap bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-medium flex-shrink-0">劳资争议</button>
+          <button class="whitespace-nowrap bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-medium flex-shrink-0">资遣费</button>
+        </div>
+        
+        <!-- 历史记录列表 -->
+        <div class="space-y-3">
+          <!-- 今天 -->
+          <div class="text-xs font-semibold text-gray-500 px-2 mb-1">今天</div>
+          
+          <a href="mobile-ai-chat.html" class="block card">
+            <div class="flex items-start p-3">
+              <div class="flex-shrink-0 bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-comment-dots text-blue-600"></i>
+              </div>
+              <div class="ml-3 flex-1">
+                <div class="flex justify-between">
+                  <h3 class="text-sm font-medium text-gray-900">加班费计算咨询</h3>
+                  <span class="text-xs text-gray-500">20:27</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1 line-clamp-2">请问加班费要怎么计算？那假如我月薪3万，平日加班3小时，怎么算？</p>
+                <div class="mt-2 flex items-center">
+                  <span class="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded-sm">工时计算</span>
+                </div>
+              </div>
+            </div>
+          </a>
+          
+          <a href="mobile-ai-chat.html" class="block card">
+            <div class="flex items-start p-3">
+              <div class="flex-shrink-0 bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-comment-dots text-blue-600"></i>
+              </div>
+              <div class="ml-3 flex-1">
+                <div class="flex justify-between">
+                  <h3 class="text-sm font-medium text-gray-900">特休假规定咨询</h3>
+                  <span class="text-xs text-gray-500">15:42</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1 line-clamp-2">我在公司工作已满两年，请问我的特休假有几天？特休假如果没休完会怎样？</p>
+                <div class="mt-2 flex items-center">
+                  <span class="bg-green-50 text-green-600 text-xs px-2 py-0.5 rounded-sm">特休假</span>
+                </div>
+              </div>
+            </div>
+          </a>
+          
+          <!-- 昨天 -->
+          <div class="text-xs font-semibold text-gray-500 px-2 mb-1 mt-5">昨天</div>
+          
+          <a href="mobile-ai-chat.html" class="block card">
+            <div class="flex items-start p-3">
+              <div class="flex-shrink-0 bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-comment-dots text-blue-600"></i>
+              </div>
+              <div class="ml-3 flex-1">
+                <div class="flex justify-between">
+                  <h3 class="text-sm font-medium text-gray-900">资遣费计算咨询</h3>
+                  <span class="text-xs text-gray-500">19:15</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1 line-clamp-2">如果公司因组织精简而裁员，资遣费应该如何计算？我工作了3年半，月薪35000元。</p>
+                <div class="mt-2 flex items-center">
+                  <span class="bg-red-50 text-red-600 text-xs px-2 py-0.5 rounded-sm">资遣费</span>
+                </div>
+              </div>
+            </div>
+          </a>
+          
+          <!-- 三天前 -->
+          <div class="text-xs font-semibold text-gray-500 px-2 mb-1 mt-5">5月8日</div>
+          
+          <a href="mobile-ai-chat.html" class="block card">
+            <div class="flex items-start p-3">
+              <div class="flex-shrink-0 bg-green-100 w-10 h-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-user-tie text-green-600"></i>
+              </div>
+              <div class="ml-3 flex-1">
+                <div class="flex justify-between">
+                  <h3 class="text-sm font-medium text-gray-900">专家咨询：不当解雇争议</h3>
+                  <span class="text-xs text-gray-500">14:30</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1 line-clamp-2">与王律师关于公司未依法定程序解雇员工应对措施的咨询记录。</p>
+                <div class="mt-2 flex items-center">
+                  <span class="bg-purple-50 text-purple-600 text-xs px-2 py-0.5 rounded-sm">专家咨询</span>
+                  <span class="bg-red-50 text-red-600 text-xs px-2 py-0.5 rounded-sm ml-1">劳资争议</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 底部导航栏 -->
+    <div class="bottom-nav">
+      <a href="mobile-home.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>首页</span>
+      </a>
+      <a href="mobile-ai-chat.html" class="nav-item">
+        <i class="fas fa-comment-alt"></i>
+        <span>咨询</span>
+      </a>
+      <a href="mobile-chat-history.html" class="nav-item active">
+        <i class="fas fa-history"></i>
+        <span>历史</span>
+      </a>
+      <a href="mobile-profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>我的</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 自定义脚本 -->
+  <script>
+    // 设置当前时间
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
+                         now.getMinutes().toString().padStart(2, '0');
+      document.querySelector('.status-bar-time').textContent = timeString;
+    }
+    
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      updateTime();
+      setInterval(updateTime, 60000); // 每分钟更新一次
+    });
+  </script>
+</body>
+</html>

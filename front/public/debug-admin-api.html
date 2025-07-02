@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理員API調試工具</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .warning { background-color: #fff3cd; color: #856404; }
+        button { padding: 8px 16px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        .log { max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+        input[type="text"] { padding: 5px; margin: 5px; border: 1px solid #ccc; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 管理員API調試工具</h1>
+    
+    <div class="section">
+        <h2>📝 當前認證狀態</h2>
+        <div id="auth-status"></div>
+        <button onclick="checkAuthStatus()">檢查認證狀態</button>
+        <button onclick="setTestAdminToken()">設置測試管理員Token</button>
+    </div>
+    
+    <div class="section">
+        <h2>🌐 網路連接測試</h2>
+        <div id="network-status"></div>
+        <button onclick="testNetworkConnectivity()">測試網路連接</button>
+        <button onclick="testAPIBaseURL()">測試API基礎URL</button>
+    </div>
+    
+    <div class="section">
+        <h2>🔍 管理員API測試</h2>
+        <button onclick="testGetAllSessions()">測試獲取所有會話</button>
+        <button onclick="testGetChatStats()">測試獲取統計數據</button>
+        <button onclick="testWithDifferentTokens()">測試不同Token</button>
+        <div id="api-results"></div>
+    </div>
+    
+    <div class="section">
+        <h2>📊 詳細調試信息</h2>
+        <div class="log" id="debug-log"></div>
+        <button onclick="clearLog()">清除日誌</button>
+        <button onclick="exportDebugInfo()">導出調試信息</button>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'https://wrrfvodsaofk.sealosgzg.site/api/v1';
+        const debugLog = document.getElementById('debug-log');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            debugLog.appendChild(logEntry);
+            debugLog.scrollTop = debugLog.scrollHeight;
+            console.log(`[${timestamp}] ${message}`);
+        }
+        
+        function clearLog() {
+            debugLog.innerHTML = '';
+        }
+        
+        function checkAuthStatus() {
+            const adminToken = localStorage.getItem('admin_access_token');
+            const adminData = localStorage.getItem('admin_data');
+            const userToken = localStorage.getItem('auth_token');
+            
+            let statusHTML = '<h3>認證狀態檢查結果：</h3>';
+            
+            if (adminToken) {
+                statusHTML += `<p class="success">✅ 管理員Token存在: ${adminToken.substring(0, 20)}...</p>`;
+                try {
+                    const payload = parseJWT(adminToken);
+                    if (payload) {
+                        const exp = new Date(payload.exp * 1000);
+                        const now = new Date();
+                        statusHTML += `<p>Token過期時間: ${exp.toLocaleString()}</p>`;
+                        statusHTML += `<p ${exp > now ? 'class="success"' : 'class="error"'}>Token狀態: ${exp > now ? '有效' : '已過期'}</p>`;
+                    }
+                } catch (e) {
+                    statusHTML += `<p class="warning">⚠️ Token解析失敗: ${e.message}</p>`;
+                }
+            } else {
+                statusHTML += '<p class="error">❌ 管理員Token不存在</p>';
+            }
+            
+            if (adminData) {
+                try {
+                    const admin = JSON.parse(adminData);
+                    statusHTML += `<p class="success">✅ 管理員資料: ${admin.name} (${admin.email})</p>`;
+                } catch (e) {
+                    statusHTML += `<p class="warning">⚠️ 管理員資料解析失敗</p>`;
+                }
+            } else {
+                statusHTML += '<p class="error">❌ 管理員資料不存在</p>';
+            }
+            
+            if (userToken) {
+                statusHTML += `<p class="warning">⚠️ 用戶Token也存在: ${userToken.substring(0, 20)}...</p>`;
+            }
+            
+            document.getElementById('auth-status').innerHTML = statusHTML;
+            log('認證狀態檢查完成');
+        }
+        
+        function setTestAdminToken() {
+            const testToken = 'test_admin_token_' + Date.now();
+            const testAdmin = {
+                id: 'admin_test_001',
+                name: '測試管理員',
+                email: 'test@admin.com',
+                role: 'admin'
+            };
+            
+            localStorage.setItem('admin_access_token', testToken);
+            localStorage.setItem('admin_data', JSON.stringify(testAdmin));
+            localStorage.setItem('admin_token_expires', (Date.now() + 24 * 60 * 60 * 1000).toString());
+            
+            log('已設置測試管理員Token', 'success');
+            checkAuthStatus();
+        }
+        
+        async function testNetworkConnectivity() {
+            log('開始測試網路連接...');
+            
+            // 測試基本連接
+            try {
+                const response = await fetch('https://httpbin.org/json');
+                const data = await response.json();
+                log('✅ 基本網路連接正常', 'success');
+            } catch (error) {
+                log(`❌ 基本網路連接失敗: ${error.message}`, 'error');
+                return;
+            }
+            
+            // 測試API伺服器連接
+            try {
+                const response = await fetch(API_BASE_URL, { method: 'HEAD' });
+                log(`✅ API伺服器連接狀態: ${response.status}`, 'success');
+            } catch (error) {
+                log(`❌ API伺服器連接失敗: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testAPIBaseURL() {
+            log('測試API基礎URL...');
+            
+            try {
+                const testURL = `${API_BASE_URL}/health`;
+                log(`測試URL: ${testURL}`);
+                
+                const response = await fetch(testURL);
+                const data = await response.text();
+                
+                log(`響應狀態: ${response.status}`);
+                log(`響應內容: ${data.substring(0, 200)}...`);
+                
+                if (response.ok) {
+                    log('✅ API基礎URL連接成功', 'success');
+                } else {
+                    log(`⚠️ API響應狀態異常: ${response.status}`, 'warning');
+                }
+            } catch (error) {
+                log(`❌ API基礎URL測試失敗: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testGetAllSessions() {
+            log('開始測試獲取所有會話API...');
+            
+            const adminToken = localStorage.getItem('admin_access_token');
+            if (!adminToken) {
+                log('❌ 沒有管理員Token，無法測試', 'error');
+                return;
+            }
+            
+            const testURL = `${API_BASE_URL}/admin/chat/sessions`;
+            log(`測試URL: ${testURL}`);
+            
+            try {
+                const response = await fetch(testURL, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                log(`響應狀態: ${response.status}`);
+                log(`響應標頭: ${JSON.stringify(Object.fromEntries(response.headers))}`);
+                
+                const data = await response.json();
+                log(`響應數據: ${JSON.stringify(data, null, 2)}`);
+                
+                if (response.ok && data.success) {
+                    log('✅ 獲取會話API調用成功', 'success');
+                    const sessions = data.data?.sessions || [];
+                    log(`📊 獲取到 ${sessions.length} 個會話`);
+                    
+                    document.getElementById('api-results').innerHTML = `
+                        <h3>API測試結果：</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    log(`❌ API調用失敗: ${data.message || '未知錯誤'}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ 網絡請求失敗: ${error.message}`, 'error');
+                log(`錯誤詳情: ${error.stack}`, 'error');
+            }
+        }
+        
+        async function testGetChatStats() {
+            log('開始測試獲取統計數據API...');
+            
+            const adminToken = localStorage.getItem('admin_access_token');
+            if (!adminToken) {
+                log('❌ 沒有管理員Token，無法測試', 'error');
+                return;
+            }
+            
+            const today = new Date().toISOString().split('T')[0];
+            const testURL = `${API_BASE_URL}/admin/chat/stats?startDate=${today}&endDate=${today}`;
+            log(`測試URL: ${testURL}`);
+            
+            try {
+                const response = await fetch(testURL, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                log(`響應狀態: ${response.status}`);
+                const data = await response.json();
+                log(`響應數據: ${JSON.stringify(data, null, 2)}`);
+                
+                if (response.ok && data.success) {
+                    log('✅ 獲取統計數據API調用成功', 'success');
+                } else {
+                    log(`❌ API調用失敗: ${data.message || '未知錯誤'}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ 網絡請求失敗: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testWithDifferentTokens() {
+            log('測試不同Token組合...');
+            
+            const tokens = [
+                localStorage.getItem('admin_access_token'),
+                localStorage.getItem('auth_token'),
+                'test_invalid_token',
+                null
+            ];
+            
+            for (const [index, token] of tokens.entries()) {
+                log(`測試Token ${index + 1}: ${token ? token.substring(0, 20) + '...' : 'null'}`);
+                
+                try {
+                    const response = await fetch(`${API_BASE_URL}/admin/chat/sessions`, {
+                        method: 'GET',
+                        headers: {
+                            ...(token && { 'Authorization': `Bearer ${token}` }),
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    log(`Token ${index + 1} 響應狀態: ${response.status}`);
+                    
+                    if (response.status === 401) {
+                        log(`Token ${index + 1}: 認證失敗`, 'warning');
+                    } else if (response.status === 403) {
+                        log(`Token ${index + 1}: 權限不足`, 'warning');
+                    } else if (response.ok) {
+                        log(`Token ${index + 1}: 成功`, 'success');
+                    }
+                    
+                } catch (error) {
+                    log(`Token ${index + 1} 請求失敗: ${error.message}`, 'error');
+                }
+            }
+        }
+        
+        function parseJWT(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                return null;
+            }
+        }
+        
+        function exportDebugInfo() {
+            const debugInfo = {
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                localStorage: {
+                    admin_access_token: localStorage.getItem('admin_access_token'),
+                    admin_data: localStorage.getItem('admin_data'),
+                    auth_token: localStorage.getItem('auth_token')
+                },
+                apiBaseURL: API_BASE_URL,
+                logs: debugLog.innerHTML
+            };
+            
+            const blob = new Blob([JSON.stringify(debugInfo, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `admin-api-debug-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // 初始化時檢查狀態
+        window.onload = function() {
+            log('調試工具已載入');
+            checkAuthStatus();
+        };
+    </script>
+</body>
+</html> 

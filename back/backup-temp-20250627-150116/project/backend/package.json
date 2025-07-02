@@ -1,0 +1,40 @@
+{
+  "name": "ai-labor-advisor-backend",
+  "version": "1.0.0",
+  "description": "台灣勞動法規AI咨詢平台後端服務",
+  "main": "src/app.js",
+  "type": "module",
+  "scripts": {
+    "start": "cross-env PORT=7070 node src/app.js",
+    "dev": "cross-env PORT=7070 nodemon src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/**/*.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "helmet": "^7.2.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.0",
+    "morgan": "^1.10.0",
+    "node-fetch": "^3.3.2",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "eslint": "^9.26.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^6.3.4"
+  }
+}

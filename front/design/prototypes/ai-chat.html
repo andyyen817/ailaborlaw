@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI法律咨询 - AI劳基法顾问</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 4px;
+    }
+
+    .typing-indicator span {
+      display: block;
+      width: 8px;
+      height: 8px;
+      background-color: #94a3b8;
+      border-radius: 50%;
+      animation: typing 1.4s infinite both;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0% {
+        opacity: 0.4;
+        transform: scale(0.8);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0.4;
+        transform: scale(0.8);
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100">
+  <!-- 浏览器模拟容器 -->
+  <div class="browser-container">
+    <div class="browser-header">
+      <div class="browser-buttons">
+        <div class="browser-button browser-button-red"></div>
+        <div class="browser-button browser-button-yellow"></div>
+        <div class="browser-button browser-button-green"></div>
+      </div>
+      <div class="browser-address-bar">
+        <i class="fas fa-lock"></i>ai-labor-advisor.tw/ai-chat
+      </div>
+    </div>
+    
+    <div class="browser-content" style="padding: 0;">
+      <div class="flex h-full">
+        <!-- 左侧会话列表 -->
+        <div class="hidden md:block md:w-64 bg-gray-50 border-r border-gray-200">
+          <div class="p-4 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-medium text-gray-800">会话历史</h2>
+              <button class="text-gray-500 hover:text-gray-700" title="新建会话" aria-label="创建新会话">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="py-2">
+            <div class="px-4 py-3 bg-blue-50 border-l-4 border-blue-500">
+              <h3 class="text-sm font-medium text-gray-800 truncate">加班费计算咨询</h3>
+              <p class="text-xs text-gray-500 mt-1">今天 14:30</p>
+            </div>
+            
+            <div class="px-4 py-3 hover:bg-gray-100">
+              <h3 class="text-sm font-medium text-gray-800 truncate">特休假申请问题</h3>
+              <p class="text-xs text-gray-500 mt-1">2025/5/8</p>
+            </div>
+            
+            <div class="px-4 py-3 hover:bg-gray-100">
+              <h3 class="text-sm font-medium text-gray-800 truncate">劳资争议处理流程</h3>
+              <p class="text-xs text-gray-500 mt-1">2025/5/5</p>
+            </div>
+            
+            <div class="px-4 py-3 hover:bg-gray-100">
+              <h3 class="text-sm font-medium text-gray-800 truncate">工作时间与休息日规定</h3>
+              <p class="text-xs text-gray-500 mt-1">2025/5/2</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 右侧聊天区域 -->
+        <div class="flex-1 flex flex-col">
+          <!-- 顶部导航栏 -->
+          <div class="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center">
+              <button class="md:hidden mr-2 text-gray-600" title="展开菜单" aria-label="显示会话列表">
+                <i class="fas fa-bars"></i>
+              </button>
+              <h1 class="text-lg font-medium text-gray-800">AI法律咨询</h1>
+            </div>
+            <div class="flex items-center space-x-2">
+              <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                剩余次数: 8
+              </div>
+              <button class="text-gray-600 hover:text-gray-800" title="更多选项" aria-label="更多选项">
+                <i class="fas fa-ellipsis-v"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- 聊天内容区域 -->
+          <div class="flex-1 overflow-y-auto p-4 bg-gray-50 chat-body">
+            <!-- 系统欢迎消息 -->
+            <div class="flex items-center justify-center mb-6">
+              <div class="bg-gray-200 rounded-full px-4 py-1 text-xs text-gray-600">
+                今天 15:30
+              </div>
+            </div>
+            
+            <div class="chat-message chat-message-ai mb-6">
+              <div class="chat-bubble chat-bubble-ai">
+                您好！我是AI劳基法顾问，专注于台湾劳动法规咨询服务。请问有什么关于劳动法规的问题需要我帮助解答吗？
+              </div>
+              <div class="chat-time">15:30</div>
+            </div>
+            
+            <div class="chat-message chat-message-user mb-6">
+              <div class="chat-bubble chat-bubble-user">
+                你好，我想了解一下关于加班费的计算方式。如果我平日工作超过8小时，雇主应该如何计算加班费？
+              </div>
+              <div class="chat-time">15:31</div>
+            </div>
+            
+            <div class="chat-message chat-message-ai mb-6">
+              <div class="chat-bubble chat-bubble-ai">
+                根据台湾《劳动基准法》第24条规定，雇主延长工作时间时应依下列标准加给工资：<br><br>
+                1. 平日延长工作时间在2小时以内者，按平日每小时工资额加给三分之一以上。<br>
+                2. 平日延长工作时间在2小时以上者，按平日每小时工资额加给三分之二以上。<br>
+                3. 休息日工作8小时以内者，按平日每小时工资额加给一又三分之一以上。<br>
+                4. 休息日工作逾8小时者，按平日每小时工资额加给一又三分之二以上。
+              </div>
+              <div class="chat-law-reference">
+                <strong>法条引用：</strong> 《劳动基准法》第24条
+              </div>
+              <div class="chat-time">15:31</div>
+            </div>
+            
+            <div class="chat-message chat-message-user mb-6">
+              <div class="chat-bubble chat-bubble-user">
+                那如果是周末加班呢？计算方式有什么不同？
+              </div>
+              <div class="chat-time">15:32</div>
+            </div>
+            
+            <div class="chat-message chat-message-ai">
+              <div class="chat-bubble chat-bubble-ai">
+                在台湾劳动法规中，周末加班的计算方式取决于该日是"休息日"还是"例假日"：<br><br>
+                
+                <strong>1. 休息日加班：</strong><br>
+                依据《劳动基准法》第24条规定：<br>
+                - 工作时间在8小时以内：按平日每小时工资额加给一又三分之一以上。<br>
+                - 工作时间超过8小时：超过部分按平日每小时工资额加给一又三分之二以上。<br><br>
+                
+                <strong>2. 例假日加班：</strong><br>
+                依据《劳动基准法》第39条规定，例假日是强制休息日，原则上不得使员工工作。若因紧急状况需工作，除了应依《劳动基准法》第40条规定安排补休外，还需依第39条规定加倍发给工资。
+              </div>
+              <div class="chat-law-reference">
+                <strong>法条引用：</strong> 《劳动基准法》第24条、第39条、第40条
+              </div>
+              <div class="chat-time">15:33</div>
+            </div>
+          </div>
+          
+          <!-- 输入区域 -->
+          <div class="bg-white border-t border-gray-200 p-4">
+            <div class="flex items-center">
+              <div class="flex-1 relative">
+                <input type="text" class="chat-input w-full border border-gray-300 rounded-full py-2 pl-4 pr-10 focus:outline-none focus:border-blue-500" placeholder="请输入您的问题...">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600" title="添加附件" aria-label="添加附件">
+                  <i class="fas fa-paperclip"></i>
+                </button>
+              </div>
+              <button class="chat-send-btn ml-2 bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center" title="发送消息" aria-label="发送消息">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            
+            <div class="mt-3 flex items-center justify-between">
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-info-circle mr-1"></i>
+                <span>每次提问将消耗一次免费咨询额度</span>
+              </div>
+              <div class="flex space-x-3">
+                <button class="text-gray-500 hover:text-gray-700" title="常见问题">
+                  <i class="fas fa-question-circle"></i>
+                </button>
+                <button class="text-gray-500 hover:text-gray-700" title="联系专家">
+                  <i class="fas fa-user-tie"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 自定义脚本 -->
+  <script src="js/scripts.js"></script>
+</body>
+</html>

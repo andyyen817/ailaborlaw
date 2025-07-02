@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>首页 - AI劳基法顾问</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-100">
+  <!-- 浏览器模拟容器 -->
+  <div class="browser-container">
+    <div class="browser-header">
+      <div class="browser-buttons">
+        <div class="browser-button browser-button-red"></div>
+        <div class="browser-button browser-button-yellow"></div>
+        <div class="browser-button browser-button-green"></div>
+      </div>
+      <div class="browser-address-bar">
+        <i class="fas fa-lock"></i>ai-labor-advisor.tw/home
+      </div>
+    </div>
+    
+    <div class="browser-content">
+      <div class="min-h-full">
+        <!-- 顶部导航栏 -->
+        <nav class="bg-white shadow-sm">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 justify-between">
+              <div class="flex">
+                <div class="flex flex-shrink-0 items-center">
+                  <i class="fas fa-balance-scale text-2xl text-blue-600"></i>
+                  <span class="ml-2 text-lg font-semibold text-gray-900">AI劳基法顾问</span>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                  <a href="home.html" class="inline-flex items-center border-b-2 border-blue-500 px-1 pt-1 text-sm font-medium text-gray-900">首页</a>
+                  <a href="ai-chat.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">AI咨询</a>
+                  <a href="chat-history.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">历史记录</a>
+                  <a href="expert-consult.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">专家咨询</a>
+                </div>
+              </div>
+              <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium mr-4">
+                  剩余次数: 10
+                </div>
+                <button type="button" class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none" title="通知" aria-label="查看通知">
+                  <i class="fas fa-bell"></i>
+                </button>
+                <div class="relative ml-3">
+                  <div>
+                    <a href="profile.html" class="flex rounded-full bg-white text-sm focus:outline-none" id="user-menu-button" title="用户菜单" aria-label="打开用户菜单">
+                      <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="用户头像">
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="-mr-2 flex items-center sm:hidden">
+                <button type="button" class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none" title="展开菜单" aria-label="展开主菜单">
+                  <i class="fas fa-bars"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <!-- 欢迎横幅 -->
+        <div class="bg-blue-600 py-10">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="text-center sm:text-left">
+              <h1 class="text-3xl font-bold tracking-tight text-white">欢迎，张先生！</h1>
+              <p class="mt-2 text-lg text-blue-100">您的AI劳基法顾问已准备就绪，立即开始咨询</p>
+            </div>
+          </div>
+        </div>
+
+        <main>
+          <div class="mx-auto max-w-7xl py-8 px-4 sm:px-6 lg:px-8">
+            
+            <!-- 快速操作卡片 -->
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+              <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                <div class="p-5">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                      <i class="fas fa-comment-alt text-white"></i>
+                    </div>
+                    <div class="ml-5">
+                      <h3 class="text-lg font-medium text-gray-900">AI咨询</h3>
+                      <p class="text-sm text-gray-500">智能解答劳动法规问题</p>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <a href="ai-chat.html" class="text-sm font-medium text-blue-600 hover:text-blue-500">立即咨询 <i class="fas fa-arrow-right ml-1"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                <div class="p-5">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                      <i class="fas fa-user-tie text-white"></i>
+                    </div>
+                    <div class="ml-5">
+                      <h3 class="text-lg font-medium text-gray-900">专家咨询</h3>
+                      <p class="text-sm text-gray-500">真人专家深度解析</p>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <a href="expert-consult.html" class="text-sm font-medium text-blue-600 hover:text-blue-500">申请咨询 <i class="fas fa-arrow-right ml-1"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                <div class="p-5">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-purple-500 rounded-md p-3">
+                      <i class="fas fa-history text-white"></i>
+                    </div>
+                    <div class="ml-5">
+                      <h3 class="text-lg font-medium text-gray-900">历史记录</h3>
+                      <p class="text-sm text-gray-500">查看历史咨询内容</p>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <a href="chat-history.html" class="text-sm font-medium text-blue-600 hover:text-blue-500">查看历史 <i class="fas fa-arrow-right ml-1"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                <div class="p-5">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                      <i class="fas fa-gift text-white"></i>
+                    </div>
+                    <div class="ml-5">
+                      <h3 class="text-lg font-medium text-gray-900">推荐奖励</h3>
+                      <p class="text-sm text-gray-500">邀请好友获得咨询次数</p>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <a href="profile.html" class="text-sm font-medium text-blue-600 hover:text-blue-500">立即分享 <i class="fas fa-arrow-right ml-1"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 热门话题区域 -->
+            <div class="mb-10">
+              <h2 class="text-xl font-bold text-gray-900 mb-6">热门劳动法规话题</h2>
+              
+              <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                <ul class="divide-y divide-gray-200">
+                  <li>
+                    <a href="ai-chat.html" class="block hover:bg-gray-50 p-4">
+                      <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-blue-100 p-2 rounded-full">
+                          <i class="fas fa-clock text-blue-700"></i>
+                        </div>
+                        <div class="ml-4">
+                          <h3 class="text-sm font-medium text-gray-900">工时与加班费计算</h3>
+                          <p class="text-xs text-gray-500 mt-1">了解工时上限与加班费计算方式</p>
+                        </div>
+                        <div class="ml-auto">
+                          <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="ai-chat.html" class="block hover:bg-gray-50 p-4">
+                      <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-green-100 p-2 rounded-full">
+                          <i class="fas fa-calendar-alt text-green-700"></i>
+                        </div>
+                        <div class="ml-4">
+                          <h3 class="text-sm font-medium text-gray-900">特休假与请假规定</h3>
+                          <p class="text-xs text-gray-500 mt-1">特休假计算方式与请假权益说明</p>
+                        </div>
+                        <div class="ml-auto">
+                          <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="ai-chat.html" class="block hover:bg-gray-50 p-4">
+                      <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-red-100 p-2 rounded-full">
+                          <i class="fas fa-file-contract text-red-700"></i>
+                        </div>
+                        <div class="ml-4">
+                          <h3 class="text-sm font-medium text-gray-900">劳动合同与解雇条件</h3>
+                          <p class="text-xs text-gray-500 mt-1">合法解雇条件与资遣费计算方式</p>
+                        </div>
+                        <div class="ml-auto">
+                          <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="ai-chat.html" class="block hover:bg-gray-50 p-4">
+                      <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-purple-100 p-2 rounded-full">
+                          <i class="fas fa-balance-scale text-purple-700"></i>
+                        </div>
+                        <div class="ml-4">
+                          <h3 class="text-sm font-medium text-gray-900">劳资争议处理</h3>
+                          <p class="text-xs text-gray-500 mt-1">有效解决劳资纠纷的流程与方法</p>
+                        </div>
+                        <div class="ml-auto">
+                          <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- 最新资讯 -->
+            <div>
+              <h2 class="text-xl font-bold text-gray-900 mb-6">最新劳动法规资讯</h2>
+              
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="会议场景" class="w-full h-48 object-cover">
+                  <div class="p-4">
+                    <div class="flex items-center mb-2">
+                      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">政策更新</span>
+                      <span class="ml-2 text-xs text-gray-500">2025/05/01</span>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">台湾《劳动基准法》最新修订要点</h3>
+                    <p class="text-sm text-gray-600 mb-3 line-clamp-3">最新《劳动基准法》修订提高加班费计算标准，并对特休假的计算方式做出调整，这些变化将从今年7月1日起正式实施...</p>
+                    <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500">阅读全文</a>
+                  </div>
+                </div>
+                
+                <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1585974738771-84483dd9f89f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="法律文件" class="w-full h-48 object-cover">
+                  <div class="p-4">
+                    <div class="flex items-center mb-2">
+                      <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">案例分析</span>
+                      <span class="ml-2 text-xs text-gray-500">2025/04/20</span>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">重要判例：雇主解雇员工的合法边界</h3>
+                    <p class="text-sm text-gray-600 mb-3 line-clamp-3">最高法院最新判决明确了雇主解雇员工必须满足的条件，并强调了资遣费计算需包含员工固定获得的各项津贴...</p>
+                    <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500">阅读全文</a>
+                  </div>
+                </div>
+                
+                <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="办公场景" class="w-full h-48 object-cover">
+                  <div class="p-4">
+                    <div class="flex items-center mb-2">
+                      <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">实用指南</span>
+                      <span class="ml-2 text-xs text-gray-500">2025/04/15</span>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">疫后远程工作：雇主与员工的权责平衡</h3>
+                    <p class="text-sm text-gray-600 mb-3 line-clamp-3">随着远程工作模式常态化，劳动部门发布最新指南，明确规定了远程工作中的工时计算、监管边界及设备补贴等问题...</p>
+                    <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500">阅读全文</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+        
+        <!-- 页脚 -->
+        <footer class="bg-gray-800 text-white py-10">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center">
+                  <i class="fas fa-balance-scale text-2xl text-blue-400"></i>
+                  <span class="ml-2 text-lg font-bold">AI劳基法顾问</span>
+                </div>
+                <p class="mt-2 text-sm text-gray-400">AI劳基法顾问是台湾领先的劳动法规智能咨询平台，致力于帮助员工和雇主了解并保障自身合法权益。</p>
+                <div class="mt-4 flex space-x-4">
+                  <a href="#" class="text-gray-400 hover:text-white">
+                    <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a href="#" class="text-gray-400 hover:text-white">
+                    <i class="fab fa-line"></i>
+                  </a>
+                  <a href="#" class="text-gray-400 hover:text-white">
+                    <i class="fab fa-youtube"></i>
+                  </a>
+                </div>
+              </div>
+              
+              <div>
+                <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">平台功能</h3>
+                <ul role="list" class="mt-4 space-y-2">
+                  <li><a href="ai-chat.html" class="text-sm text-gray-400 hover:text-white">AI法律咨询</a></li>
+                  <li><a href="expert-consult.html" class="text-sm text-gray-400 hover:text-white">专家咨询</a></li>
+                  <li><a href="chat-history.html" class="text-sm text-gray-400 hover:text-white">历史记录</a></li>
+                  <li><a href="profile.html" class="text-sm text-gray-400 hover:text-white">个人资料</a></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">关于我们</h3>
+                <ul role="list" class="mt-4 space-y-2">
+                  <li><a href="#" class="text-sm text-gray-400 hover:text-white">公司简介</a></li>
+                  <li><a href="#" class="text-sm text-gray-400 hover:text-white">专家团队</a></li>
+                  <li><a href="#" class="text-sm text-gray-400 hover:text-white">服务条款</a></li>
+                  <li><a href="#" class="text-sm text-gray-400 hover:text-white">隐私政策</a></li>
+                  <li><a href="#" class="text-sm text-gray-400 hover:text-white">联系我们</a></li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
+              <div class="flex space-x-6 md:order-2">
+                <a href="#" class="text-sm text-gray-400 hover:text-white">服务条款</a>
+                <a href="#" class="text-sm text-gray-400 hover:text-white">隐私政策</a>
+                <a href="#" class="text-sm text-gray-400 hover:text-white">Cookie政策</a>
+              </div>
+              <p class="mt-8 text-sm text-gray-400 md:order-1 md:mt-0">© 2025 AI劳基法顾问. 保留所有权利</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 自定义脚本 -->
+  <script src="js/scripts.js"></script>
+</body>
+</html>

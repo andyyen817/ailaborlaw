@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人资料 - AI劳基法顾问</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-100">
+  <!-- 浏览器模拟容器 -->
+  <div class="browser-container">
+    <div class="browser-header">
+      <div class="browser-buttons">
+        <div class="browser-button browser-button-red"></div>
+        <div class="browser-button browser-button-yellow"></div>
+        <div class="browser-button browser-button-green"></div>
+      </div>
+      <div class="browser-address-bar">
+        <i class="fas fa-lock"></i>ai-labor-advisor.tw/profile
+      </div>
+    </div>
+    
+    <div class="browser-content">
+      <div class="min-h-full">
+        <!-- 顶部导航栏 -->
+        <nav class="bg-white shadow-sm">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 justify-between">
+              <div class="flex">
+                <div class="flex flex-shrink-0 items-center">
+                  <i class="fas fa-balance-scale text-2xl text-blue-600"></i>
+                  <span class="ml-2 text-lg font-semibold text-gray-900">AI劳基法顾问</span>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                  <a href="ai-chat.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">AI咨询</a>
+                  <a href="chat-history.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">历史记录</a>
+                  <a href="expert-consult.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">专家咨询</a>
+                  <a href="profile.html" class="inline-flex items-center border-b-2 border-blue-500 px-1 pt-1 text-sm font-medium text-gray-900">个人资料</a>
+                </div>
+              </div>
+              <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium mr-4">
+                  剩余次数: 8
+                </div>
+                <button type="button" class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none" title="通知" aria-label="查看通知">
+                  <i class="fas fa-bell"></i>
+                </button>
+                <div class="relative ml-3">
+                  <div>
+                    <button type="button" class="flex rounded-full bg-white text-sm focus:outline-none" id="user-menu-button" title="用户菜单" aria-label="打开用户菜单">
+                      <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="用户头像">
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div class="py-10">
+          <header>
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <h1 class="text-2xl font-bold leading-tight tracking-tight text-gray-900">个人资料</h1>
+            </div>
+          </header>
+          
+          <main>
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+              <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- 左侧边栏 -->
+                <div class="lg:col-span-1">
+                  <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                    <div class="px-4 py-5 sm:p-6 text-center">
+                      <div class="mb-4">
+                        <img class="h-24 w-24 rounded-full mx-auto" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="用户头像">
+                        <h2 class="mt-2 text-lg font-medium text-gray-900">张先生</h2>
+                        <p class="text-sm text-gray-500">tech@example.com</p>
+                      </div>
+                      
+                      <div class="border-t border-gray-200 pt-4">
+                        <div class="flex justify-center mb-2">
+                          <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                            剩余咨询次数: 8
+                          </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-3">注册会员 · 2025/3/15</p>
+                        <button type="button" class="inline-flex items-center px-3 py-1.5 border border-blue-600 text-blue-600 rounded-md text-sm font-medium hover:bg-blue-50">
+                          <i class="fas fa-gift mr-1.5"></i>获取更多咨询次数
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <!-- 侧边栏菜单 -->
+                    <div class="border-t border-gray-200">
+                      <nav class="flex flex-col">
+                        <a href="#" class="px-4 py-3 bg-blue-50 border-l-4 border-blue-500 text-blue-700 font-medium flex items-center">
+                          <i class="fas fa-user-circle mr-3"></i>
+                          <span>个人资料</span>
+                        </a>
+                        <a href="#" class="px-4 py-3 hover:bg-gray-50 text-gray-700 flex items-center">
+                          <i class="fas fa-cog mr-3"></i>
+                          <span>账户设置</span>
+                        </a>
+                        <a href="#" class="px-4 py-3 hover:bg-gray-50 text-gray-700 flex items-center">
+                          <i class="fas fa-bell mr-3"></i>
+                          <span>通知偏好</span>
+                        </a>
+                        <a href="#" class="px-4 py-3 hover:bg-gray-50 text-gray-700 flex items-center">
+                          <i class="fas fa-user-friends mr-3"></i>
+                          <span>邀请好友</span>
+                        </a>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- 右侧主要内容 -->
+                <div class="lg:col-span-3">
+                  <!-- 个人信息表单 -->
+                  <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-6">
+                    <div class="px-4 py-5 sm:p-6">
+                      <h2 class="text-lg font-medium leading-6 text-gray-900 mb-4">基本信息</h2>
+                      
+                      <form class="space-y-6 needs-validation" action="#" method="POST" novalidate>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <label for="full-name" class="block text-sm font-medium text-gray-700">姓名</label>
+                            <div class="mt-1">
+                              <input type="text" id="full-name" name="full-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="张先生">
+                            </div>
+                          </div>
+
+                          <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">电子邮箱</label>
+                            <div class="mt-1">
+                              <input type="email" id="email" name="email" class="block w-full rounded-md border-gray-300 shadow-sm bg-gray-50 focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="tech@example.com" disabled>
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">邮箱地址无法修改</p>
+                          </div>
+
+                          <div>
+                            <label for="industry" class="block text-sm font-medium text-gray-700">行业</label>
+                            <div class="mt-1">
+                              <select id="industry" name="industry" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" aria-label="选择行业" title="行业类型选择">
+                                <option value="">请选择行业</option>
+                                <option value="tech" selected>科技/IT</option>
+                                <option value="manufacturing">制造业</option>
+                                <option value="retail">零售/贸易</option>
+                                <option value="finance">金融/保险</option>
+                                <option value="education">教育/培训</option>
+                                <option value="healthcare">医疗/健康</option>
+                                <option value="service">服务业</option>
+                                <option value="others">其他</option>
+                              </select>
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <label for="position" class="block text-sm font-medium text-gray-700">职位</label>
+                            <div class="mt-1">
+                              <select id="position" name="position" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" aria-label="选择职位" title="职位类型选择">
+                                <option value="">请选择职位</option>
+                                <option value="employee" selected>一般员工</option>
+                                <option value="manager">管理者</option>
+                                <option value="hr">人力资源</option>
+                                <option value="boss">企业主/雇主</option>
+                                <option value="others">其他</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <label for="company" class="block text-sm font-medium text-gray-700">公司名称（选填）</label>
+                          <div class="mt-1">
+                            <input type="text" id="company" name="company" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="请输入公司名称">
+                          </div>
+                          <p class="mt-1 text-xs text-gray-500">此信息仅用于为您提供更精准的法规咨询服务</p>
+                        </div>
+                        
+                        <div>
+                          <button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            保存更改
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  
+                  <!-- 安全设置 -->
+                  <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-6">
+                    <div class="px-4 py-5 sm:p-6">
+                      <h2 class="text-lg font-medium leading-6 text-gray-900 mb-4">安全设置</h2>
+                      
+                      <form class="space-y-6" action="#" method="POST">
+                        <div>
+                          <label for="current-password" class="block text-sm font-medium text-gray-700">当前密码</label>
+                          <div class="mt-1">
+                            <input type="password" id="current-password" name="current-password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••">
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <label for="new-password" class="block text-sm font-medium text-gray-700">新密码</label>
+                          <div class="mt-1">
+                            <input type="password" id="new-password" name="new-password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••">
+                          </div>
+                          <p class="mt-1 text-xs text-gray-500">密碼至少包含8個字符，包含英文字母和數字（不區分大小寫）</p>
+                        </div>
+                        
+                        <div>
+                          <label for="confirm-password" class="block text-sm font-medium text-gray-700">确认新密码</label>
+                          <div class="mt-1">
+                            <input type="password" id="confirm-password" name="confirm-password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••">
+                          </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                          <button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            更改密码
+                          </button>
+                          <a href="#" class="ml-4 text-sm font-medium text-blue-600 hover:text-blue-500">忘记密码?</a>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  
+                  <!-- 推荐奖励 -->
+                  <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                    <div class="px-4 py-5 sm:p-6">
+                      <h2 class="text-lg font-medium leading-6 text-gray-900 mb-4">推荐奖励</h2>
+                      
+                      <div class="bg-blue-50 border border-blue-100 rounded-md p-4 mb-5">
+                        <div class="flex">
+                          <div class="flex-shrink-0">
+                            <i class="fas fa-info-circle text-blue-400"></i>
+                          </div>
+                          <div class="ml-3">
+                            <p class="text-sm text-blue-700">邀请好友注册AI劳基法顾问，每成功邀请一位新用户，您将获得10次免费AI咨询次数</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="flex items-center justify-between mb-4">
+                        <div>
+                          <h3 class="text-sm font-medium text-gray-700">您的专属邀请链接</h3>
+                          <div class="flex items-center mt-1">
+                            <input type="text" id="invite-link" aria-label="邀请链接" title="您的专属邀请链接" value="https://ai-labor-advisor.tw/r/ZHANG2025" class="block w-full rounded-md border-gray-300 shadow-sm bg-gray-50 text-gray-500 text-sm pr-10" readonly>
+                            <button type="button" class="absolute right-3 text-gray-400 hover:text-gray-600" title="复制邀请链接" aria-label="复制邀请链接">
+                              <i class="fas fa-copy"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="border-t border-gray-200 pt-5">
+                        <div class="flex items-center justify-between">
+                          <h3 class="text-sm font-medium text-gray-700">分享邀请链接</h3>
+                        </div>
+                        <div class="mt-2 flex space-x-3">
+                          <button type="button" class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50" title="通过LINE分享" aria-label="通过LINE分享">
+                            <i class="fab fa-line text-green-600 mr-1.5"></i>
+                            LINE
+                          </button>
+                          <button type="button" class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50" title="通过Facebook分享" aria-label="通过Facebook分享">
+                            <i class="fab fa-facebook text-blue-600 mr-1.5"></i>
+                            Facebook
+                          </button>
+                          <button type="button" class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50" title="通过Email分享" aria-label="通过Email分享">
+                            <i class="fas fa-envelope text-gray-600 mr-1.5"></i>
+                            Email
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 自定义脚本 -->
+  <script src="js/scripts.js"></script>
+</body>
+</html>

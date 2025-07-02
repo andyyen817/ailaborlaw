@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史咨询记录 - AI劳基法顾问</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-100">
+  <!-- 浏览器模拟容器 -->
+  <div class="browser-container">
+    <div class="browser-header">
+      <div class="browser-buttons">
+        <div class="browser-button browser-button-red"></div>
+        <div class="browser-button browser-button-yellow"></div>
+        <div class="browser-button browser-button-green"></div>
+      </div>
+      <div class="browser-address-bar">
+        <i class="fas fa-lock"></i>ai-labor-advisor.tw/history
+      </div>
+    </div>
+    
+    <div class="browser-content">
+      <div class="min-h-full">
+        <!-- 顶部导航栏 -->
+        <nav class="bg-white shadow-sm">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 justify-between">
+              <div class="flex">
+                <div class="flex flex-shrink-0 items-center">
+                  <i class="fas fa-balance-scale text-2xl text-blue-600"></i>
+                  <span class="ml-2 text-lg font-semibold text-gray-900">AI劳基法顾问</span>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                  <a href="ai-chat.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">AI咨询</a>
+                  <a href="chat-history.html" class="inline-flex items-center border-b-2 border-blue-500 px-1 pt-1 text-sm font-medium text-gray-900">历史记录</a>
+                  <a href="expert-consult.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">专家咨询</a>
+                  <a href="profile.html" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700">个人资料</a>
+                </div>
+              </div>
+              <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium mr-4">
+                  剩余次数: 8
+                </div>
+                <button type="button" class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none" title="通知" aria-label="查看通知">
+                  <i class="fas fa-bell"></i>
+                </button>
+                <div class="relative ml-3">
+                  <div>
+                    <button type="button" class="flex rounded-full bg-white text-sm focus:outline-none" id="user-menu-button" title="用户菜单" aria-label="打开用户菜单">
+                      <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="用户头像">
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="-mr-2 flex items-center sm:hidden">
+                <button type="button" class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none" title="展开菜单" aria-label="展开主菜单">
+                  <i class="fas fa-bars"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div class="py-10">
+          <header>
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <h1 class="text-2xl font-bold leading-tight tracking-tight text-gray-900">历史咨询记录</h1>
+            </div>
+          </header>
+          
+          <main>
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+              <!-- 搜索和过滤 -->
+              <div class="bg-white shadow-sm rounded-lg p-4 mb-6">
+                <div class="sm:flex sm:justify-between sm:items-center">
+                  <div class="sm:flex-1">
+                    <div class="relative rounded-md shadow-sm">
+                      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-search text-gray-400"></i>
+                      </div>
+                      <input type="text" class="block w-full rounded-md border-gray-300 pl-10 focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="搜索历史记录...">
+                    </div>
+                  </div>
+                  <div class="mt-3 sm:mt-0 sm:ml-4">
+                    <div class="flex space-x-2">
+                      <select aria-label="选择时间范围" title="时间范围筛选" class="rounded-md border-gray-300 py-1.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        <option value="">全部时间</option>
+                        <option value="today">今天</option>
+                        <option value="week">本周</option>
+                        <option value="month">本月</option>
+                      </select>
+                      <select aria-label="选择咨询类型" title="问题类型筛选" class="rounded-md border-gray-300 py-1.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        <option value="">全部类型</option>
+                        <option value="worktime">工时问题</option>
+                        <option value="salary">薪资问题</option>
+                        <option value="leave">休假问题</option>
+                        <option value="dispute">劳资纠纷</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 会话历史列表 -->
+              <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                <ul role="list" class="divide-y divide-gray-200">
+                  <!-- 会话记录项目 -->
+                  <li>
+                    <a href="ai-chat.html" class="block hover:bg-gray-50">
+                      <div class="px-4 py-4 sm:px-6">
+                        <div class="flex items-center justify-between">
+                          <p class="truncate text-sm font-medium text-blue-600">加班费计算咨询</p>
+                          <div class="ml-2 flex flex-shrink-0">
+                            <p class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">已解决</p>
+                          </div>
+                        </div>
+                        <div class="mt-2 sm:flex sm:justify-between">
+                          <div class="sm:flex">
+                            <p class="flex items-center text-sm text-gray-500">
+                              <i class="fas fa-tag mr-1.5 text-gray-400"></i>
+                              工时/薪资
+                            </p>
+                            <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                              <i class="fas fa-comment-alt mr-1.5 text-gray-400"></i>
+                              4条消息
+                            </p>
+                          </div>
+                          <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                            <i class="fas fa-clock mr-1.5 text-gray-400"></i>
+                            <p>
+                              今天 15:30
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="ai-chat.html" class="block hover:bg-gray-50">
+                      <div class="px-4 py-4 sm:px-6">
+                        <div class="flex items-center justify-between">
+                          <p class="truncate text-sm font-medium text-blue-600">特休假申请问题</p>
+                          <div class="ml-2 flex flex-shrink-0">
+                            <p class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">已解决</p>
+                          </div>
+                        </div>
+                        <div class="mt-2 sm:flex sm:justify-between">
+                          <div class="sm:flex">
+                            <p class="flex items-center text-sm text-gray-500">
+                              <i class="fas fa-tag mr-1.5 text-gray-400"></i>
+                              休假/请假
+                            </p>
+                            <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                              <i class="fas fa-comment-alt mr-1.5 text-gray-400"></i>
+                              6条消息
+                            </p>
+                          </div>
+                          <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                            <i class="fas fa-clock mr-1.5 text-gray-400"></i>
+                            <p>
+                              2025/5/8
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="ai-chat.html" class="block hover:bg-gray-50">
+                      <div class="px-4 py-4 sm:px-6">
+                        <div class="flex items-center justify-between">
+                          <p class="truncate text-sm font-medium text-blue-600">劳资争议处理流程</p>
+                          <div class="ml-2 flex flex-shrink-0">
+                            <p class="inline-flex rounded-full bg-yellow-100 px-2 text-xs font-semibold leading-5 text-yellow-800">专家跟进</p>
+                          </div>
+                        </div>
+                        <div class="mt-2 sm:flex sm:justify-between">
+                          <div class="sm:flex">
+                            <p class="flex items-center text-sm text-gray-500">
+                              <i class="fas fa-tag mr-1.5 text-gray-400"></i>
+                              劳资纠纷
+                            </p>
+                            <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                              <i class="fas fa-comment-alt mr-1.5 text-gray-400"></i>
+                              8条消息
+                            </p>
+                          </div>
+                          <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                            <i class="fas fa-clock mr-1.5 text-gray-400"></i>
+                            <p>
+                              2025/5/5
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="ai-chat.html" class="block hover:bg-gray-50">
+                      <div class="px-4 py-4 sm:px-6">
+                        <div class="flex items-center justify-between">
+                          <p class="truncate text-sm font-medium text-blue-600">工作时间与休息日规定</p>
+                          <div class="ml-2 flex flex-shrink-0">
+                            <p class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">已解决</p>
+                          </div>
+                        </div>
+                        <div class="mt-2 sm:flex sm:justify-between">
+                          <div class="sm:flex">
+                            <p class="flex items-center text-sm text-gray-500">
+                              <i class="fas fa-tag mr-1.5 text-gray-400"></i>
+                              工时/休息
+                            </p>
+                            <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                              <i class="fas fa-comment-alt mr-1.5 text-gray-400"></i>
+                              5条消息
+                            </p>
+                          </div>
+                          <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                            <i class="fas fa-clock mr-1.5 text-gray-400"></i>
+                            <p>
+                              2025/5/2
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="ai-chat.html" class="block hover:bg-gray-50">
+                      <div class="px-4 py-4 sm:px-6">
+                        <div class="flex items-center justify-between">
+                          <p class="truncate text-sm font-medium text-blue-600">劳动合同终止补偿问题</p>
+                          <div class="ml-2 flex flex-shrink-0">
+                            <p class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">已解决</p>
+                          </div>
+                        </div>
+                        <div class="mt-2 sm:flex sm:justify-between">
+                          <div class="sm:flex">
+                            <p class="flex items-center text-sm text-gray-500">
+                              <i class="fas fa-tag mr-1.5 text-gray-400"></i>
+                              雇佣关系
+                            </p>
+                            <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                              <i class="fas fa-comment-alt mr-1.5 text-gray-400"></i>
+                              7条消息
+                            </p>
+                          </div>
+                          <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                            <i class="fas fa-clock mr-1.5 text-gray-400"></i>
+                            <p>
+                              2025/4/28
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                
+                <!-- 分页 -->
+                <nav class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6" aria-label="分页">
+                  <div class="hidden sm:block">
+                    <p class="text-sm text-gray-700">
+                      显示第 <span class="font-medium">1</span> 至 <span class="font-medium">5</span> 条，共 <span class="font-medium">12</span> 条
+                    </p>
+                  </div>
+                  <div class="flex flex-1 justify-between sm:justify-end">
+                    <a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">上一页</a>
+                    <a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">下一页</a>
+                  </div>
+                </nav>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 自定义脚本 -->
+  <script src="js/scripts.js"></script>
+</body>
+</html>

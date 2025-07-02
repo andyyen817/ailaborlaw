@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册 - AI劳基法顾问</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-100">
+  <!-- 浏览器模拟容器 -->
+  <div class="browser-container">
+    <div class="browser-header">
+      <div class="browser-buttons">
+        <div class="browser-button browser-button-red"></div>
+        <div class="browser-button browser-button-yellow"></div>
+        <div class="browser-button browser-button-green"></div>
+      </div>
+      <div class="browser-address-bar">
+        <i class="fas fa-lock"></i>ai-labor-advisor.tw/register
+      </div>
+    </div>
+    
+    <div class="browser-content">
+      <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+          <div class="text-center">
+            <i class="fas fa-balance-scale text-4xl text-blue-600"></i>
+          </div>
+          <h2 class="mt-3 text-center text-3xl font-bold tracking-tight text-gray-900">创建账户</h2>
+          <p class="mt-2 text-center text-sm text-gray-600">
+            注册即可获得10次免费AI法律咨询
+          </p>
+        </div>
+
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+            <form class="space-y-6 needs-validation" action="home.html" method="GET" novalidate>
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">电子邮箱</label>
+                <div class="mt-1">
+                  <input id="email" name="email" type="email" autocomplete="email" required 
+                         class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                         placeholder="your-email@example.com">
+                </div>
+                <p class="mt-1 text-xs text-gray-500">我们将向此邮箱发送验证链接</p>
+              </div>
+
+              <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">密码</label>
+                <div class="mt-1">
+                  <input id="password" name="password" type="password" autocomplete="new-password" required
+                         class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                         placeholder="••••••••">
+                </div>
+                <p class="mt-1 text-xs text-gray-500">至少8个字符，包含字母和数字</p>
+              </div>
+
+              <div>
+                <label for="password-confirm" class="block text-sm font-medium text-gray-700">确认密码</label>
+                <div class="mt-1">
+                  <input id="password-confirm" name="password-confirm" type="password" autocomplete="new-password" required
+                         class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                         placeholder="••••••••">
+                </div>
+              </div>
+              
+              <div class="space-y-4">
+                <h3 class="text-sm font-medium text-gray-700">基本资料 (选填)</h3>
+                
+                <div>
+                  <label for="industry" class="block text-sm font-medium text-gray-700">行业</label>
+                  <div class="mt-1">
+                    <select id="industry" name="industry" 
+                            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm">
+                      <option value="">请选择</option>
+                      <option value="tech">科技/IT</option>
+                      <option value="manufacturing">制造业</option>
+                      <option value="retail">零售/贸易</option>
+                      <option value="finance">金融/保险</option>
+                      <option value="education">教育/培训</option>
+                      <option value="healthcare">医疗/健康</option>
+                      <option value="service">服务业</option>
+                      <option value="others">其他</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="position" class="block text-sm font-medium text-gray-700">职位</label>
+                  <div class="mt-1">
+                    <select id="position" name="position"
+                            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm">
+                      <option value="">请选择</option>
+                      <option value="employee">一般员工</option>
+                      <option value="manager">管理者</option>
+                      <option value="hr">人力资源</option>
+                      <option value="boss">企业主/雇主</option>
+                      <option value="others">其他</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center">
+                <input id="terms" name="terms" type="checkbox" required
+                       class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                <label for="terms" class="ml-2 block text-sm text-gray-700">
+                  我已阅读并同意 <a href="#" class="font-medium text-blue-600 hover:text-blue-500">服务条款</a>
+                  和 <a href="#" class="font-medium text-blue-600 hover:text-blue-500">隐私政策</a>
+                </label>
+              </div>
+
+              <div>
+                <a href="home.html">
+                  <button type="button"
+                        class="flex w-full justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    注册
+                  </button>
+                </a>
+              </div>
+            </form>
+
+            <div class="mt-6">
+              <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                  <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                  <span class="bg-white px-2 text-gray-500">或者</span>
+                </div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-1 gap-3">
+                <div>
+                  <a href="#"
+                     class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50">
+                    <i class="fab fa-line text-green-600 text-lg mr-2"></i>
+                    使用LINE账户注册
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 text-center text-sm">
+              <p class="text-gray-600">
+                已有账户? 
+                <a href="login.html" class="font-medium text-blue-600 hover:text-blue-500">
+                  立即登录
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="sm:mx-auto sm:w-full sm:max-w-md mt-8">
+          <div class="bg-blue-50 p-4 rounded-md border border-blue-100">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-gift text-blue-600"></i>
+              </div>
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">注册福利</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                  <ul class="list-disc pl-5 space-y-1">
+                    <li>立即获得10次免费AI法律咨询</li>
+                    <li>每邀请一位好友注册，再获赠10次额外咨询</li>
+                    <li>专业真人专家服务优先体验</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 自定义脚本 -->
+  <script src="js/scripts.js"></script>
+</body>
+</html>
