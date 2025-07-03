@@ -171,12 +171,19 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 启动服务器
+// 启动服务器 - 僅在非生產環境下啟動
 const PORT = process.env.PORT || 7070;
-app.listen(PORT, () => {
-  logger.info(`服務器在端口 ${PORT} 上運行，環境：${process.env.NODE_ENV}`);
-  logger.info(`内网地址: http://ailabordevbox.ns-2rlrcc3k.svc.cluster.local:${PORT}`);
-  logger.info(`公网地址: https://wrrfvodsaofk.sealosgzg.site`);
-});
 
-export default app; // 如果需要导出 app 实例 (例如用于测试)
+// 條件化啟動 - Vercel Serverless環境不需要手動監聽
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    logger.info(`服務器在端口 ${PORT} 上運行，環境：${process.env.NODE_ENV}`);
+    logger.info(`内网地址: http://ailabordevbox.ns-2rlrcc3k.svc.cluster.local:${PORT}`);
+    logger.info(`公网地址: https://wrrfvodsaofk.sealosgzg.site`);
+  });
+} else {
+  logger.info(`Serverless模式啟動，環境：${process.env.NODE_ENV}`);
+}
+
+// 導出app實例供Vercel Serverless使用
+export default app;

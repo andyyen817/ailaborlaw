@@ -1,0 +1,17 @@
+{"baseUrl":"https://andyaiauto.zeabur.app/webhook/5cc76a7e-2e6a-4428-ba09-cbe8f8598f9b/chat","fullUrl":"https://andyaiauto.zeabur.app/webhook/5cc76a7e-2e6a-4428-ba09-cbe8f8598f9b/chat?action=sendMessage","level":"info","maxRetries":3,"message":"N8N服务初始化完成","service":"ai-labor-advisor","timeout":30000,"timestamp":"2025-07-03 23:37:04"}
+{"level":"warn","message":"JWT_SECRET 未設置，使用默認值進行開發。生產環境請設置強密鑰！","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:04"}
+{"level":"info","message":"應用環境: development","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:04"}
+{"level":"info","message":"服務器端口: 7070","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:04"}
+{"level":"info","message":"MongoDB URI: 已配置","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:04"}
+{"level":"info","message":"服務器在端口 7070 上運行，環境：development","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:04"}
+{"level":"info","message":"内网地址: http://ailabordevbox.ns-2rlrcc3k.svc.cluster.local:7070","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:04"}
+{"level":"info","message":"公网地址: https://wrrfvodsaofk.sealosgzg.site","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:04"}
+{"level":"info","message":"MongoDB 连接成功","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:08"}
+{"baseUrl":"https://andyaiauto.zeabur.app/webhook/5cc76a7e-2e6a-4428-ba09-cbe8f8598f9b/chat","fullUrl":"https://andyaiauto.zeabur.app/webhook/5cc76a7e-2e6a-4428-ba09-cbe8f8598f9b/chat?action=sendMessage","level":"info","maxRetries":3,"message":"N8N服务初始化完成","service":"ai-labor-advisor","timeout":30000,"timestamp":"2025-07-03 23:37:15"}
+{"level":"warn","message":"JWT_SECRET 未設置，使用默認值進行開發。生產環境請設置強密鑰！","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:16"}
+{"level":"info","message":"應用環境: development","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:16"}
+{"level":"info","message":"服務器端口: 7070","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:16"}
+{"level":"info","message":"MongoDB URI: 已配置","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:16"}
+{"level":"info","message":"服務器在端口 7070 上運行，環境：development","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:16"}
+{"level":"info","message":"内网地址: http://ailabordevbox.ns-2rlrcc3k.svc.cluster.local:7070","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:16"}
+{"level":"info","message":"公网地址: https://wrrfvodsaofk.sealosgzg.site","service":"ai-labor-advisor","timestamp":"2025-07-03 23:37:16"}
