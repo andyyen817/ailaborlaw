@@ -1,9 +1,9 @@
-// 假设 Admin 模型, jwtUtils, logger 都已转换为 ES 模块或将被转换
-import Admin from '../../models/admin.model.js'; 
+﻿// 假设 Admin 模型, jwtUtils, logger 都已转换为 ES 模块或将被转换
+const Admin = require('../../models/admin.model.js'); 
 // jwtUtils 现在是命名导出
 import { generateAccessToken, generateRefreshToken, verifyToken } from '../../utils/jwt.js'; 
-import logger from '../../utils/logger.js';
-import bcrypt from 'bcryptjs'; // 修正：使用 import 而非 require
+const logger = require('../../utils/logger.js');
+const bcrypt = require('bcryptjs'); // 修正：使用 import 而非 require
 
 /**
  * 管理员认证控制器 (旧版，基于 Admin 模型)

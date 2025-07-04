@@ -1,4 +1,4 @@
-import express from 'express';
+﻿const express = require('express');
 import { protectAdmin, isSuperAdmin } from '../../middlewares/admin-auth.middleware.js';
 import { 
   createAdmin, 
@@ -30,4 +30,4 @@ router.patch('/:id/status', isSuperAdmin, updateAdminStatus);
 // 重置管理員密碼 (僅超級管理員可用)
 router.post('/:id/reset-password', isSuperAdmin, resetAdminPassword);
 
-export default router; 
+module.exports = router; 

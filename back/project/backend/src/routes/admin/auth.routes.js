@@ -1,4 +1,4 @@
-import express from 'express';
+﻿const express = require('express');
 // 假设 adminAuthController 和 authMiddleware 都已或将被转换为 ES 模块
 import * as adminAuthController from '../../controllers/admin/auth.controller.js'; 
 // 从 auth.middleware.js 中我们导出了 protect 和 isAdmin
@@ -38,4 +38,4 @@ router.post('/setup-initial-admin', adminAuthController.setupInitialAdmin);
 // 緊急更新管理員為超級管理員 (開發階段使用，之後應移除)
 router.post('/emergency-super-admin/:email', adminAuthController.emergencySuperAdmin);
 
-export default router;
+module.exports = router;

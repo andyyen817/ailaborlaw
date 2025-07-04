@@ -1,6 +1,6 @@
-import SystemSetting from '../models/system-setting.model.js';
-import { AppError, errorUtils } from '../utils/error.js';
-import logger from '../utils/logger.js';
+const SystemSetting = require('../models/system-setting.model.js');
+const { AppError, errorUtils } = require('../utils/error.js');
+const logger = require('../utils/logger.js');
 
 /**
  * 系统设置服务类
@@ -513,4 +513,4 @@ class SystemSettingService {
   }
 }
 
-export default SystemSettingService; 
+module.exports = SystemSettingService; 

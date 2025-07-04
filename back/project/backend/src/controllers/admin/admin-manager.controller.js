@@ -1,5 +1,5 @@
-import Admin from '../../models/admin.model.js';
-import logger from '../../utils/logger.js';
+﻿const Admin = require('../../models/admin.model.js');
+const logger = require('../../utils/logger.js');
 
 /**
  * 管理员账户管理控制器

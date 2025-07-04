@@ -1,5 +1,6 @@
-import ExpertConsultation, { SERVICE_TYPES, STATUS_TYPES } from '../models/expert_consultation.model.js';
-import logger from '../utils/logger.js';
+﻿const ExpertConsultation = require('../models/expert_consultation.model.js');
+const { SERVICE_TYPES, STATUS_TYPES } = require('../models/expert_consultation.model.js');
+const logger = require('../utils/logger.js');
 
 /**
  * 专家咨询控制器
@@ -598,4 +599,4 @@ class ExpertConsultationController {
   }
 }
 
-export default ExpertConsultationController; 
+module.exports = ExpertConsultationController; 

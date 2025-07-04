@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+﻿import { body, validationResult } from 'express-validator';
 import { SPECIALTIES, REGIONS } from '../models/labor_advisor.model.js';
 
 /**

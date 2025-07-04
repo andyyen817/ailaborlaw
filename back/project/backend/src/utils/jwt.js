@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import logger from './logger.js'; // 已转换为 ES 模块
+const jwt = require('jsonwebtoken');
+const logger = require('./logger.js');
 
 // 注意：不再在模块顶层读取 JWT_SECRET。将在函数内部按需读取。
 
@@ -8,7 +8,7 @@ import logger from './logger.js'; // 已转换为 ES 模块
  * @param {Object} payload - 令牌载荷 (应包含 userId 或 id)
  * @returns {String|null} 访问令牌或null (如果生成失败)
  */
-export const generateAccessToken = (payload) => {
+const generateAccessToken = (payload) => {
   const secret = process.env.JWT_SECRET;
   const expiresIn = process.env.JWT_EXPIRES_IN || '1d'; // 默认为1天
   
@@ -47,7 +47,7 @@ export const generateAccessToken = (payload) => {
  * @param {Object} payload - 令牌载荷 (通常只包含 userId 或 id 以减少信息暴露)
  * @returns {String|null} 刷新令牌或null (如果生成失败)
  */
-export const generateRefreshToken = (payload) => {
+const generateRefreshToken = (payload) => {
   const secret = process.env.JWT_SECRET;
   const refreshExpiresIn = process.env.JWT_REFRESH_EXPIRES_IN || '7d'; // 默认为7天
   
@@ -86,7 +86,7 @@ export const generateRefreshToken = (payload) => {
  * @param {String} token - JWT令牌
  * @returns {Object|null} 解码后的载荷或null (如果验证失败)
  */
-export const verifyToken = (token) => {
+const verifyToken = (token) => {
   const secret = process.env.JWT_SECRET;
   
   if (!secret) {
@@ -122,7 +122,7 @@ export const verifyToken = (token) => {
  * @param {Object} req - Express请求对象
  * @returns {String|null} 提取的令牌或null (如果未找到或格式不正确)
  */
-export const getTokenFromHeader = (req) => {
+const getTokenFromHeader = (req) => {
   try {
     const authHeader = req.headers.authorization || req.headers.Authorization;
     
@@ -152,7 +152,7 @@ export const getTokenFromHeader = (req) => {
  * @param {String} token - JWT令牌
  * @returns {String|null} 用户ID或null
  */
-export const extractUserIdFromToken = (token) => {
+const extractUserIdFromToken = (token) => {
   if (!token) return null;
   
   try {
@@ -165,11 +165,10 @@ export const extractUserIdFromToken = (token) => {
   }
 };
 
-// 可以选择默认导出一个包含所有函数的对象，或者让调用者分别导入
-// export default {
-//   generateAccessToken,
-//   generateRefreshToken,
-//   verifyToken,
-//   getTokenFromHeader,
-// };
-// 但命名导出更符合 ES 模块的风格，也更灵活
+module.exports = {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyToken,
+  getTokenFromHeader,
+  extractUserIdFromToken
+};

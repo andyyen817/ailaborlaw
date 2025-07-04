@@ -1,7 +1,7 @@
-import EmailLog from '../../models/email_log.model.js';
-import User from '../../models/user.model.js';
-import EmailService from '../../services/email.service.js';
-import logger from '../../utils/logger.js';
+﻿const EmailLog = require('../../models/email_log.model.js');
+const User = require('../../models/user.model.js');
+const EmailService = require('../../services/email.service.js');
+const logger = require('../../utils/logger.js');
 
 /**
  * 管理後台郵件管理控制器

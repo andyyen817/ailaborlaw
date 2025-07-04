@@ -1,4 +1,4 @@
-import express from 'express';
+﻿const express = require('express');
 import { protectAdmin } from '../../middlewares/admin-auth.middleware.js';
 import {
   getAllSessions,
@@ -48,4 +48,4 @@ router.get('/stats', getChatStats);
  */
 router.post('/export', exportChatRecords);
 
-export default router; 
+module.exports = router; 

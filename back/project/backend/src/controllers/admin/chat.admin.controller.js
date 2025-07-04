@@ -1,9 +1,9 @@
-import Conversation from '../../models/conversation.model.js';
-import Message from '../../models/message.model.js';
-import User from '../../models/user.model.js';
-import n8nService from '../../services/n8n.service.js';
-import logger from '../../utils/logger.js';
-import XLSX from 'xlsx';
+﻿const Conversation = require('../../models/conversation.model.js');
+const Message = require('../../models/message.model.js');
+const User = require('../../models/user.model.js');
+const n8nService = require('../../services/n8n.service.js');
+const logger = require('../../utils/logger.js');
+const XLSX = require('xlsx');
 
 /**
  * 管理后台聊天控制器

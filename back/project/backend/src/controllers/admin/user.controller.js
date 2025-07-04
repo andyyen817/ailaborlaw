@@ -1,6 +1,6 @@
-import User from '../../models/user.model.js';
+﻿const User = require('../../models/user.model.js');
 // UserProfile model is not needed as profile is an embedded document in User model as per backend_tasks_auth_user_management.md
-import logger from '../../utils/logger.js';
+const logger = require('../../utils/logger.js');
 
 /**
  * 管理员用户管理控制器

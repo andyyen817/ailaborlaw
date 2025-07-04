@@ -1,6 +1,6 @@
-import { verifyToken } from '../utils/jwt.js';
-import Admin from '../models/admin.model.js';
-import logger from '../utils/logger.js';
+﻿import { verifyToken } from '../utils/jwt.js';
+const Admin = require('../models/admin.model.js');
+const logger = require('../utils/logger.js');
 
 /**
  * Admin認證中間件

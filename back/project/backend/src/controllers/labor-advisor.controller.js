@@ -1,6 +1,6 @@
-import LaborAdvisor, { SPECIALTIES, REGIONS } from '../models/labor_advisor.model.js';
-import ExpertConsultation from '../models/expert_consultation.model.js';
-import logger from '../utils/logger.js';
+﻿import LaborAdvisor, { SPECIALTIES, REGIONS } from '../models/labor_advisor.model.js';
+const ExpertConsultation = require('../models/expert_consultation.model.js');
+const logger = require('../utils/logger.js');
 
 /**
  * 劳资顾问控制器
@@ -948,4 +948,4 @@ class LaborAdvisorController {
   }
 }
 
-export default LaborAdvisorController; 
+module.exports = LaborAdvisorController; 
