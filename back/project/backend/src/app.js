@@ -48,21 +48,32 @@ app.use(helmet({
 
 // 設置CORS允許跨域請求
 const corsOptions = {
-  origin: [
-    'https://iztxzvmtxzzc.sealosgzg.site',  // ⭐ 新增：生產環境前端域名
-    'https://wmdelchfajsi.sealosgzg.site',  // 保留：備用前端域名
-    'http://localhost:3032',                // 保留：本地開發環境
-    'http://localhost:3001',                // ⭐ 新增：前端开发端口（修复CORS问题）
-    'http://localhost:3000',                // 保留：備用本地端口
-    'http://127.0.0.1:3032',               // 新增：本地IP訪問
-    'http://127.0.0.1:3001',               // ⭐ 新增：前端开发端口IP版本
-    'http://127.0.0.1:3000',               // 新增：備用本地IP
-    'http://userai-laborlaw.ns-2rlrcc3k.svc.cluster.local:3000',
-    'http://localhost:3029',
-    'http://localhost:3003',
-    'https://ailabordevbox.ns-2rlrcc3k.sealos.run',
-    'https://wrrfvodsaofk.sealosgzg.site'
-  ],
+  origin: function (origin, callback) {
+    // 允許的域名列表
+    const allowedOrigins = [
+      'https://iztxzvmtxzzc.sealosgzg.site',  // 生產環境前端域名
+      'https://wmdelchfajsi.sealosgzg.site',  // 備用前端域名
+      'http://localhost:3032',                // 本地開發環境
+      'http://localhost:3001',                // 前端开发端口
+      'http://localhost:3000',                // 備用本地端口
+      'http://127.0.0.1:3032',               // 本地IP訪問
+      'http://127.0.0.1:3001',               // 前端开发端口IP版本
+      'http://127.0.0.1:3000',               // 備用本地IP
+      'http://userai-laborlaw.ns-2rlrcc3k.svc.cluster.local:3000',
+      'http://localhost:3029',
+      'http://localhost:3003',
+      'https://ailabordevbox.ns-2rlrcc3k.sealos.run',
+      'https://wrrfvodsaofk.sealosgzg.site',
+      'https://ailaborlawbackv1.vercel.app'   // ⭐ 新增：Vercel部署地址
+    ];
+    
+    // 允許本地文件訪問（origin為null）和允許列表中的域名
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: [

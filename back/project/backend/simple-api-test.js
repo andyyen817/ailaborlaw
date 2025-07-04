@@ -1,11 +1,11 @@
 import fetch from 'node-fetch';
 
 const testAPI = async () => {
-  console.log('🔍 測試邀請統計API...');
+  console.log('🔍 測試勞法通v1.0 Vercel部署API...');
   
   try {
-    // 測試API是否可達
-    const response = await fetch('http://localhost:7070/api/v1/invites/my-stats', {
+    // 測試API是否可達 - 使用新的Vercel地址
+    const response = await fetch('https://ailaborlawbackv1.vercel.app/api/v1/invites/my-stats', {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzVkNmM5NTBkNDhlM2M5ZGU2MjM5ZjYiLCJlbWFpbCI6ImNyZWF0eWVuQGdtYWlsLmNvbSIsInVzZXJUeXBlIjoiZW1wbG95ZWUiLCJpYXQiOjE3MzUyODA3NjAsImV4cCI6MTczNTM2NzE2MH0.Mm5YIVhJqjFCvZLGONvgK_lCvdJBuJRb7nCqrQXJYe4',
@@ -26,12 +26,12 @@ const testAPI = async () => {
   } catch (error) {
     console.log('❌ 連接失敗:', error.message);
     
-    // 檢查服務是否運行
+    // 檢查Vercel服務是否運行
     try {
-      const healthCheck = await fetch('http://localhost:7070/health');
-      console.log('✅ 服務運行中，健康檢查通過');
+      const healthCheck = await fetch('https://ailaborlawbackv1.vercel.app/api/health');
+      console.log('✅ Vercel服務運行中，健康檢查通過');
     } catch (healthError) {
-      console.log('❌ 服務未運行或無法連接');
+      console.log('❌ Vercel服務未運行或無法連接');
     }
   }
 };

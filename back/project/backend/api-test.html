@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勞法通v1.0 API測試工具</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f7;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1d1d1f;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .api-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+        }
+        .api-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 10px;
+        }
+        .api-url {
+            background: #f6f6f6;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: 'Monaco', monospace;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Monaco', monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status.ready {
+            background: #d4edda;
+            color: #155724;
+        }
+        .info {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            color: #0d47a1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 勞法通v1.0 API測試工具</h1>
+        
+        <div class="info">
+            <strong>📡 API基礎地址：</strong> https://ailaborlawbackv1.vercel.app<br>
+            <strong>🎯 部署狀態：</strong> <span class="status ready">已上線</span><br>
+            <strong>📅 版本：</strong> v1.0.0 (58個API端點)
+        </div>
+
+        <!-- 健康檢查 -->
+        <div class="api-section">
+            <div class="api-title">🏥 健康檢查 (不需認證)</div>
+            <div class="api-url">GET /api/health</div>
+            <button onclick="testHealth()">測試健康檢查</button>
+            <div id="health-result"></div>
+        </div>
+
+        <!-- 用戶註冊 -->
+        <div class="api-section">
+            <div class="api-title">👤 用戶註冊 (不需認證)</div>
+            <div class="api-url">POST /api/auth/register</div>
+            <button onclick="testRegister()">測試用戶註冊</button>
+            <div id="register-result"></div>
+        </div>
+
+        <!-- 用戶登入 -->
+        <div class="api-section">
+            <div class="api-title">🔐 用戶登入 (不需認證)</div>
+            <div class="api-url">POST /api/auth/login</div>
+            <button onclick="testLogin()">測試用戶登入</button>
+            <div id="login-result"></div>
+        </div>
+
+        <!-- AI聊天 -->
+        <div class="api-section">
+            <div class="api-title">🤖 AI聊天諮詢 (需要認證)</div>
+            <div class="api-url">POST /api/v1/chat</div>
+            <button onclick="testChat()">測試AI聊天</button>
+            <div id="chat-result"></div>
+        </div>
+
+        <!-- 邀請統計 -->
+        <div class="api-section">
+            <div class="api-title">📊 邀請統計 (需要認證)</div>
+            <div class="api-url">GET /api/v1/invites/my-stats</div>
+            <button onclick="testInvites()">測試邀請統計</button>
+            <div id="invites-result"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const API_BASE = 'https://ailaborlawbackv1.vercel.app';
+        let authToken = null;
+
+        // 測試健康檢查
+        async function testHealth() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.innerHTML = '⏳ 測試中...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success">✅ 成功！\n${JSON.stringify(data, null, 2)}</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">❌ 失敗 (${response.status})\n${JSON.stringify(data, null, 2)}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">❌ 連接錯誤: ${error.message}</div>`;
+            }
+        }
+
+        // 測試用戶註冊
+        async function testRegister() {
+            const resultDiv = document.getElementById('register-result');
+            resultDiv.innerHTML = '⏳ 測試中...';
+            
+            const testData = {
+                email: `test${Date.now()}@example.com`,
+                password: 'Test123456',
+                name: '測試用戶',
+                userType: 'employee'
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success">✅ 註冊成功！\n${JSON.stringify(data, null, 2)}</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">❌ 註冊失敗 (${response.status})\n${JSON.stringify(data, null, 2)}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">❌ 連接錯誤: ${error.message}</div>`;
+            }
+        }
+
+        // 測試用戶登入
+        async function testLogin() {
+            const resultDiv = document.getElementById('login-result');
+            resultDiv.innerHTML = '⏳ 測試中...';
+            
+            const testData = {
+                email: 'creatyen@gmail.com',
+                password: '123456'
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    authToken = data.data.token;
+                    resultDiv.innerHTML = `<div class="result success">✅ 登入成功！已獲取Token\n${JSON.stringify(data, null, 2)}</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">❌ 登入失敗 (${response.status})\n${JSON.stringify(data, null, 2)}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">❌ 連接錯誤: ${error.message}</div>`;
+            }
+        }
+
+        // 測試AI聊天
+        async function testChat() {
+            const resultDiv = document.getElementById('chat-result');
+            if (!authToken) {
+                resultDiv.innerHTML = '<div class="result error">❌ 請先登入獲取Token</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '⏳ 測試中...';
+            
+            const testData = {
+                message: '請問加班費如何計算？',
+                sessionId: 'test-session-' + Date.now()
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(testData)
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success">✅ AI聊天成功！\n${JSON.stringify(data, null, 2)}</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">❌ AI聊天失敗 (${response.status})\n${JSON.stringify(data, null, 2)}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">❌ 連接錯誤: ${error.message}</div>`;
+            }
+        }
+
+        // 測試邀請統計
+        async function testInvites() {
+            const resultDiv = document.getElementById('invites-result');
+            if (!authToken) {
+                resultDiv.innerHTML = '<div class="result error">❌ 請先登入獲取Token</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '⏳ 測試中...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/invites/my-stats`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success">✅ 邀請統計成功！\n${JSON.stringify(data, null, 2)}</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">❌ 邀請統計失敗 (${response.status})\n${JSON.stringify(data, null, 2)}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">❌ 連接錯誤: ${error.message}</div>`;
+            }
+        }
+
+        // 頁面載入時自動測試健康檢查
+        window.onload = function() {
+            testHealth();
+        };
+    </script>
+</body>
+</html> 
