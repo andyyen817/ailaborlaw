@@ -1,6 +1,6 @@
-import express from 'express';
-import { protect, hasRemainingQueries } from '../middlewares/auth.middleware.js';
-import {
+const express = require('express');
+const { protect, hasRemainingQueries } = require('../middlewares/auth.middleware.js');
+const {
   createSession,
   getUserSessions,
   getSessionDetail,
@@ -8,7 +8,7 @@ import {
   deleteSession,
   sendMessage,
   getMessages
-} from '../controllers/chat.controller.js';
+} = require('../controllers/chat.controller.js');
 
 const router = express.Router();
 
@@ -90,8 +90,8 @@ router.post('/sessions/:sessionId/messages/:messageId/feedback', protect, async 
     const userId = req.user.id;
     
     // 引入需要的模型
-    const { default: Message } = await import('../models/message.model.js');
-    const { default: Conversation } = await import('../models/conversation.model.js');
+    const Message = require('../models/message.model.js');
+    const Conversation = require('../models/conversation.model.js');
     
     // 验证会话权限
     const conversation = await Conversation.findOne({ sessionId, userId });
@@ -132,4 +132,4 @@ router.post('/sessions/:sessionId/messages/:messageId/feedback', protect, async 
   }
 });
 
-export default router; 
+module.exports = router; 

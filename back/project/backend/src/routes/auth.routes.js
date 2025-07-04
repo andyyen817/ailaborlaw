@@ -1,5 +1,5 @@
-import express from 'express';
-import * as authController from '../controllers/auth.controller.js';
+const express = require('express');
+const authController = require('../controllers/auth.controller.js');
 
 const router = express.Router();
 
@@ -459,7 +459,7 @@ router.post('/verify-and-register', authController.verifyAndRegister);
 // 路由: POST /api/v1/auth/verify-invite-registration
 router.post('/verify-invite-registration', authController.verifyInviteRegistration);
 
-export default router;
+module.exports = router;
 
 // Swagger/OpenAPI 组件定义 (通常放在主 app.js 或 swagger配置文件中, 这里为了方便查看)
 /**

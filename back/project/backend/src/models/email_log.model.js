@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 // EmailLog 模型 - 記錄所有郵件發送日志
 const emailLogSchema = new mongoose.Schema({
@@ -197,4 +197,4 @@ emailLogSchema.methods.markAsSent = async function(aoksendResponse) {
 
 const EmailLog = mongoose.model('EmailLog', emailLogSchema);
 
-export default EmailLog; 
+module.exports = EmailLog; 

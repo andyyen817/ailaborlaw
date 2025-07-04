@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 /**
  * 系统设置模型
@@ -298,4 +298,4 @@ systemSettingSchema.pre('save', function(next) {
 
 const SystemSetting = mongoose.model('SystemSetting', systemSettingSchema);
 
-export default SystemSetting; 
+module.exports = SystemSetting; 

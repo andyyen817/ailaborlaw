@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 /**
  * 劳资顾问模型
@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
  */
 
 // 专业领域枚举（与服务类型保持一致）
-export const SPECIALTIES = {
+const SPECIALTIES = {
   LABOR_CONTRACT: 'labor_contract',
   COMPENSATION: 'compensation', 
   TERMINATION: 'termination',
@@ -16,7 +16,7 @@ export const SPECIALTIES = {
 };
 
 // 地区枚举（台湾主要地区）
-export const REGIONS = {
+const REGIONS = {
   TAIPEI: '台北市',
   NEW_TAIPEI: '新北市',
   TAOYUAN: '桃園市',
@@ -308,4 +308,8 @@ laborAdvisorSchema.statics.getStatistics = async function(region = null) {
   };
 };
 
-export default mongoose.model('LaborAdvisor', laborAdvisorSchema); 
+const LaborAdvisor = mongoose.model('LaborAdvisor', laborAdvisorSchema);
+
+module.exports = LaborAdvisor;
+module.exports.SPECIALTIES = SPECIALTIES;
+module.exports.REGIONS = REGIONS; 

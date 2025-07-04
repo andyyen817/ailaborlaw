@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 /**
  * 郵箱驗證碼模型
@@ -297,4 +297,4 @@ emailVerificationSchema.statics.releaseTempLock = async function(verificationId,
 
 const EmailVerification = mongoose.model('EmailVerification', emailVerificationSchema);
 
-export default EmailVerification; 
+module.exports = EmailVerification; 

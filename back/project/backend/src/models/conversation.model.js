@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 /**
  * 聊天会话模型 - 优化版本
@@ -201,4 +201,4 @@ conversationSchema.statics.getSessionStats = function(startDate) {
 
 const Conversation = mongoose.model('Conversation', conversationSchema);
 
-export default Conversation; 
+module.exports = Conversation; 

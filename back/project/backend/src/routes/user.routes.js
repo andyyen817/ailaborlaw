@@ -1,13 +1,13 @@
-import express from 'express';
-import { authenticateToken } from '../middlewares/auth.middleware.js';
-import { 
+const express = require('express');
+const { authenticateToken } = require('../middlewares/auth.middleware.js');
+const { 
   getCurrentUser, 
   updateCurrentUser, 
   updatePassword, 
   deleteCurrentUser,
   getRemainingQueries,
   decreaseQuery
-} from '../controllers/user.controller.js';
+} = require('../controllers/user.controller.js');
 
 const router = express.Router();
 
@@ -156,4 +156,4 @@ router.get('/me/queries', getRemainingQueries);
  */
 router.post('/me/queries/decrease', decreaseQuery);
 
-export default router; 
+module.exports = router; 

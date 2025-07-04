@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 // 保持 bcrypt, 如果项目中用的是它。如果用 bcryptjs, 则改为 import bcrypt from 'bcryptjs';
-import bcrypt from 'bcryptjs'; 
+const bcrypt = require('bcryptjs'); 
 
 /**
  * 管理员模型
@@ -112,4 +112,4 @@ adminSchema.methods.hasPermission = function(permission) {
 
 const Admin = mongoose.model('Admin', adminSchema);
 
-export default Admin;
+module.exports = Admin;

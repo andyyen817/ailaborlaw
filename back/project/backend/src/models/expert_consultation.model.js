@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
+const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
 /**
  * 专家咨询模型
@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
  */
 
 // 服务类型枚举
-export const SERVICE_TYPES = {
+const SERVICE_TYPES = {
   LABOR_CONTRACT: 'labor_contract',
   COMPENSATION: 'compensation', 
   TERMINATION: 'termination',
@@ -17,7 +17,7 @@ export const SERVICE_TYPES = {
 };
 
 // 状态类型枚举
-export const STATUS_TYPES = {
+const STATUS_TYPES = {
   PENDING: 'pending',
   PROCESSING: 'processing',
   COMPLETED: 'completed',
@@ -25,14 +25,14 @@ export const STATUS_TYPES = {
 };
 
 // 联系方式枚举
-export const CONTACT_METHODS = {
+const CONTACT_METHODS = {
   PHONE: 'phone',
   EMAIL: 'email',
   LINE: 'line'
 };
 
 // 时间段枚举
-export const TIME_PERIODS = {
+const TIME_PERIODS = {
   MORNING: 'morning',
   AFTERNOON: 'afternoon',
   EVENING: 'evening'
@@ -510,4 +510,10 @@ expertConsultationSchema.statics.getStatistics = async function(filters = {}) {
   };
 };
 
-export default mongoose.model('ExpertConsultation', expertConsultationSchema); 
+const ExpertConsultation = mongoose.model('ExpertConsultation', expertConsultationSchema);
+
+module.exports = ExpertConsultation;
+module.exports.SERVICE_TYPES = SERVICE_TYPES;
+module.exports.STATUS_TYPES = STATUS_TYPES;
+module.exports.CONTACT_METHODS = CONTACT_METHODS;
+module.exports.TIME_PERIODS = TIME_PERIODS; 

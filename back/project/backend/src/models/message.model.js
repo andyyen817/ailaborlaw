@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 /**
  * 聊天消息模型 - 优化版本
@@ -282,4 +282,4 @@ messageSchema.statics.getRecentAIMessages = function(limit = 100) {
 
 const Message = mongoose.model('Message', messageSchema);
 
-export default Message; 
+module.exports = Message; 

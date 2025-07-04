@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs'; // 文档中使用 bcryptjs
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs'); // 文档中使用 bcryptjs
 
 // 生成邀請碼工具函數
 function generateInviteCode() {
@@ -248,4 +248,4 @@ userSchema.statics.findByInviteCode = async function(inviteCode) {
 
 const User = mongoose.model('User', userSchema);
 
-export default User;
+module.exports = User;

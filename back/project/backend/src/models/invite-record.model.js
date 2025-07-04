@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 /**
  * 邀请记录模型
@@ -171,4 +171,4 @@ inviteRecordSchema.methods.complete = async function() {
 
 const InviteRecord = mongoose.model('InviteRecord', inviteRecordSchema);
 
-export default InviteRecord; 
+module.exports = InviteRecord; 

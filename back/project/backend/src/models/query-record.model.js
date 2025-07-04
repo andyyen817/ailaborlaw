@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 /**
  * 咨询次数记录模型
@@ -269,4 +269,4 @@ queryRecordSchema.statics.getTopUsers = async function(limit = 10, action = 'dec
 
 const QueryRecord = mongoose.model('QueryRecord', queryRecordSchema);
 
-export default QueryRecord; 
+module.exports = QueryRecord; 
