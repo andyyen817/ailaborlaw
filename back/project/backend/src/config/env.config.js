@@ -1,63 +1,59 @@
 /**
- * 環境變量配置文件
- * 用於在應用啟動時加載環境變量，特別是在無法直接修改.env文件的情況下
+ * 環境配置文件
  */
 
-import dotenv from 'dotenv';
-import logger from '../utils/logger.js';
-
-// 嘗試加載.env文件
-dotenv.config();
-
-// 必要的環境變量檢查與設置
-export const setupEnvironment = () => {
-  // ⭐ 設置正確的MongoDB連接字符串
-  if (!process.env.MONGODB_URI) {
-    // 使用Sealos雲端MongoDB連接字符串
-    process.env.MONGODB_URI = 'mongodb://root:8w2kv62n@dbconn.sealosgzg.site:45064/ailabor_db?directConnection=true&authSource=admin';
-    logger.info('MONGODB_URI 已設置為Sealos雲端數據庫');
+// 開發環境配置
+const development = {
+  port: process.env.PORT || 3000,
+  mongodbUri: process.env.MONGODB_URI || 'mongodb://root:8w2kv62n@dbconn.sealosgzg.site:46203/aialabr?directConnection=true&authSource=admin',
+  jwtSecret: process.env.JWT_SECRET || 'your-development-jwt-secret-key-2024',
+  emailConfig: {
+    service: 'gmail',
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
+};
 
-  // 檢查並設置JWT密鑰
-  if (!process.env.JWT_SECRET) {
-    // 為開發環境設置默認密鑰
-    const defaultSecret = 'ailabor_super_secret_key_for_development_only';
-    process.env.JWT_SECRET = defaultSecret;
-    logger.warn(`JWT_SECRET 未設置，使用默認值進行開發。生產環境請設置強密鑰！`);
-  }
-
-  // 設置JWT令牌過期時間
-  if (!process.env.JWT_EXPIRES_IN) {
-    process.env.JWT_EXPIRES_IN = '1d';
-  }
-
-  // 設置JWT刷新令牌過期時間
-  if (!process.env.JWT_REFRESH_EXPIRES_IN) {
-    process.env.JWT_REFRESH_EXPIRES_IN = '7d';
-  }
-
-  // 允許初始管理員創建
-  if (!process.env.ALLOW_INITIAL_ADMIN_CREATION) {
-    process.env.ALLOW_INITIAL_ADMIN_CREATION = 'true';
-  }
-
-  // 設置初始超級管理員信息
-  if (!process.env.INITIAL_ADMIN_USERNAME) {
-    process.env.INITIAL_ADMIN_USERNAME = 'superadmin';
-  }
-
-  if (!process.env.INITIAL_ADMIN_EMAIL) {
-    process.env.INITIAL_ADMIN_EMAIL = 'superadmin@example.com';
-  }
-
-  if (!process.env.INITIAL_ADMIN_PASSWORD) {
-    process.env.INITIAL_ADMIN_PASSWORD = 'AdminPass123!';
-  }
-
-  // 記錄環境信息
-  logger.info(`應用環境: ${process.env.NODE_ENV || 'development'}`);
-  logger.info(`服務器端口: ${process.env.PORT || 7070}`);
-  logger.info(`MongoDB URI: ${process.env.MONGODB_URI ? '已配置' : '未配置'}`);
+// 如果沒有設置 MONGODB_URI 環境變量，使用默認值（修正後的配置）
+if (!process.env.MONGODB_URI) {
+  process.env.MONGODB_URI = 'mongodb://root:8w2kv62n@dbconn.sealosgzg.site:46203/aialabr?directConnection=true&authSource=admin';
 }
 
-export default setupEnvironment; 
+// 如果沒有設置 JWT_SECRET 環境變量，使用默認值
+if (!process.env.JWT_SECRET) {
+  process.env.JWT_SECRET = 'your-development-jwt-secret-key-2024';
+}
+
+// 生產環境配置
+const production = {
+  port: process.env.PORT || 3000,
+  mongodbUri: process.env.MONGODB_URI,
+  jwtSecret: process.env.JWT_SECRET,
+  emailConfig: {
+    service: 'gmail',
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+};
+
+// 測試環境配置
+const test = {
+  port: process.env.PORT || 3001,
+  mongodbUri: process.env.MONGODB_URI_TEST || 'mongodb://root:8w2kv62n@dbconn.sealosgzg.site:46203/aialabr_test?directConnection=true&authSource=admin',
+  jwtSecret: process.env.JWT_SECRET || 'your-test-jwt-secret-key-2024',
+  emailConfig: {
+    service: 'gmail',
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+};
+
+const config = {
+  development,
+  production,
+  test
+};
+
+const env = process.env.NODE_ENV || 'development';
+
+module.exports = config[env]; 
