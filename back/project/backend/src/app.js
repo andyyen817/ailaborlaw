@@ -46,7 +46,7 @@ app.use(helmet({
   }
 })); // 配置安全HTTP头允許內聯腳本和樣式用於測試頁面
 
-// 設置CORS允許跨域請求
+// 設置CORS允許跨域請求 - 增強Vercel Serverless支持
 const corsOptions = {
   origin: function (origin, callback) {
     // 允許的域名列表
@@ -64,11 +64,17 @@ const corsOptions = {
       'http://localhost:3003',
       'https://ailabordevbox.ns-2rlrcc3k.sealos.run',
       'https://wrrfvodsaofk.sealosgzg.site',
-      'https://ailaborlawbackv1.vercel.app'   // ⭐ 新增：Vercel部署地址
+      'https://ailaborlawbackv1.vercel.app'   // ⭐ Vercel部署地址
     ];
     
-    // 允許本地文件訪問（origin為null）和允許列表中的域名
-    if (!origin || allowedOrigins.includes(origin)) {
+    // 開發/測試模式：允許所有來源（包括file://協議）
+    if (process.env.NODE_ENV !== 'production' || !origin) {
+      callback(null, true);
+      return;
+    }
+    
+    // 生產模式：檢查允許列表
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -96,6 +102,17 @@ const corsOptions = {
   maxAge: 86400,                           // 預檢請求緩存24小時
   optionsSuccessStatus: 200                // 某些瀏覽器（IE11, 各種SmartTVs）在204上會出錯
 };
+
+// 在Serverless環境中手動處理OPTIONS請求
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Max-Age', '86400');
+  res.sendStatus(200);
+});
+
 app.use(cors(corsOptions)); // 使用自定義CORS設置
 app.use(express.json()); // 解析JSON请求體
 app.use(express.urlencoded({ extended: true })); // 解析URL编码请求體
