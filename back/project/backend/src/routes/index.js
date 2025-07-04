@@ -74,4 +74,19 @@ mainRouter.get('/health', (req, res) => {
   });
 });
 
+// 測試路由配置
+mainRouter.get('/test-routes', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: '路由配置測試',
+    routes: {
+      health: '/api/health',
+      v1_auth: '/api/v1/auth/*',
+      v1_users: '/api/v1/users/*',
+      v1_chat: '/api/v1/chat/*'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 export default mainRouter;
