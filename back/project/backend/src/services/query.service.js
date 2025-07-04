@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
-import User from '../models/user.model.js';
-import QueryRecord from '../models/query-record.model.js';
-import SystemSetting from '../models/system-setting.model.js';
-import { AppError, errorUtils } from '../utils/error.js';
-import logger from '../utils/logger.js';
+const mongoose = require('mongoose');
+const User = require('../models/user.model.js');
+const QueryRecord = require('../models/query-record.model.js');
+const SystemSetting = require('../models/system-setting.model.js');
+const { AppError, errorUtils } = require('../utils/error.js');
+const logger = require('../utils/logger.js');
 
 /**
  * 咨询次数服务类
@@ -540,4 +540,4 @@ class QueryService {
   }
 }
 
-export default QueryService; 
+module.exports = QueryService; 

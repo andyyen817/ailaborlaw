@@ -1,5 +1,5 @@
-import fetch from 'node-fetch';
-import logger from '../utils/logger.js';
+const fetch = require('node-fetch');
+const logger = require('../utils/logger.js');
 
 /**
  * N8N集成服务类
@@ -475,4 +475,4 @@ class N8NService {
 // 创建单例实例
 const n8nService = new N8NService();
 
-export default n8nService; 
+module.exports = n8nService; 

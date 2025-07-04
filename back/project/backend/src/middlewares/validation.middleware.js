@@ -1,10 +1,10 @@
-import { validationResult } from 'express-validator';
+const { validationResult } = require('express-validator');
 
 /**
  * 验证中间件
  * 处理express-validator的验证结果，如果有错误则返回400状态码
  */
-export const validateRequest = (req, res, next) => {
+const validateRequest = (req, res, next) => {
   const errors = validationResult(req);
   
   if (!errors.isEmpty()) {
@@ -25,4 +25,5 @@ export const validateRequest = (req, res, next) => {
   next();
 };
 
-export default validateRequest; 
+module.exports = validateRequest;
+module.exports.validateRequest = validateRequest; 
