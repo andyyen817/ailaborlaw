@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
-import Admin from '../models/admin.model.js';
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const Admin = require('../models/admin.model');
 
 /**
  * 腳本用於測試管理員密碼比對功能

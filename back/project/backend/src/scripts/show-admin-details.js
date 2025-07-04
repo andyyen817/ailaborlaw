@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 /**
  * 顯示管理員帳戶的完整詳細信息，用於調試
@@ -47,4 +47,4 @@ async function showAdminDetails() {
 }
 
 // 執行腳本
-showAdminDetails(); 
+showAdminDetails();

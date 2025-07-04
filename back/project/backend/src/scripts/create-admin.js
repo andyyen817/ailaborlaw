@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import Admin from '../models/admin.model.js';
-import connectDatabase from '../config/database.js';
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const Admin = require('../models/admin.model');
+const connectDatabase = require('../config/database');
 
 // 加載環境變量
 dotenv.config();

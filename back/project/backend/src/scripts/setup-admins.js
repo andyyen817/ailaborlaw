@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import Admin from '../models/admin.model.js';
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const Admin = require('../models/admin.model');
 
 // 加載環境變量
 dotenv.config();

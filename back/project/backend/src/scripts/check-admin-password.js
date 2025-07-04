@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
-import Admin from '../models/admin.model.js';
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const Admin = require('../models/admin.model');
 
 /**
  * 腳本用於檢查和修復管理員密碼哈希問題
