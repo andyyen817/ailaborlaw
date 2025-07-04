@@ -1,9 +1,5 @@
 import express from 'express';
 import * as authController from '../controllers/auth.controller.js';
-// 導入輸入驗證中間件
-import { validateRegistration, validateLogin } from '../validations/auth.validation.js';
-import { emailValidation, validateRequest, validateQuery } from '../validations/email.validation.js';
-import { handleValidationErrors } from '../middlewares/error-handlers.middleware.js';
 
 const router = express.Router();
 
@@ -64,8 +60,9 @@ const router = express.Router();
  *       409:
  *         description: Email already exists
  */
+// 簡化的路由，移除複雜驗證中間件
 // 路由: POST /api/v1/auth/register
-router.post('/register', validateRegistration, handleValidationErrors, authController.registerUser);
+router.post('/register', authController.registerUser);
 
 /**
  * @swagger
@@ -147,7 +144,7 @@ router.post('/register/with-invite', authController.registerWithInvite);
  *         description: Authentication failed (e.g., incorrect email/password, account inactive)
  */
 // 路由: POST /api/v1/auth/login
-router.post('/login', validateLogin, handleValidationErrors, authController.loginUser);
+router.post('/login', authController.loginUser);
 
 /**
  * @swagger
@@ -187,10 +184,7 @@ router.post('/login', validateLogin, handleValidationErrors, authController.logi
  *         description: Rate limit exceeded
  */
 // 路由: POST /api/v1/auth/send-email-verification
-router.post('/send-email-verification', 
-  validateRequest(emailValidation.sendEmailVerification), 
-  authController.sendEmailVerification
-);
+router.post('/send-email-verification', authController.sendEmailVerification);
 
 /**
  * @swagger
@@ -230,10 +224,7 @@ router.post('/send-email-verification',
  *         description: Verification code expired
  */
 // 路由: POST /api/v1/auth/verify-email
-router.post('/verify-email', 
-  validateRequest(emailValidation.verifyEmail), 
-  authController.verifyEmail
-);
+router.post('/verify-email', authController.verifyEmail);
 
 /**
  * @swagger
@@ -268,10 +259,7 @@ router.post('/verify-email',
  *         description: Rate limit exceeded
  */
 // 路由: POST /api/v1/auth/resend-verification
-router.post('/resend-verification', 
-  validateRequest(emailValidation.resendVerification), 
-  authController.resendVerification
-);
+router.post('/resend-verification', authController.resendVerification);
 
 /**
  * @swagger
@@ -294,10 +282,7 @@ router.post('/resend-verification',
  *         description: User not found
  */
 // 路由: GET /api/v1/auth/email-verification-status
-router.get('/email-verification-status', 
-  validateQuery(emailValidation.checkEmailStatus), 
-  authController.getEmailVerificationStatus
-);
+router.get('/email-status', authController.getEmailVerificationStatus);
 
 /**
  * @swagger
@@ -327,10 +312,7 @@ router.get('/email-verification-status',
  *         description: Rate limit exceeded
  */
 // 路由: POST /api/v1/auth/forgot-password
-router.post('/forgot-password', 
-  validateRequest(emailValidation.forgotPassword), 
-  authController.forgotPassword
-);
+router.post('/forgot-password', authController.forgotPassword);
 
 /**
  * @swagger
@@ -370,10 +352,7 @@ router.post('/forgot-password',
  *         description: Verification code expired
  */
 // 路由: POST /api/v1/auth/reset-password
-router.post('/reset-password', 
-  validateRequest(emailValidation.resetPassword), 
-  authController.resetPassword
-);
+router.post('/reset-password', authController.resetPassword);
 
 /**
  * @swagger
@@ -438,10 +417,7 @@ router.post('/reset-password',
  *         description: Email already registered
  */
 // 路由: POST /api/v1/auth/verify-and-register ⭐ 新增一步式註冊API
-router.post('/verify-and-register', 
-  validateRequest(emailValidation.verifyAndRegister), 
-  authController.verifyAndRegister
-);
+router.post('/verify-and-register', authController.verifyAndRegister);
 
 /**
  * @swagger
@@ -481,10 +457,7 @@ router.post('/verify-and-register',
  *         description: Verification code expired
  */
 // 路由: POST /api/v1/auth/verify-invite-registration
-router.post('/verify-invite-registration', 
-  validateRequest(emailValidation.verifyInviteRegistration), 
-  authController.verifyInviteRegistration
-);
+router.post('/verify-invite-registration', authController.verifyInviteRegistration);
 
 export default router;
 
