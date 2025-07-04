@@ -89,4 +89,18 @@ mainRouter.get('/test-routes', (req, res) => {
   });
 });
 
+// 直接測試auth端點（繞過復雜中間件）
+mainRouter.post('/test-auth', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: '直接auth路由測試成功',
+    receivedData: {
+      body: req.body,
+      method: req.method,
+      path: req.path
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 export default mainRouter;
