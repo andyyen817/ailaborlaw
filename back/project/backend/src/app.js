@@ -1,217 +1,216 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import dotenv from 'dotenv';
-import path from 'path'; // path可能在ESM中需要不同处理，但這是必要的
-import { fileURLToPath } from 'url'; // 如果需要 __dirname 或 __filename
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const dotenv = require('dotenv');
+const path = require('path');
 
-// 加载环境变量 - dotenv.config() 应该尽可能早地执行
+// 載入環境變量
 dotenv.config();
 
-// 加載環境變量配置
-import setupEnvironment from './config/env.config.js';
-setupEnvironment(); // 設置必要的環境變量
+// 注意：我們修改了 env.config.js 現在它是 CommonJS，所以不需要 default 導入
+const envConfig = require('./config/env.config.js');
 
-// 导入配置
-// 假设 appConfig, connectDatabase, logger 都已转换为 ES 模块
-import appConfig from './config/app.js'; // 假设 app.js 是 ES 模块
-import connectDatabase from './config/database.js';
-import logger from './utils/logger.js';
-import mainApiRouter from './routes/index.js'; // 假设 routes/index.js 是主 API 路由器
-import { AppError, errorUtils } from './utils/error.js';
-import { requestLogger } from './middlewares/request-logger.middleware.js';
-import { handleMongoDBErrors } from './middlewares/error-handlers.middleware.js';
+// 載入其他模組 - 都改為 CommonJS
+const appConfig = require('./config/app.js');
+const connectDatabase = require('./config/database.js');
+const logger = require('./utils/logger.js');
+const mainApiRouter = require('./routes/index.js');
+const { AppError, errorUtils } = require('./utils/error.js');
+const { requestLogger } = require('./middlewares/request-logger.middleware.js');
+const { handleMongoDBErrors } = require('./middlewares/error-handlers.middleware.js');
 
-// 创建Express应用
 const app = express();
 
-// ES Module equivalents for __dirname (if needed, e.g., for serving static files)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.join(__dirname, '..');
-
-// 连接数据库
-connectDatabase();
-
-// 安全和基礎中間件
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", 'data:']
-    }
-  }
-})); // 配置安全HTTP头允許內聯腳本和樣式用於測試頁面
-
-// 設置CORS允許跨域請求 - 增強Vercel Serverless支持
-const corsOptions = {
+// 中間件配置
+app.use(helmet());
+app.use(cors({
   origin: function (origin, callback) {
+    // 允許無 origin 的請求（如 Postman、curl）
+    if (!origin) return callback(null, true);
+    
     // 允許的域名列表
     const allowedOrigins = [
-      'https://iztxzvmtxzzc.sealosgzg.site',  // 生產環境前端域名
-      'https://wmdelchfajsi.sealosgzg.site',  // 備用前端域名
-      'http://localhost:3032',                // 本地開發環境
-      'http://localhost:3001',                // 前端开发端口
-      'http://localhost:3000',                // 備用本地端口
-      'http://127.0.0.1:3032',               // 本地IP訪問
-      'http://127.0.0.1:3001',               // 前端开发端口IP版本
-      'http://127.0.0.1:3000',               // 備用本地IP
-      'http://userai-laborlaw.ns-2rlrcc3k.svc.cluster.local:3000',
-      'http://localhost:3029',
-      'http://localhost:3003',
-      'https://ailabordevbox.ns-2rlrcc3k.sealos.run',
-      'https://wrrfvodsaofk.sealosgzg.site',
-      'https://ailaborlawbackv1.vercel.app'   // ⭐ Vercel部署地址
+      'https://ailaborlawbackv1.vercel.app',
+      'https://ailaborlaw.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:7070',
+      'file://', // 允許本地 HTML 文件
     ];
     
-    // 開發/測試模式：允許所有來源（包括file://協議）
-    if (process.env.NODE_ENV !== 'production' || !origin) {
-      callback(null, true);
-      return;
+    // 檢查是否為允許的域名或以 file:// 開頭
+    if (allowedOrigins.some(allowed => 
+      origin === allowed || 
+      origin.startsWith('file://') ||
+      origin.startsWith('http://localhost') ||
+      origin.startsWith('https://localhost')
+    )) {
+      return callback(null, true);
     }
     
-    // 生產模式：檢查允許列表
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',                        // ⭐ JWT令牌認證
-    'X-Requested-With',
-    'Accept',
-    'Origin',
-    'Access-Control-Request-Method',
-    'Access-Control-Request-Headers',
-    'Cache-Control', 
-    'Pragma', 
-    'Expires'
-  ],
-  exposedHeaders: [
-    'Content-Disposition',                  // 文件下載需要
-    'X-Total-Count',                       // 分頁總數
-    'X-Page-Count'                         // 分頁頁數
-  ],
-  maxAge: 86400,                           // 預檢請求緩存24小時
-  optionsSuccessStatus: 200                // 某些瀏覽器（IE11, 各種SmartTVs）在204上會出錯
-};
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  optionsSuccessStatus: 200
+}));
 
-// 在Serverless環境中手動處理OPTIONS請求
+// 手動處理 OPTIONS 請求
 app.options('*', (req, res) => {
   res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS,PATCH');
   res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers');
   res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Max-Age', '86400');
   res.sendStatus(200);
 });
 
-app.use(cors(corsOptions)); // 使用自定義CORS設置
-app.use(express.json()); // 解析JSON请求體
-app.use(express.urlencoded({ extended: true })); // 解析URL编码请求體
+app.use(morgan('combined'));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// 請求日誌中間件（自定義）
+// 請求日誌記錄
 app.use(requestLogger);
 
-// 日志记录 (morgan) - HTTP 請求日誌
-if (process.env.NODE_ENV === 'development') { // 直接使用 process.env
-  app.use(morgan('dev'));
-} else {
-  app.use(morgan('combined', {
-    stream: {
-      write: (message) => logger.info(message.trim()) // morgan stream
-    }
-  }));
-}
+// 靜態文件服務
+app.use(express.static(path.join(__dirname, '../public')));
 
-// 靜態文件服務 - 提供測試API頁面
-app.use(express.static(rootDir));
-
-// API路由 - 将从 routes/index.js 导入并使用
-app.use('/api', mainApiRouter); // 使用导入的路由器
-
-// 基础路由
+// 根路由
 app.get('/', (req, res) => {
   res.json({
-    message: '歡迎使用 AI勞基法顧問 API',
+    success: true,
+    message: '🎉 AI勞基法顧問後端API服務',
     version: '1.0.0',
-    status: 'running'
+    status: 'running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    database: 'MongoDB (Connected)',
+    api_docs: '/api/v1/docs',
+    health_check: '/api/v1/health'
   });
 });
 
-// API測試頁面路由
-app.get('/test-api', (req, res) => {
-  res.sendFile(path.join(rootDir, 'test-api.html'));
+// 健康檢查端點
+app.get('/api/v1/health', (req, res) => {
+  res.json({
+    success: true,
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    version: '1.0.0'
+  });
 });
 
-// 404 错误处理中间件 (如果之前的路由都未匹配)
-app.use((req, res, next) => {
-  // 使用新的 AppError 和 errorUtils
-  next(errorUtils.notFound(`找不到路徑: ${req.originalUrl}`));
+// API 路由
+app.use('/api/v1', mainApiRouter);
+
+// 測試頁面路由
+app.get('/test-api.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../test-api.html'));
 });
 
-// MongoDB錯誤處理中間件
-app.use(handleMongoDBErrors);
-
-// 全局错误处理中间件 (必须在所有路由和中间件之后定义)
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  // 判斷錯誤類型並設置狀態碼和消息
-  const statusCode = err.statusCode || 500;
-  const errorCode = err.code || (statusCode === 500 ? 'INTERNAL_SERVER_ERROR' : 'UNKNOWN_ERROR');
-  const isOperational = err.isOperational !== undefined ? err.isOperational : statusCode < 500;
-  const isProduction = process.env.NODE_ENV === 'production';
-  
-  // 記錄錯誤到日誌系統
-  if (statusCode >= 500) {
-    logger.error(`服務器錯誤: ${err.message}`, { 
-      stack: err.stack, 
-      path: req.path, 
-      method: req.method,
-      code: errorCode,
-      userId: req.user ? req.user.id : 'unauthenticated'
-    });
-  } else {
-    logger.warn(`請求錯誤: ${err.message}`, {
-      path: req.path,
-      method: req.method,
-      code: errorCode,
-      status: statusCode,
-      userId: req.user ? req.user.id : 'unauthenticated'
-    });
-  }
-  
-  // 返回適當的錯誤響應
-  res.status(statusCode).json({
+// 404 處理
+app.use('*', (req, res) => {
+  res.status(404).json({
     success: false,
-    message: isOperational ? err.message : (isProduction ? '服務器發生未知錯誤' : err.message),
+    message: `找不到路由: ${req.method} ${req.originalUrl}`,
     error: {
-      code: errorCode,
-      details: isProduction && !isOperational ? undefined : err.stack // 不在生產環境暴露堆疊給非業務錯誤
+      code: 'ROUTE_NOT_FOUND',
+      details: `The requested endpoint ${req.originalUrl} does not exist.`
     }
   });
 });
 
-// 启动服务器 - 僅在非生產環境下啟動
-const PORT = process.env.PORT || 7070;
+// MongoDB 錯誤處理中間件
+app.use(handleMongoDBErrors);
 
-// 條件化啟動 - Vercel Serverless環境不需要手動監聽
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    logger.info(`服務器在端口 ${PORT} 上運行，環境：${process.env.NODE_ENV}`);
-    logger.info(`内网地址: http://ailabordevbox.ns-2rlrcc3k.svc.cluster.local:${PORT}`);
-    logger.info(`公网地址: https://wrrfvodsaofk.sealosgzg.site`);
+// 全域錯誤處理
+app.use((error, req, res, next) => {
+  logger.error('全域錯誤處理:', {
+    error: error.message,
+    stack: error.stack,
+    url: req.url,
+    method: req.method,
+    ip: req.ip,
+    userAgent: req.get('User-Agent')
   });
-} else {
-  logger.info(`Serverless模式啟動，環境：${process.env.NODE_ENV}`);
+
+  // 如果錯誤是 AppError 的實例，使用其狀態碼和消息
+  if (error instanceof AppError) {
+    return res.status(error.statusCode).json({
+      success: false,
+      message: error.message,
+      error: {
+        code: error.code || 'APPLICATION_ERROR',
+        details: error.details || error.message
+      }
+    });
+  }
+
+  // 處理 MongoDB 相關錯誤
+  if (error.name === 'ValidationError') {
+    return res.status(400).json({
+      success: false,
+      message: '數據驗證失敗',
+      error: {
+        code: 'VALIDATION_ERROR',
+        details: Object.values(error.errors).map(err => err.message)
+      }
+    });
+  }
+
+  if (error.name === 'CastError') {
+    return res.status(400).json({
+      success: false,
+      message: '無效的數據格式',
+      error: {
+        code: 'INVALID_DATA_FORMAT',
+        details: `Invalid ${error.path}: ${error.value}`
+      }
+    });
+  }
+
+  // 預設錯誤回應
+  const statusCode = error.statusCode || error.status || 500;
+  const message = error.message || '內部服務器錯誤';
+
+  res.status(statusCode).json({
+    success: false,
+    message: message,
+    error: {
+      code: 'INTERNAL_SERVER_ERROR',
+      details: process.env.NODE_ENV === 'development' ? error.stack : '服務器遇到了一個錯誤，請稍後再試。'
+    }
+  });
+});
+
+// 資料庫連接和伺服器啟動
+async function startServer() {
+  try {
+    // 連接資料庫
+    await connectDatabase();
+    
+    const PORT = process.env.PORT || 7070;
+    
+    app.listen(PORT, () => {
+      logger.info(`🚀 服務器運行在端口 ${PORT}`);
+      logger.info(`🌐 API地址: http://localhost:${PORT}`);
+      logger.info(`📚 API文檔: http://localhost:${PORT}/api/v1/docs`);
+      logger.info(`🏥 健康檢查: http://localhost:${PORT}/api/v1/health`);
+      logger.info(`🧪 測試頁面: http://localhost:${PORT}/test-api.html`);
+    });
+
+  } catch (error) {
+    logger.error('❌ 服務器啟動失敗:', error);
+    process.exit(1);
+  }
 }
 
-// 導出app實例供Vercel Serverless使用
-export default app;
+// 為 Vercel 導出應用
+module.exports = app;
+
+// 如果直接運行此文件，啟動服務器
+if (require.main === module) {
+  startServer();
+}

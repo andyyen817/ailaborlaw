@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "台灣勞動法規AI咨詢平台後端服務",
   "main": "src/app.js",
-  "type": "module",
   "scripts": {
     "start": "cross-env PORT=7070 node src/app.js",
     "dev": "cross-env PORT=7070 nodemon src/app.js",

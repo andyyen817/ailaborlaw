@@ -1,106 +1,125 @@
-import express from 'express';
-import authRoutes from './auth.routes.js'; // 我们新创建的认证路由
-import userRoutes from './user.routes.js'; // 导入用户路由
-import adminRoutes from './admin/index.js'; // 假设 admin 路由的入口是 admin/index.js
-import testRoutes from './test.routes.js'; // 导入测试路由
-import chatRoutes from './chat.routes.js'; // 聊天模块路由
-import expertConsultationRoutes from './expert-consultation.routes.js'; // 专家咨询路由
-import laborAdvisorRoutes from './labor-advisor.routes.js'; // 劳资顾问管理路由
-import inviteRoutes from './invite.routes.js'; // 邀请管理路由
-import queryRoutes from './query.routes.js'; // 咨询次数管理路由
+const express = require('express');
+const authRoutes = require('./auth.routes.js');
+const userRoutes = require('./user.routes.js');
+const queryRoutes = require('./query.routes.js');
+const inviteRoutes = require('./invite.routes.js');
+const laborAdvisorRoutes = require('./labor-advisor.routes.js');
+const expertConsultationRoutes = require('./expert-consultation.routes.js');
+const chatRoutes = require('./chat.routes.js');
+const testRoutes = require('./test.routes.js');
+const adminRoutes = require('./admin/index.js');
 
-const mainRouter = express.Router(); // 主 /api 路由器
-const v1Router = express.Router(); // /api/v1 子路由器
+const logger = require('../utils/logger.js');
 
 /**
- * API路由主文件
- * 集中管理所有路由
+ * 主API路由配置
+ * 集中管理所有API端點
  */
 
-// === V1 Routes ===
-// 认证路由 (User registration and login)
-v1Router.use('/auth', authRoutes);
+const mainRouter = express.Router();
 
-// 用户路由 (User profile, settings, etc.)
-v1Router.use('/users', userRoutes);
+// 路由中間件 - 記錄所有API請求
+mainRouter.use((req, res, next) => {
+  logger.info(`API請求: ${req.method} ${req.originalUrl}`, {
+    ip: req.ip,
+    userAgent: req.get('User-Agent'),
+    timestamp: new Date().toISOString()
+  });
+  next();
+});
 
-// 聊天模块路由 (Chat sessions and messages)
-v1Router.use('/chat', chatRoutes);
-
-// 专家咨询路由 (Expert consultation requests)
-v1Router.use('/expert-consultations', expertConsultationRoutes);
-
-// 劳资顾问管理路由 (Labor advisor management)
-v1Router.use('/labor-advisors', laborAdvisorRoutes);
-
-// 邀请管理路由 (Invite management)
-v1Router.use('/invites', inviteRoutes);
-
-// 咨询次数管理路由 (Query count management)
-v1Router.use('/queries', queryRoutes);
-
-// 測試路由 (测试认证和权限中间件)
-v1Router.use('/test', testRoutes);
-
-// 后台用户管理路由 (Admin User Management - 将在后续模块实现)
-// import adminUserRoutes from './admin/user.routes.js'; // 示例，后续添加
-// v1Router.use('/admin/users', adminUserRoutes);
-
-
-// === Legacy or Non-Versioned Routes (if any) ===
-// 原有的管理后台路由 (如果仍然需要，并且其 API 路径不是 /api/v1/admin)
-// 如果 admin 路由也应该是 /api/v1/admin，则应该挂载到 v1Router 上
-// mainRouter.use('/admin', adminRoutes); 
-// 假设现有的 /admin 路由是指向 /api/admin (非 /api/v1/admin)
-// 如果所有 admin 路由都应在 /api/v1/admin 下，那么下面的 adminRoutes 也应该移到 v1Router
-// 比如: v1Router.use('/admin', adminRoutes); // 这样 admin 路由就是 /api/v1/admin/...
-// 根据 backend_tasks_auth_user_management.md, Admin User Management 路由前缀是 /api/v1/admin/users
-// 这意味着 admin 相关的路由也应该在 v1Router 下。
-// 为了清晰，我将假设原有的 /admin 路由也应版本化到 /v1/admin
-v1Router.use('/admin', adminRoutes); // 这会使路径变为 /api/v1/admin/...
-
-
-// 将 v1 版本的路由挂载到主 API 路由器
-mainRouter.use('/v1', v1Router);
-
-
-// API路由健康检查 (可以放在 /api/health 或 /api/v1/health)
+// 健康檢查端點
 mainRouter.get('/health', (req, res) => {
-  res.status(200).json({
+  res.json({
     success: true,
-    message: 'API 服务正常运行',
+    status: 'healthy',
     timestamp: new Date().toISOString(),
-    version: 'v1' // 可以指明当前主要服务的API版本
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    version: '1.0.0',
+    service: 'ai-labor-advisor-api'
   });
 });
 
-// 測試路由配置
-mainRouter.get('/test-routes', (req, res) => {
-  res.status(200).json({
+// API信息端點
+mainRouter.get('/info', (req, res) => {
+  res.json({
     success: true,
-    message: '路由配置測試',
-    routes: {
-      health: '/api/health',
-      v1_auth: '/api/v1/auth/*',
-      v1_users: '/api/v1/users/*',
-      v1_chat: '/api/v1/chat/*'
+    name: 'AI勞基法顧問API',
+    version: '1.0.0',
+    description: '台灣勞動法規AI咨詢平台後端服務',
+    endpoints: {
+      auth: '/api/v1/auth',
+      users: '/api/v1/users',
+      queries: '/api/v1/queries',
+      invites: '/api/v1/invites',
+      laborAdvisors: '/api/v1/labor-advisors',
+      expertConsultations: '/api/v1/expert-consultations',
+      chat: '/api/v1/chat',
+      admin: '/api/v1/admin',
+      test: '/api/v1/test'
     },
-    timestamp: new Date().toISOString()
+    documentation: '/api/v1/docs',
+    healthCheck: '/api/v1/health'
   });
 });
 
-// 直接測試auth端點（繞過復雜中間件）
-mainRouter.post('/test-auth', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: '直接auth路由測試成功',
-    receivedData: {
-      body: req.body,
-      method: req.method,
-      path: req.path
-    },
-    timestamp: new Date().toISOString()
+// 掛載各模組路由
+try {
+  // 認證相關路由
+  mainRouter.use('/auth', authRoutes);
+  logger.info('✅ 認證路由已載入');
+
+  // 用戶相關路由
+  mainRouter.use('/users', userRoutes);
+  logger.info('✅ 用戶路由已載入');
+
+  // 查詢相關路由
+  mainRouter.use('/queries', queryRoutes);
+  logger.info('✅ 查詢路由已載入');
+
+  // 邀請相關路由
+  mainRouter.use('/invites', inviteRoutes);
+  logger.info('✅ 邀請路由已載入');
+
+  // 勞基法顧問相關路由
+  mainRouter.use('/labor-advisors', laborAdvisorRoutes);
+  logger.info('✅ 勞基法顧問路由已載入');
+
+  // 專家諮詢相關路由
+  mainRouter.use('/expert-consultations', expertConsultationRoutes);
+  logger.info('✅ 專家諮詢路由已載入');
+
+  // 聊天相關路由
+  mainRouter.use('/chat', chatRoutes);
+  logger.info('✅ 聊天路由已載入');
+
+  // 測試相關路由
+  mainRouter.use('/test', testRoutes);
+  logger.info('✅ 測試路由已載入');
+
+  // 管理員相關路由
+  mainRouter.use('/admin', adminRoutes);
+  logger.info('✅ 管理員路由已載入');
+
+} catch (error) {
+  logger.error('❌ 路由載入失敗:', error);
+  throw error;
+}
+
+// 未匹配路由處理
+mainRouter.use('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `API端點不存在: ${req.method} ${req.originalUrl}`,
+    error: {
+      code: 'API_ENDPOINT_NOT_FOUND',
+      details: `The requested API endpoint ${req.originalUrl} does not exist.`,
+      availableEndpoints: '/api/v1/info'
+    }
   });
 });
 
-export default mainRouter;
+logger.info('🚀 主API路由配置完成');
+
+module.exports = mainRouter;

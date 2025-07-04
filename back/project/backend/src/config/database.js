@@ -1,61 +1,63 @@
-import mongoose from 'mongoose';
-import logger from '../utils/logger.js'; // 假设 logger.js 也将使用 ES 模块
+const mongoose = require('mongoose');
+const logger = require('../utils/logger.js');
 
 /**
- * 数据库连接配置
+ * 數據庫連接配置與管理
  */
+
 const connectDatabase = async () => {
   try {
-    // 提供默認的MongoDB URI（如果環境變數中未設置）
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ailabor';
+    // 獲取MongoDB連接字符串
+    const mongoURI = process.env.MONGODB_URI;
     
-    // 連接選項
+    if (!mongoURI) {
+      throw new Error('MONGODB_URI environment variable is not defined');
+    }
+
+    logger.info('🔄 正在連接MongoDB數據庫...');
+    logger.info(`數據庫地址: ${mongoURI.replace(/\/\/.*@/, '//***@')}`);
+
+    // MongoDB連接選項
     const options = {
-      // 在Mongoose 6+版本中，這些選項默認為true
-      // 記錄選項供參考，但實際不需要設置
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
-      
-      // 設置超時和重試選項
-      serverSelectionTimeoutMS: 5000, // 如果無法連接，最多等待5秒
-      heartbeatFrequencyMS: 30000,   // 每30秒檢測一次連接狀態
-      maxPoolSize: 10,               // 最大連接池大小
-      minPoolSize: 1,                // 最小連接池大小
-      socketTimeoutMS: 45000,        // 套接字超時時間
-      family: 4                      // 強制使用IPv4
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      bufferCommands: false,
+      bufferMaxEntries: 0
     };
-    
-    // 連接MongoDB
+
+    // 連接到MongoDB
     await mongoose.connect(mongoURI, options);
+
+    logger.info('✅ MongoDB數據庫連接成功');
     
-    logger.info('MongoDB 连接成功');
-    
-    // 監聽數據庫連接錯誤
+    // 監聽數據庫事件
+    mongoose.connection.on('connected', () => {
+      logger.info('🔗 Mongoose已連接到MongoDB');
+    });
+
     mongoose.connection.on('error', (err) => {
-      logger.error(`MongoDB 连接错误: ${err}`);
+      logger.error('❌ MongoDB連接錯誤:', err);
     });
-    
-    // 監聽數據庫連接斷開
+
     mongoose.connection.on('disconnected', () => {
-      logger.warn('MongoDB 连接断开，尝试重新连接...');
-      setTimeout(() => {
-        logger.info('MongoDB 尝试重新连接...');
-        connectDatabase(); // 重新連接
-      }, 5000); // 5秒后重試
+      logger.warn('⚠️ Mongoose已斷開與MongoDB的連接');
     });
-    
-    // 應用退出時關閉數據庫連接
+
+    // 應用程式終止時關閉數據庫連接
     process.on('SIGINT', async () => {
       await mongoose.connection.close();
-      logger.info('MongoDB 连接已关闭 (应用终止)');
+      logger.info('🔐 MongoDB連接已關閉，應用程式正在退出');
       process.exit(0);
     });
-    
+
   } catch (error) {
-    logger.error(`MongoDB 连接失败: ${error.message}`);
-    // 5秒后重试连接
-    setTimeout(connectDatabase, 5000);
+    logger.error('❌ MongoDB連接失敗:', error.message);
+    logger.error('詳細錯誤:', error);
+    throw error;
   }
 };
 
-export default connectDatabase;
+module.exports = connectDatabase;

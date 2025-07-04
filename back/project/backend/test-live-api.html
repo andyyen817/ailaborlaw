@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 AI勞基法顧問 - 修復後API測試</title>
+    <style>
+        body { 
+            font-family: 'Microsoft YaHei', sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 30px; 
+            border-radius: 15px; 
+            color: #333;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        .success { 
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .error { 
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .info { 
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        button { 
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 8px 0; 
+            border: 2px solid #ddd; 
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .test-account {
+            background: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #4CAF50;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .online { background-color: #4CAF50; }
+        .offline { background-color: #f44336; }
+        .testing { background-color: #FF9800; }
+        h1 { 
+            text-align: center; 
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .emoji { font-size: 1.2em; }
+        .result-json {
+            background: #2d3748;
+            color: #a0aec0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+            border-left: 4px solid #4299e1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="emoji">🎉</span> AI勞基法顧問後端API - 修復測試 <span class="emoji">🔧</span></h1>
+        
+        <div class="info">
+            <h3><span class="emoji">✅</span> 修復狀態報告</h3>
+            <p><strong>問題：</strong> API連接到空數據庫 ailabor_db</p>
+            <p><strong>解決：</strong> 已切換到包含真實數據的 aialabr 數據庫</p>
+            <p><strong>端口：</strong> 從 45064 升級到 46203</p>
+            <p><strong>部署：</strong> 已推送到GitHub並觸發Vercel重新部署</p>
+        </div>
+
+        <div class="test-account">
+            <h3><span class="emoji">👑</span> 可用管理員測試賬戶</h3>
+            <p><strong>超級管理員：</strong> test@ailaborlaw.com (密碼: Test1234)</p>
+            <p><strong>普通管理員：</strong> newadmin@ailaborlaw.com (密碼: Admin1234)</p>
+        </div>
+
+        <div>
+            <h3><span class="emoji">🔗</span> API狀態檢查</h3>
+            <p>API地址: <code>https://ailaborlawbackv1.vercel.app</code></p>
+            <p>狀態: <span class="status-indicator" id="apiStatus"></span><span id="apiStatusText">檢查中...</span></p>
+            <button onclick="checkAPIStatus()"><span class="emoji">🔍</span> 檢查API狀態</button>
+        </div>
+
+        <div>
+            <h3><span class="emoji">🔐</span> 登入功能測試</h3>
+            <input type="email" id="email" placeholder="輸入郵箱地址" value="test@ailaborlaw.com">
+            <input type="password" id="password" placeholder="輸入密碼" value="Test1234">
+            <button onclick="testLogin()"><span class="emoji">🚀</span> 測試登入</button>
+            <button onclick="useSecondAccount()"><span class="emoji">👤</span> 使用第二個賬戶</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://ailaborlawbackv1.vercel.app';
+
+        async function checkAPIStatus() {
+            const statusIndicator = document.getElementById('apiStatus');
+            const statusText = document.getElementById('apiStatusText');
+            
+            statusIndicator.className = 'status-indicator testing';
+            statusText.textContent = '檢查中...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/health`);
+                if (response.ok) {
+                    statusIndicator.className = 'status-indicator online';
+                    statusText.textContent = '線上運行';
+                    showResult('success', '🎉 API服務器正常運行！');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusIndicator.className = 'status-indicator offline';
+                statusText.textContent = '離線或錯誤';
+                showResult('error', `❌ API狀態檢查失敗: ${error.message}`);
+            }
+        }
+
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                showResult('error', '❌ 請輸入郵箱和密碼');
+                return;
+            }
+
+            showResult('info', '🔄 正在測試登入...');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showResult('success', `
+                        <h3>🎉 登入成功！數據庫修復完成！</h3>
+                        <p><strong>用戶:</strong> ${data.data.admin.username}</p>
+                        <p><strong>角色:</strong> ${data.data.admin.role}</p>
+                        <p><strong>郵箱:</strong> ${data.data.admin.email}</p>
+                        <p><strong>狀態:</strong> ${data.data.admin.status}</p>
+                        <p><strong>令牌:</strong> ${data.data.token.substring(0, 50)}...</p>
+                        <div class="result-json">
+                            <strong>完整響應:</strong><br>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `);
+                } else {
+                    showResult('error', `
+                        <h3>❌ 登入失敗</h3>
+                        <p><strong>錯誤:</strong> ${data.message || '未知錯誤'}</p>
+                        <div class="result-json">
+                            <strong>響應詳情:</strong><br>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `);
+                }
+            } catch (error) {
+                showResult('error', `❌ 請求失敗: ${error.message}`);
+            }
+        }
+
+        function useSecondAccount() {
+            document.getElementById('email').value = 'newadmin@ailaborlaw.com';
+            document.getElementById('password').value = 'Admin1234';
+            showResult('info', '📝 已切換到第二個測試賬戶');
+        }
+
+        function showResult(type, message) {
+            const result = document.getElementById('result');
+            result.className = type;
+            result.innerHTML = message;
+        }
+
+        // 頁面載入時自動檢查API狀態
+        window.onload = function() {
+            checkAPIStatus();
+        };
+    </script>
+</body>
+</html> 
