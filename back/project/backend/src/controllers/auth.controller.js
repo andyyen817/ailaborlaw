@@ -1,18 +1,18 @@
-import User from '../models/user.model.js';
-import EmailLog from '../models/email_log.model.js';
-import EmailVerification from '../models/email_verification.model.js';
-import EmailService from '../services/email.service.js';
-import { generateAccessToken } from '../utils/jwt.js';
-import logger from '../utils/logger.js';
+const User = require('../models/user.model.js');
+const EmailLog = require('../models/email_log.model.js');
+const EmailVerification = require('../models/email_verification.model.js');
+const EmailService = require('../services/email.service.js');
+const { generateAccessToken } = require('../utils/jwt.js');
+const logger = require('../utils/logger.js');
 // 假设会有 express-validator 的结果处理函数
-// import { validationResult } from 'express-validator';
+// const { validationResult } = require('express-validator');
 
 /**
  * 用戶註冊
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
   // 注意：輸入驗證現在由 express-validator 中間件處理
 
   const { 
@@ -136,7 +136,7 @@ export const registerUser = async (req, res) => {
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res) => {
   const { email } = req.body;
 
   try {
@@ -159,7 +159,7 @@ export const forgotPassword = async (req, res) => {
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const resetPassword = async (req, res) => {
+const resetPassword = async (req, res) => {
   const { email, verificationCode, newPassword } = req.body;
 
   try {
@@ -249,7 +249,7 @@ export const resetPassword = async (req, res) => {
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   // 注意：輸入驗證現在由 express-validator 中間件處理
 
   const { email, password } = req.body;
@@ -368,7 +368,7 @@ export const loginUser = async (req, res) => {
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const sendEmailVerification = async (req, res) => {
+const sendEmailVerification = async (req, res) => {
   const { email, type = 'registration', language = 'zh-TW' } = req.body;
 
   try {
@@ -486,7 +486,7 @@ export const sendEmailVerification = async (req, res) => {
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const verifyEmail = async (req, res) => {
+const verifyEmail = async (req, res) => {
   const { email, verificationCode, type = 'registration' } = req.body;
 
   try {
@@ -633,7 +633,7 @@ export const verifyEmail = async (req, res) => {
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const resendVerification = async (req, res) => {
+const resendVerification = async (req, res) => {
   const { email, type = 'registration' } = req.body;
 
   try {
@@ -675,7 +675,7 @@ export const resendVerification = async (req, res) => {
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const getEmailVerificationStatus = async (req, res) => {
+const getEmailVerificationStatus = async (req, res) => {
   const { email } = req.query;
 
   try {
@@ -728,7 +728,7 @@ export const getEmailVerificationStatus = async (req, res) => {
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const verifyAndRegister = async (req, res) => {
+const verifyAndRegister = async (req, res) => {
   const { email, verificationCode, userData } = req.body;
   const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
 
@@ -826,7 +826,7 @@ export const verifyAndRegister = async (req, res) => {
           inviteCode: userData.inviteCode
         });
         
-        const InviteService = (await import('../services/invite.service.js')).default;
+        const InviteService = require('../services/invite.service.js');
         const inviteValidation = await InviteService.validateInviteCode(userData.inviteCode);
         
         if (inviteValidation.valid) {
@@ -898,7 +898,7 @@ export const verifyAndRegister = async (req, res) => {
           inviteeId: newUser._id
         });
         
-        const InviteRecord = (await import('../models/invite-record.model.js')).default;
+        const InviteRecord = require('../models/invite-record.model.js');
         await InviteRecord.createInviteRecord(
           inviterData.id,
           newUser._id,
@@ -1051,12 +1051,12 @@ export const verifyAndRegister = async (req, res) => {
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const verifyInviteRegistration = async (req, res) => {
+const verifyInviteRegistration = async (req, res) => {
   const { email, verificationCode, inviteCode } = req.body;
 
   try {
     // 1. 先驗證邀請碼
-    const InviteService = (await import('../services/invite.service.js')).default;
+    const InviteService = require('../services/invite.service.js');
     const inviteValidation = await InviteService.validateInviteCode(inviteCode);
     
     if (!inviteValidation.valid) {
@@ -1212,7 +1212,7 @@ export const verifyInviteRegistration = async (req, res) => {
  * @param {Object} req - Express 請求對象
  * @param {Object} res - Express 響應對象
  */
-export const registerWithInvite = async (req, res) => {
+const registerWithInvite = async (req, res) => {
   const { inviteCode, email, password, username } = req.body;
 
   try {
@@ -1226,7 +1226,7 @@ export const registerWithInvite = async (req, res) => {
     }
 
     // 2. 驗證邀請碼
-    const InviteService = (await import('../services/invite.service.js')).default;
+    const InviteService = require('../services/invite.service.js');
     const inviteValidation = await InviteService.validateInviteCode(inviteCode);
     
     if (!inviteValidation.valid) {
@@ -1361,4 +1361,18 @@ export const registerWithInvite = async (req, res) => {
       error: { code: 'INTERNAL_SERVER_ERROR', details: error.message }
     });
   }
+};
+
+module.exports = {
+  registerUser,
+  forgotPassword,
+  resetPassword,
+  loginUser,
+  sendEmailVerification,
+  verifyEmail,
+  resendVerification,
+  getEmailVerificationStatus,
+  verifyAndRegister,
+  verifyInviteRegistration,
+  registerWithInvite
 };

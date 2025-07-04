@@ -1,7 +1,7 @@
-import express from 'express';
-import LaborAdvisorController from '../controllers/labor-advisor.controller.js';
-import { protectAdmin } from '../middlewares/admin-auth.middleware.js';
-import { validateLaborAdvisor, validateAdvisorUpdate } from '../validations/labor-advisor.validation.js';
+const express = require('express');
+const LaborAdvisorController = require('../controllers/labor-advisor.controller.js');
+const { protectAdmin } = require('../middlewares/admin-auth.middleware.js');
+const { validateLaborAdvisor, validateAdvisorUpdate } = require('../validations/labor-advisor.validation.js');
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ const router = express.Router();
  * @route   GET /api/v1/labor-advisors
  * @desc    获取劳资顾问列表
  * @access  Admin
- * @params  ?page=1&limit=20&region=台北市&specialty=labor_contract&status=active&search=张三
+ * @params  ?page=1&limit=20&region=台北�?specialty=labor_contract&status=active&search=张三
  */
 router.get('/',
   protectAdmin,
@@ -27,7 +27,7 @@ router.get('/',
  * @route   GET /api/v1/labor-advisors/search
  * @desc    搜索可用顾问（用于指派）
  * @access  Admin  
- * @params  ?region=台北市&specialty=labor_contract&available=true
+ * @params  ?region=台北�?specialty=labor_contract&available=true
  */
 router.get('/search',
   protectAdmin,
@@ -38,8 +38,7 @@ router.get('/search',
  * @route   GET /api/v1/labor-advisors/statistics
  * @desc    获取劳资顾问统计数据
  * @access  Admin
- * @params  ?region=台北市
- */
+ * @params  ?region=台北�? */
 router.get('/statistics',
   protectAdmin,
   LaborAdvisorController.getAdvisorStatistics
@@ -79,8 +78,7 @@ router.put('/:id',
 
 /**
  * @route   PUT /api/v1/labor-advisors/:id/toggle-status
- * @desc    切换劳资顾问状态（激活/停用）
- * @access  Admin
+ * @desc    切换劳资顾问状态（激�?停用�? * @access  Admin
  */
 router.put('/:id/toggle-status',
   protectAdmin,
@@ -101,8 +99,7 @@ router.delete('/:id',
 
 /**
  * @route   PUT /api/v1/labor-advisors/assign/:consultationId
- * @desc    手动指派顾问到咨询案件
- * @access  Admin
+ * @desc    手动指派顾问到咨询案�? * @access  Admin
  */
 router.put('/assign/:consultationId',
   protectAdmin,
@@ -121,12 +118,11 @@ router.post('/auto-assign/:consultationId',
 
 /**
  * @route   GET /api/v1/labor-advisors/assignment-history/:consultationId
- * @desc    获取咨询案件的指派历史
- * @access  Admin
+ * @desc    获取咨询案件的指派历�? * @access  Admin
  */
 router.get('/assignment-history/:consultationId',
   protectAdmin,
   LaborAdvisorController.getAssignmentHistory
 );
 
-export default router; 
+module.exports = router; 

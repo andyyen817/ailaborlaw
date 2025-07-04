@@ -1,40 +1,32 @@
-import Conversation from '../models/conversation.model.js';
-import Message from '../models/message.model.js';
-import User from '../models/user.model.js';
-import n8nService from '../services/n8n.service.js';
-import logger from '../utils/logger.js';
+const Conversation = require('../models/conversation.model.js');
+const Message = require('../models/message.model.js');
+const User = require('../models/user.model.js');
+const n8nService = require('../services/n8n.service.js');
+const logger = require('../utils/logger.js');
 
 /**
- * 聊天控制器
- * 实现完整的聊天会话和消息管理功能
- * 集成N8N AI服务和现有认证系统
- */
-
-// ================== 会话管理功能 ==================
-
-/**
- * 创建新聊天会话
+ * Create a new chat session
  * POST /api/v1/chat/sessions
  */
-export const createSession = async (req, res) => {
+const createSession = async (req, res) => {
   try {
     const userId = req.user.id;
     const { title } = req.body;
 
-    logger.info(`用户创建新会话`, { userId, title });
+    logger.info(`User creating new session`, { userId, title });
 
-    // 创建新会话
+    // Create new conversation
     const conversation = new Conversation({
       userId,
-      title: title || '新的劳法咨询'
+      title: title || 'New Labor Law Consultation'
     });
 
     await conversation.save();
 
-    // 返回成功响应
+    // Return success response
     res.status(201).json({
       success: true,
-      message: '会话创建成功',
+      message: 'Session created successfully',
       data: {
         sessionId: conversation.sessionId,
         title: conversation.title,
@@ -45,14 +37,14 @@ export const createSession = async (req, res) => {
       }
     });
 
-    logger.info(`会话创建成功`, { 
+    logger.info(`Session created successfully`, { 
       userId, 
       sessionId: conversation.sessionId,
       title: conversation.title 
     });
 
   } catch (error) {
-    logger.error(`创建会话失败: ${error.message}`, { 
+    logger.error(`Create session failed: ${error.message}`, { 
       userId: req.user?.id, 
       error: error.stack 
     });
@@ -61,7 +53,7 @@ export const createSession = async (req, res) => {
       success: false,
       error: {
         code: 'CHAT_007',
-        message: '创建会话失败',
+        message: 'Failed to create session',
         details: error.message
       }
     });
@@ -69,10 +61,10 @@ export const createSession = async (req, res) => {
 };
 
 /**
- * 获取用户会话列表
+ * Get user session list
  * GET /api/v1/chat/sessions
  */
-export const getUserSessions = async (req, res) => {
+const getUserSessions = async (req, res) => {
   try {
     const userId = req.user.id;
     const {
@@ -81,20 +73,20 @@ export const getUserSessions = async (req, res) => {
       search = ''
     } = req.query;
 
-    // 参数验证
+    // Parameter validation
     const pageNum = Math.max(1, parseInt(page));
     const limitNum = Math.min(50, Math.max(1, parseInt(limit)));
     const skip = (pageNum - 1) * limitNum;
 
-    logger.info(`获取用户会话列表`, { userId, page: pageNum, limit: limitNum, search });
+    logger.info(`Getting user session list`, { userId, page: pageNum, limit: limitNum, search });
 
-    // 构建查询条件
+    // Build query conditions
     const query = { userId };
     if (search.trim()) {
       query.title = { $regex: search.trim(), $options: 'i' };
     }
 
-    // 执行查询
+    // Execute query
     const [sessions, totalCount] = await Promise.all([
       Conversation.find(query)
         .sort({ lastMessageAt: -1 })
@@ -104,7 +96,7 @@ export const getUserSessions = async (req, res) => {
       Conversation.countDocuments(query)
     ]);
 
-    // 计算分页信息
+    // Calculate pagination info
     const totalPages = Math.ceil(totalCount / limitNum);
     const hasNextPage = pageNum < totalPages;
     const hasPrevPage = pageNum > 1;
@@ -123,14 +115,14 @@ export const getUserSessions = async (req, res) => {
       }
     });
 
-    logger.info(`获取会话列表成功`, { 
+    logger.info(`Get session list success`, { 
       userId, 
       sessionCount: sessions.length, 
       totalCount 
     });
 
   } catch (error) {
-    logger.error(`获取会话列表失败: ${error.message}`, { 
+    logger.error(`Get session list failed: ${error.message}`, { 
       userId: req.user?.id, 
       error: error.stack 
     });
@@ -139,7 +131,7 @@ export const getUserSessions = async (req, res) => {
       success: false,
       error: {
         code: 'CHAT_008',
-        message: '获取会话列表失败',
+        message: 'Failed to get session list',
         details: error.message
       }
     });
@@ -147,29 +139,29 @@ export const getUserSessions = async (req, res) => {
 };
 
 /**
- * 获取会话详情和消息
+ * Get session detail and messages
  * GET /api/v1/chat/sessions/:sessionId
  */
-export const getSessionDetail = async (req, res) => {
+const getSessionDetail = async (req, res) => {
   try {
     const userId = req.user.id;
     const { sessionId } = req.params;
 
-    logger.info(`获取会话详情`, { userId, sessionId });
+    logger.info(`Getting session detail`, { userId, sessionId });
 
-    // 验证会话权限
+    // Validate session permission
     const conversation = await Conversation.findOne({ sessionId, userId });
     if (!conversation) {
       return res.status(404).json({
         success: false,
         error: {
           code: 'CHAT_001',
-          message: '会话不存在'
+          message: 'Session not found'
         }
       });
     }
 
-    // 获取会话消息
+    // Get session messages
     const messages = await Message.getSessionMessages(sessionId, { limit: 100 });
 
     res.json({
@@ -188,14 +180,14 @@ export const getSessionDetail = async (req, res) => {
       }
     });
 
-    logger.info(`获取会话详情成功`, { 
+    logger.info(`Get session detail success`, { 
       userId, 
       sessionId, 
       messageCount: messages.length 
     });
 
   } catch (error) {
-    logger.error(`获取会话详情失败: ${error.message}`, { 
+    logger.error(`Get session detail failed: ${error.message}`, { 
       userId: req.user?.id, 
       sessionId: req.params?.sessionId, 
       error: error.stack 
@@ -205,7 +197,7 @@ export const getSessionDetail = async (req, res) => {
       success: false,
       error: {
         code: 'CHAT_009',
-        message: '获取会话详情失败',
+        message: 'Failed to get session detail',
         details: error.message
       }
     });
@@ -213,55 +205,127 @@ export const getSessionDetail = async (req, res) => {
 };
 
 /**
- * 更新会话标题
+ * Update session title
  * PUT /api/v1/chat/sessions/:sessionId
  */
-export const updateSessionTitle = async (req, res) => {
+const updateSessionTitle = async (req, res) => {
   try {
     const userId = req.user.id;
     const { sessionId } = req.params;
     const { title } = req.body;
 
-    // 参数验证
-    if (!title || title.trim().length === 0) {
+    logger.info(`Updating session title`, { userId, sessionId, newTitle: title });
+
+    // Validate input
+    if (!title || typeof title !== 'string' || title.trim().length === 0) {
       return res.status(400).json({
         success: false,
         error: {
-          code: 'CHAT_010',
-          message: '会话标题不能为空'
+          code: 'CHAT_004',
+          message: 'Invalid title format'
         }
       });
     }
 
-    logger.info(`更新会话标题`, { userId, sessionId, newTitle: title });
+    // Find and update session
+    const conversation = await Conversation.findOneAndUpdate(
+      { sessionId, userId },
+      { title: title.trim() },
+      { new: true, runValidators: true }
+    );
 
-    // 验证会话权限并更新
-    const conversation = await Conversation.findOne({ sessionId, userId });
     if (!conversation) {
       return res.status(404).json({
         success: false,
         error: {
           code: 'CHAT_001',
-          message: '会话不存在'
+          message: 'Session not found'
         }
       });
     }
 
-    await conversation.updateTitle(title.trim());
-
     res.json({
       success: true,
-      message: '会话标题更新成功',
+      message: 'Session title updated successfully',
       data: {
         sessionId: conversation.sessionId,
         title: conversation.title
       }
     });
 
-    logger.info(`会话标题更新成功`, { userId, sessionId, title: conversation.title });
+    logger.info(`Session title updated successfully`, { 
+      userId, 
+      sessionId, 
+      newTitle: conversation.title 
+    });
 
   } catch (error) {
-    logger.error(`更新会话标题失败: ${error.message}`, { 
+    logger.error(`Update session title failed: ${error.message}`, { 
+      userId: req.user?.id, 
+      sessionId: req.params?.sessionId, 
+      error: error.stack 
+    });
+
+    res.status(500).json({
+      success: false,
+      error: {
+        code: 'CHAT_010',
+        message: 'Failed to update session title',
+        details: error.message
+      }
+    });
+  }
+};
+
+/**
+ * Delete a session
+ * DELETE /api/v1/chat/sessions/:sessionId
+ */
+const deleteSession = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { sessionId } = req.params;
+
+    logger.info(`Deleting session`, { userId, sessionId });
+
+    // Soft delete conversation
+    const conversation = await Conversation.findOneAndUpdate(
+      { sessionId, userId, status: { $ne: 'deleted' } },
+      { 
+        status: 'deleted',
+        deletedAt: new Date()
+      },
+      { new: true }
+    );
+
+    if (!conversation) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: 'CHAT_001',
+          message: 'Session not found or already deleted'
+        }
+      });
+    }
+
+    // Soft delete associated messages
+    await Message.updateMany(
+      { sessionId },
+      { 
+        status: 'deleted',
+        deletedAt: new Date()
+      }
+    );
+
+    res.json({
+      success: true,
+      message: 'Session deleted successfully'
+    });
+
+    logger.info(`Session deleted successfully`, { userId, sessionId });
+
+  } catch (error) {
+    logger.error(`Delete session failed: ${error.message}`, { 
       userId: req.user?.id, 
       sessionId: req.params?.sessionId, 
       error: error.stack 
@@ -271,7 +335,7 @@ export const updateSessionTitle = async (req, res) => {
       success: false,
       error: {
         code: 'CHAT_011',
-        message: '更新会话标题失败',
+        message: 'Failed to delete session',
         details: error.message
       }
     });
@@ -279,52 +343,150 @@ export const updateSessionTitle = async (req, res) => {
 };
 
 /**
- * 删除会话及其所有消息
- * DELETE /api/v1/chat/sessions/:sessionId
+ * Send message and get AI response
+ * POST /api/v1/chat/sessions/:sessionId/messages
  */
-export const deleteSession = async (req, res) => {
+const sendMessage = async (req, res) => {
   try {
     const userId = req.user.id;
     const { sessionId } = req.params;
+    const { content, messageType = 'text' } = req.body;
 
-    logger.info(`删除会话`, { userId, sessionId });
+    logger.info(`Sending message`, { userId, sessionId, messageType });
 
-    // 验证会话权限
-    const conversation = await Conversation.findOne({ sessionId, userId });
+    // Validate input
+    if (!content || typeof content !== 'string' || content.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'CHAT_005',
+          message: 'Message content cannot be empty'
+        }
+      });
+    }
+
+    // Verify conversation exists and belongs to user
+    const conversation = await Conversation.findOne({ 
+      sessionId, 
+      userId,
+      status: { $ne: 'deleted' }
+    });
+
     if (!conversation) {
       return res.status(404).json({
         success: false,
         error: {
           code: 'CHAT_001',
-          message: '会话不存在'
+          message: 'Session not found'
         }
       });
     }
 
-    // 删除相关消息
-    const deletedMessagesResult = await Message.deleteMany({ sessionId });
-    const deletedMessageCount = deletedMessagesResult.deletedCount || 0;
+    // Check user query limit
+    const user = await User.findById(userId);
+    if (!user || user.remainingQueries <= 0) {
+      return res.status(403).json({
+        success: false,
+        error: {
+          code: 'CHAT_002',
+          message: 'Insufficient consultation queries remaining'
+        }
+      });
+    }
 
-    // 删除会话
-    await Conversation.deleteOne({ sessionId, userId });
+    // Create user message
+    const userMessage = new Message({
+      sessionId,
+      userId,
+      content: content.trim(),
+      messageType,
+      sender: 'user'
+    });
 
-    res.json({
-      success: true,
-      message: '会话已删除',
-      data: {
-        deletedSessionId: sessionId,
-        deletedMessages: deletedMessageCount
+    await userMessage.save();
+
+    // Get AI response
+    let aiResponse;
+    try {
+      aiResponse = await n8nService.getAIResponse({
+        sessionId,
+        userMessage: content.trim(),
+        userId
+      });
+    } catch (aiError) {
+      logger.error(`AI service error: ${aiError.message}`, { userId, sessionId });
+      
+      // Create error response message
+      const errorMessage = new Message({
+        sessionId,
+        userId,
+        content: 'Sorry, our AI consultant is temporarily unavailable. Please try again later.',
+        messageType: 'error',
+        sender: 'assistant'
+      });
+      
+      await errorMessage.save();
+      
+      return res.status(500).json({
+        success: false,
+        error: {
+          code: 'CHAT_006',
+          message: 'AI service temporarily unavailable',
+          details: 'Please try again later'
+        }
+      });
+    }
+
+    // Create AI response message
+    const aiMessage = new Message({
+      sessionId,
+      userId,
+      content: aiResponse.content || 'Sorry, I could not generate a response.',
+      messageType: 'text',
+      sender: 'assistant',
+      metadata: {
+        responseTime: aiResponse.responseTime || 0,
+        confidence: aiResponse.confidence || 0
       }
     });
 
-    logger.info(`会话删除成功`, { 
+    await aiMessage.save();
+
+    // Update conversation
+    await conversation.updateLastActivity();
+    await conversation.incrementMessageCount(2); // User + AI messages
+
+    // Decrease user query count
+    await user.decreaseRemainingQueries();
+
+    res.json({
+      success: true,
+      message: 'Message sent successfully',
+      data: {
+        userMessage: {
+          id: userMessage._id,
+          content: userMessage.content,
+          sender: userMessage.sender,
+          timestamp: userMessage.createdAt
+        },
+        aiMessage: {
+          id: aiMessage._id,
+          content: aiMessage.content,
+          sender: aiMessage.sender,
+          timestamp: aiMessage.createdAt
+        },
+        remainingQueries: user.remainingQueries - 1
+      }
+    });
+
+    logger.info(`Message exchange completed`, { 
       userId, 
-      sessionId, 
-      deletedMessages: deletedMessageCount 
+      sessionId,
+      remainingQueries: user.remainingQueries - 1
     });
 
   } catch (error) {
-    logger.error(`删除会话失败: ${error.message}`, { 
+    logger.error(`Send message failed: ${error.message}`, { 
       userId: req.user?.id, 
       sessionId: req.params?.sessionId, 
       error: error.stack 
@@ -334,230 +496,7 @@ export const deleteSession = async (req, res) => {
       success: false,
       error: {
         code: 'CHAT_012',
-        message: '删除会话失败',
-        details: error.message
-      }
-    });
-  }
-};
-
-// ================== 消息管理功能 ==================
-
-/**
- * 发送用户消息并获取AI回复 - 核心功能
- * POST /api/v1/chat/sessions/:sessionId/messages
- */
-export const sendMessage = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const { sessionId } = req.params;
-    const { content, messageType = 'question' } = req.body;
-
-    // 参数验证
-    if (!content || content.trim().length === 0) {
-      return res.status(400).json({
-        success: false,
-        error: {
-          code: 'CHAT_003',
-          message: '消息内容不能为空'
-        }
-      });
-    }
-
-    if (content.length > 5000) {
-      return res.status(400).json({
-        success: false,
-        error: {
-          code: 'CHAT_003',
-          message: '消息内容过长，最多5000字符'
-        }
-      });
-    }
-
-    logger.info(`发送消息`, { 
-      userId, 
-      sessionId, 
-      contentLength: content.length, 
-      messageType 
-    });
-
-    // 验证会话权限
-    const conversation = await Conversation.findOne({ sessionId, userId });
-    if (!conversation) {
-      return res.status(404).json({
-        success: false,
-        error: {
-          code: 'CHAT_001',
-          message: '会话不存在'
-        }
-      });
-    }
-
-    // 获取最近消息作为上下文
-    const recentMessages = await Message.find({ sessionId })
-      .sort({ createdAt: -1 })
-      .limit(10)
-      .select('role content createdAt');
-
-    // 创建用户消息
-    const userMessage = new Message({
-      sessionId,
-      userId,
-      role: 'user',
-      content: content.trim(),
-      metadata: {
-        messageType
-      }
-    });
-
-    await userMessage.save();
-
-    // 设置第一个问题（用于自动生成标题）
-    if (conversation.messageCount === 0) {
-      await conversation.setFirstQuestion(content.trim());
-    }
-
-    // 更新会话消息统计
-    await conversation.incrementMessageCount('user');
-
-    // 调用AI服务获取回复
-    let aiResponse;
-    let aiMessage;
-
-    try {
-      const aiContext = {
-        sessionId,
-        userId,
-        recentMessages: recentMessages.reverse() // 按时间正序
-      };
-
-      aiResponse = await n8nService.sendToAI(content.trim(), aiContext);
-
-      // 创建AI回复消息
-      aiMessage = new Message({
-        sessionId,
-        userId,
-        role: 'ai',
-        content: aiResponse.content,
-        metadata: {
-          processingTime: aiResponse.processingTime,
-          n8nResponse: aiResponse.rawResponse,
-          references: aiResponse.references,
-          qualityScore: aiResponse.qualityScore
-        }
-      });
-
-      await aiMessage.save();
-
-      // 更新会话统计
-      await conversation.incrementMessageCount('ai');
-
-      logger.info(`AI回复成功`, { 
-        userId, 
-        sessionId, 
-        processingTime: aiResponse.processingTime,
-        referencesCount: aiResponse.references.length 
-      });
-
-    } catch (aiError) {
-      logger.error(`AI服务调用失败: ${aiError.message}`, { 
-        userId, 
-        sessionId, 
-        error: aiError.stack 
-      });
-
-      // AI服务失败时返回错误，但用户消息已保存
-      return res.status(500).json({
-        success: false,
-        error: {
-          code: 'CHAT_004',
-          message: 'AI服务暂时不可用，请稍后再试',
-          details: aiError.message
-        },
-        data: {
-          userMessage: {
-            messageId: userMessage.messageId,
-            role: userMessage.role,
-            content: userMessage.content,
-            status: userMessage.status,
-            createdAt: userMessage.createdAt
-          }
-        }
-      });
-    }
-
-    // 扣减用户咨询次数（在成功获取AI回复后）
-    try {
-      const user = await User.findById(userId);
-      if (user && user.profile.remainingQueries > 0) {
-        user.profile.remainingQueries -= 1;
-        await user.save();
-        logger.info(`咨询次数扣减成功`, { 
-          userId, 
-          remainingQueries: user.profile.remainingQueries 
-        });
-      }
-    } catch (quotaError) {
-      logger.error(`扣减咨询次数失败: ${quotaError.message}`, { 
-        userId, 
-        error: quotaError.stack 
-      });
-      // 次数扣减失败不影响聊天功能，只记录日志
-    }
-
-    // 获取用户剩余次数
-    const updatedUser = await User.findById(userId).select('profile.remainingQueries');
-    const remainingQueries = updatedUser?.profile?.remainingQueries || 0;
-
-    // 返回成功响应
-    res.json({
-      success: true,
-      message: '消息发送成功',
-      data: {
-        userMessage: {
-          messageId: userMessage.messageId,
-          role: userMessage.role,
-          content: userMessage.content,
-          status: userMessage.status,
-          createdAt: userMessage.createdAt
-        },
-        aiResponse: {
-          messageId: aiMessage.messageId,
-          role: aiMessage.role,
-          content: aiMessage.content,
-          status: aiMessage.status,
-          processingTime: aiMessage.metadata.processingTime,
-          references: aiMessage.metadata.references,
-          createdAt: aiMessage.createdAt
-        },
-        remainingQueries,
-        sessionUpdated: {
-          messageCount: conversation.messageCount + 2,
-          lastMessageAt: aiMessage.createdAt
-        }
-      }
-    });
-
-    logger.info(`消息发送完成`, { 
-      userId, 
-      sessionId, 
-      userMessageId: userMessage.messageId,
-      aiMessageId: aiMessage.messageId,
-      remainingQueries 
-    });
-
-  } catch (error) {
-    logger.error(`发送消息失败: ${error.message}`, { 
-      userId: req.user?.id, 
-      sessionId: req.params?.sessionId, 
-      error: error.stack 
-    });
-
-    res.status(500).json({
-      success: false,
-      error: {
-        code: 'CHAT_013',
-        message: '发送消息失败',
+        message: 'Failed to send message',
         details: error.message
       }
     });
@@ -565,10 +504,10 @@ export const sendMessage = async (req, res) => {
 };
 
 /**
- * 获取会话消息列表
+ * Get messages for a session
  * GET /api/v1/chat/sessions/:sessionId/messages
  */
-export const getMessages = async (req, res) => {
+const getMessages = async (req, res) => {
   try {
     const userId = req.user.id;
     const { sessionId } = req.params;
@@ -578,52 +517,51 @@ export const getMessages = async (req, res) => {
       before = null
     } = req.query;
 
-    logger.info(`获取消息列表`, { userId, sessionId, page, limit, before });
+    logger.info(`Getting messages`, { userId, sessionId, page, limit });
 
-    // 验证会话权限
-    const conversation = await Conversation.findOne({ sessionId, userId });
+    // Verify conversation permission
+    const conversation = await Conversation.findOne({ 
+      sessionId, 
+      userId,
+      status: { $ne: 'deleted' }
+    });
+
     if (!conversation) {
       return res.status(404).json({
         success: false,
         error: {
           code: 'CHAT_001',
-          message: '会话不存在'
+          message: 'Session not found'
         }
       });
     }
 
-    // 获取消息
-    const messages = await Message.getSessionMessages(sessionId, {
-      page: parseInt(page),
-      limit: Math.min(100, parseInt(limit)),
-      beforeTimestamp: before
-    });
+    // Get messages with pagination
+    const options = {
+      page: Math.max(1, parseInt(page)),
+      limit: Math.min(100, Math.max(1, parseInt(limit))),
+      before: before ? new Date(before) : null
+    };
 
-    // 计算是否还有更多消息
-    const totalMessages = await Message.countDocuments({ sessionId });
-    const currentTotal = messages.length;
-    const hasMore = (parseInt(page) * parseInt(limit)) < totalMessages;
+    const messages = await Message.getSessionMessages(sessionId, options);
 
     res.json({
       success: true,
       data: {
         messages,
-        pagination: {
-          currentPage: parseInt(page),
-          totalMessages,
-          hasMore
-        }
+        sessionId,
+        hasMore: messages.length === options.limit
       }
     });
 
-    logger.info(`获取消息列表成功`, { 
+    logger.info(`Get messages success`, { 
       userId, 
       sessionId, 
       messageCount: messages.length 
     });
 
   } catch (error) {
-    logger.error(`获取消息列表失败: ${error.message}`, { 
+    logger.error(`Get messages failed: ${error.message}`, { 
       userId: req.user?.id, 
       sessionId: req.params?.sessionId, 
       error: error.stack 
@@ -632,10 +570,20 @@ export const getMessages = async (req, res) => {
     res.status(500).json({
       success: false,
       error: {
-        code: 'CHAT_014',
-        message: '获取消息列表失败',
+        code: 'CHAT_013',
+        message: 'Failed to get messages',
         details: error.message
       }
     });
   }
+};
+
+module.exports = {
+  createSession,
+  getUserSessions,
+  getSessionDetail,
+  updateSessionTitle,
+  deleteSession,
+  sendMessage,
+  getMessages
 }; 

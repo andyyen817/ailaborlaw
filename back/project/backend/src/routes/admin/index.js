@@ -5,7 +5,7 @@ import adminManagerRoutes from './admin-manager.routes.js';
 import adminChatRoutes from './chat.admin.routes.js'; // 聊天管理路由
 import adminEmailRoutes from './email.admin.routes.js'; // 郵件管理路由
 import systemSettingsRoutes from './system-settings.routes.js'; // 系统设置管理路由
-import laborAdvisorRoutes from '../labor-advisor.routes.js'; // 劳资顾问管理路由
+// // import laborAdvisorRoutes from '../labor-advisor.routes.js'; // 劳资顾问管理路由 (暫時註釋)
 // import consultationRoutes from './consultation.routes.js'; // 示例
 // import expertRoutes from './expert.routes.js'; // 示例
 // import statisticsRoutes from './statistics.routes.js'; // 示例
@@ -20,11 +20,11 @@ const router = express.Router();
 router.use('/auth', adminAuthRoutes);
 
 // 用户管理路由 (/api/v1/admin/users)
-// 注意: backend_tasks_auth_user_management.md 中用户管理路由前缀是 /api/v1/admin/users
-// 所以这里 user.routes.js 应该只包含 users 路径下的具体端点 (如 GET /, POST /, GET /:userId 等)
+// 注意: backend_tasks_auth_user_management.md 中用户管理路由前缀�?/api/v1/admin/users
+// 所以这�?user.routes.js 应该只包�?users 路径下的具体端点 (�?GET /, POST /, GET /:userId �?
 router.use('/users', adminUserRoutes);
 
-// 管理員管理路由 (/api/v1/admin/managers)
+// 管理員管理路�?(/api/v1/admin/managers)
 router.use('/managers', adminManagerRoutes);
 
 // 聊天管理路由 (/api/v1/admin/chat)
@@ -34,12 +34,12 @@ router.use('/chat', adminChatRoutes);
 router.use('/emails', adminEmailRoutes);
 
 // 劳资顾问管理路由 (/api/v1/admin/labor-advisors)
-router.use('/labor-advisors', laborAdvisorRoutes);
+// router.use('/labor-advisors', laborAdvisorRoutes);
 
 // 系统设置管理路由 (/api/v1/admin/system-settings)
 router.use('/system-settings', systemSettingsRoutes);
 
-// 后续将添加更多路由:
+// 后续将添加更多路�?
 // router.use('/consultations', consultationRoutes);
 // router.use('/experts', expertRoutes);
 // router.use('/statistics', statisticsRoutes);

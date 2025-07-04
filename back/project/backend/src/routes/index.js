@@ -2,12 +2,12 @@ const express = require('express');
 const authRoutes = require('./auth.routes.js');
 const userRoutes = require('./user.routes.js');
 const queryRoutes = require('./query.routes.js');
-const inviteRoutes = require('./invite.routes.js');
-const laborAdvisorRoutes = require('./labor-advisor.routes.js');
-const expertConsultationRoutes = require('./expert-consultation.routes.js');
+// const inviteRoutes = require('./invite.routes.js'); // 暫時註釋，有編碼問題
+// const laborAdvisorRoutes = require('./labor-advisor.routes.js'); // 暫時註釋，控制器有ES模塊問題
+// const expertConsultationRoutes = require('./expert-consultation.routes.js'); // 暫時註釋，控制器有ES模塊問題
 const chatRoutes = require('./chat.routes.js');
-const testRoutes = require('./test.routes.js');
-const adminRoutes = require('./admin/index.js');
+// const testRoutes = require('./test.routes.js'); // 暫時註釋，有ES import問題
+// const adminRoutes = require('./admin/index.js'); // 暫時註釋，使用ES模塊語法
 
 const logger = require('../utils/logger.js');
 
@@ -79,28 +79,28 @@ try {
   logger.info('✅ 查詢路由已載入');
 
   // 邀請相關路由
-  mainRouter.use('/invites', inviteRoutes);
-  logger.info('✅ 邀請路由已載入');
+  // mainRouter.use('/invites', inviteRoutes);
+  // logger.info('✅ 邀請路由已載入');
 
-  // 勞基法顧問相關路由
-  mainRouter.use('/labor-advisors', laborAdvisorRoutes);
-  logger.info('✅ 勞基法顧問路由已載入');
+  // 勞基法顧問相關路由 (暫時註釋，控制器有ES模塊問題)
+  // mainRouter.use('/labor-advisors', laborAdvisorRoutes);
+  // logger.info('✅ 勞基法顧問路由已載入');
 
   // 專家諮詢相關路由
-  mainRouter.use('/expert-consultations', expertConsultationRoutes);
-  logger.info('✅ 專家諮詢路由已載入');
+  // mainRouter.use('/expert-consultations', expertConsultationRoutes);
+  // logger.info('✅ 專家諮詢路由已載入');
 
   // 聊天相關路由
   mainRouter.use('/chat', chatRoutes);
   logger.info('✅ 聊天路由已載入');
 
   // 測試相關路由
-  mainRouter.use('/test', testRoutes);
-  logger.info('✅ 測試路由已載入');
+  // mainRouter.use('/test', testRoutes);
+  // logger.info('✅ 測試路由已載入');
 
-  // 管理員相關路由
-  mainRouter.use('/admin', adminRoutes);
-  logger.info('✅ 管理員路由已載入');
+  // 管理員相關路由 (暫時註釋，使用ES模塊語法)
+  // mainRouter.use('/admin', adminRoutes);
+  // logger.info('✅ 管理員路由已載入');
 
 } catch (error) {
   logger.error('❌ 路由載入失敗:', error);

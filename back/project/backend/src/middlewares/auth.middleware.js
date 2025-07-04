@@ -1,7 +1,7 @@
-import { getTokenFromHeader, verifyToken } from '../utils/jwt.js';
-import User from '../models/user.model.js';
-import Admin from '../models/admin.model.js';
-import logger from '../utils/logger.js';
+const { getTokenFromHeader, verifyToken } = require('../utils/jwt.js');
+const User = require('../models/user.model.js');
+const Admin = require('../models/admin.model.js');
+const logger = require('../utils/logger.js');
 
 /**
  * 認證中間件 (Protect Route)
@@ -10,7 +10,7 @@ import logger from '../utils/logger.js';
  * @param {Object} res - Express響應對象
  * @param {Function} next - Express下一個中間件函數
  */
-export const protect = async (req, res, next) => {
+const protect = async (req, res, next) => {
   let token;
   try {
     token = getTokenFromHeader(req);
@@ -112,7 +112,7 @@ export const protect = async (req, res, next) => {
  * @param {Object} res - Express響應對象
  * @param {Function} next - Express下一個中間件函數
  */
-export const isAdmin = (req, res, next) => {
+const isAdmin = (req, res, next) => {
   if (req.user && req.user.userType === 'admin') {
     next();
   } else {
@@ -132,7 +132,7 @@ export const isAdmin = (req, res, next) => {
  * @param {Object} res - Express響應對象
  * @param {Function} next - Express下一個中間件函數
  */
-export const isHR = (req, res, next) => {
+const isHR = (req, res, next) => {
   if (req.user && req.user.userType === 'hr') {
     next();
   } else {
@@ -152,7 +152,7 @@ export const isHR = (req, res, next) => {
  * @param {Object} res - Express響應對象
  * @param {Function} next - Express下一個中間件函數
  */
-export const isEmployer = (req, res, next) => {
+const isEmployer = (req, res, next) => {
   if (req.user && req.user.userType === 'employer') {
     next();
   } else {
@@ -172,7 +172,7 @@ export const isEmployer = (req, res, next) => {
  * @param {Object} res - Express響應對象
  * @param {Function} next - Express下一個中間件函數
  */
-export const isEmployee = (req, res, next) => {
+const isEmployee = (req, res, next) => {
   if (req.user && req.user.userType === 'employee') {
     next();
   } else {
@@ -191,7 +191,7 @@ export const isEmployee = (req, res, next) => {
  * @param {String[]} roles - 允許的角色數組
  * @returns {Function} Express中間件函數
  */
-export const hasRole = (roles) => {
+const hasRole = (roles) => {
   return (req, res, next) => {
     if (!Array.isArray(roles) || roles.length === 0) {
       logger.error('hasRole 中間件配置錯誤: roles 必須是非空數組');
@@ -222,7 +222,7 @@ export const hasRole = (roles) => {
  * @param {Object} res - Express響應對象
  * @param {Function} next - Express下一個中間件函數
  */
-export const hasRemainingQueries = async (req, res, next) => {
+const hasRemainingQueries = async (req, res, next) => {
   try {
     // 用戶ID應該已經在protect中間件中設置
     const userId = req.user.id;
@@ -271,7 +271,7 @@ export const hasRemainingQueries = async (req, res, next) => {
  * @param {String} userIdParam - 路由參數名稱，包含要訪問的用戶ID (默認為 'userId')
  * @returns {Function} Express中間件函數
  */
-export const isSelfOrAdmin = (userIdParam = 'userId') => {
+const isSelfOrAdmin = (userIdParam = 'userId') => {
   return (req, res, next) => {
     const targetUserId = req.params[userIdParam];
     
@@ -310,7 +310,7 @@ export const isSelfOrAdmin = (userIdParam = 'userId') => {
  * @param {Object} res - Express響應對象
  * @param {Function} next - Express下一個中間件函數
  */
-export const protectOptional = async (req, res, next) => {
+const protectOptional = async (req, res, next) => {
   let token;
   try {
     token = getTokenFromHeader(req);
@@ -389,7 +389,7 @@ export const protectOptional = async (req, res, next) => {
  * @param {Object} res - Express响应对象
  * @param {Function} next - Express下一个中间件函数
  */
-export const authenticateToken = async (req, res, next) => {
+const authenticateToken = async (req, res, next) => {
   let token;
   try {
     token = getTokenFromHeader(req);
@@ -499,7 +499,7 @@ export const authenticateToken = async (req, res, next) => {
  * @param {String[]} roles - 允许的角色数组
  * @returns {Function} Express中间件函数
  */
-export const requireRole = (roles) => {
+const requireRole = (roles) => {
   return (req, res, next) => {
     // 确保用户已经通过认证
     if (!req.user) {
@@ -541,3 +541,17 @@ export const requireRole = (roles) => {
 // 注意：原有的 isSuperAdmin 和 hasPermission 中間件已移除，
 // 因為它們依賴於當前任務範圍之外的 Admin 模型和特定權限系統。
 // 如果將來需要，可以基於 User 模型的 userType 或更複雜的角色權限系統重新實現。
+
+module.exports = {
+  protect,
+  isAdmin,
+  isHR,
+  isEmployer,
+  isEmployee,
+  hasRole,
+  hasRemainingQueries,
+  isSelfOrAdmin,
+  protectOptional,
+  authenticateToken,
+  requireRole
+};

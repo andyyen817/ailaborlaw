@@ -1,8 +1,8 @@
-import express from 'express';
-import ExpertConsultationController from '../controllers/expert-consultation.controller.js';
-import { protect, isAdmin, protectOptional } from '../middlewares/auth.middleware.js';
-import { protectAdmin } from '../middlewares/admin-auth.middleware.js';
-import { validateExpertConsultation, validateConsultationUpdate } from '../validations/expert-consultation.validation.js';
+const express = require('express');
+const ExpertConsultationController = require('../controllers/expert-consultation.controller.js');
+const { protect, isAdmin, protectOptional } = require('../middlewares/auth.middleware.js');
+const { protectAdmin } = require('../middlewares/admin-auth.middleware.js');
+const { validateExpertConsultation, validateConsultationUpdate } = require('../validations/expert-consultation.validation.js');
 
 const router = express.Router();
 
@@ -26,8 +26,7 @@ router.post('/',
 
 /**
  * @route   GET /api/v1/expert-consultations/user/:userId
- * @desc    获取用户的咨询申请列表
- * @access  Private (需要认证)
+ * @desc    获取用户的咨询申请列�? * @access  Private (需要认�?
  */
 router.get('/user/:userId',
   protect,
@@ -37,7 +36,7 @@ router.get('/user/:userId',
 /**
  * @route   GET /api/v1/expert-consultations/:id
  * @desc    获取单个咨询申请详情
- * @access  Private (只能查看自己的申请)
+ * @access  Private (只能查看自己的申�?
  */
 router.get('/:id',
   protect,
@@ -47,7 +46,7 @@ router.get('/:id',
 /**
  * @route   PUT /api/v1/expert-consultations/:id/cancel
  * @desc    取消咨询申请
- * @access  Private (只能取消自己的申请)
+ * @access  Private (只能取消自己的申�?
  */
 router.put('/:id/cancel',
   protect,
@@ -58,7 +57,7 @@ router.put('/:id/cancel',
 
 /**
  * @route   GET /api/v1/expert-consultations/admin/list
- * @desc    获取所有咨询申请列表 (管理员)
+ * @desc    获取所有咨询申请列�?(管理�?
  * @access  Admin (支持Admin模型认证)
  */
 router.get('/admin/list',
@@ -68,9 +67,9 @@ router.get('/admin/list',
 
 /**
  * @route   GET /api/v1/expert-consultations/admin/statistics
- * @desc    获取咨询统计数据 (管理员)
+ * @desc    获取咨询统计数据 (管理�?
  * @access  Admin (支持Admin模型认证)
- * @note    必须放在动态参数路由之前，避免被 /admin/:id 拦截
+ * @note    必须放在动态参数路由之前，避免�?/admin/:id 拦截
  */
 router.get('/admin/statistics',
   protectAdmin, // 修改：支持Admin模型认证
@@ -79,7 +78,7 @@ router.get('/admin/statistics',
 
 /**
  * @route   GET /api/v1/expert-consultations/admin/:id
- * @desc    获取咨询申请详情 (管理员)
+ * @desc    获取咨询申请详情 (管理�?
  * @access  Admin (支持Admin模型认证)
  */
 router.get('/admin/:id',
@@ -89,7 +88,7 @@ router.get('/admin/:id',
 
 /**
  * @route   PUT /api/v1/expert-consultations/admin/:id
- * @desc    更新咨询申请 (管理员)
+ * @desc    更新咨询申请 (管理�?
  * @access  Admin (支持Admin模型认证)
  */
 router.put('/admin/:id',
@@ -100,7 +99,7 @@ router.put('/admin/:id',
 
 /**
  * @route   DELETE /api/v1/expert-consultations/admin/:id
- * @desc    删除咨询申请 (管理员)
+ * @desc    删除咨询申请 (管理�?
  * @access  Admin (支持Admin模型认证)
  */
 router.delete('/admin/:id',
@@ -108,4 +107,4 @@ router.delete('/admin/:id',
   ExpertConsultationController.deleteConsultation
 );
 
-export default router; 
+module.exports = router; 

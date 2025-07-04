@@ -1,9 +1,9 @@
-import express from 'express';
-import { body, param, query } from 'express-validator';
-import { asyncHandler } from '../middlewares/async.middleware.js';
-import { authenticateToken, requireRole } from '../middlewares/auth.middleware.js';
-import { validateRequest } from '../middlewares/validation.middleware.js';
-import QueryService from '../services/query.service.js';
+const express = require('express');
+const { body, param, query } = require('express-validator');
+const { asyncHandler } = require('../middlewares/async.middleware.js');
+const { authenticateToken, requireRole } = require('../middlewares/auth.middleware.js');
+const { validateRequest } = require('../middlewares/validation.middleware.js');
+const QueryService = require('../services/query.service.js');
 
 const router = express.Router();
 
@@ -376,4 +376,4 @@ router.get('/my-today-count',
   })
 );
 
-export default router; 
+module.exports = router; 
