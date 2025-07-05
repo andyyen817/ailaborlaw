@@ -96,3 +96,7 @@
 {"level":"info","message":"📚 API文檔: http://localhost:7070/api/v1/docs","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:56"}
 {"level":"info","message":"🏥 健康檢查: http://localhost:7070/api/v1/health","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:56"}
 {"level":"info","message":"🧪 測試頁面: http://localhost:7070/test-api.html","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:56"}
+{"level":"error","message":"JWT_SECRET 未配置，无法生成访问令牌。","service":"ai-labor-advisor","timestamp":"2025-07-05 09:35:59"}
+{"level":"error","message":"JWT_SECRET 未配置，无法生成访问令牌。","service":"ai-labor-advisor","timestamp":"2025-07-05 09:44:41"}
+{"level":"error","message":"JWT_SECRET 未配置，无法生成访问令牌。","service":"ai-labor-advisor","timestamp":"2025-07-05 09:44:50"}
+{"level":"error","message":"JWT_SECRET 未配置，无法生成访问令牌。","service":"ai-labor-advisor","timestamp":"2025-07-05 09:46:01"}
