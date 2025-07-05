@@ -82,3 +82,17 @@
 {"level":"info","message":"📚 API文檔: http://localhost:7070/api/v1/docs","service":"ai-labor-advisor","timestamp":"2025-07-05 08:20:19"}
 {"level":"info","message":"🏥 健康檢查: http://localhost:7070/api/v1/health","service":"ai-labor-advisor","timestamp":"2025-07-05 08:20:19"}
 {"level":"info","message":"🧪 測試頁面: http://localhost:7070/test-api.html","service":"ai-labor-advisor","timestamp":"2025-07-05 08:20:19"}
+{"baseUrl":"https://andyaiauto.zeabur.app/webhook/5cc76a7e-2e6a-4428-ba09-cbe8f8598f9b/chat","fullUrl":"https://andyaiauto.zeabur.app/webhook/5cc76a7e-2e6a-4428-ba09-cbe8f8598f9b/chat?action=sendMessage","level":"info","maxRetries":3,"message":"N8N服务初始化完成","service":"ai-labor-advisor","timeout":30000,"timestamp":"2025-07-05 08:32:54"}
+{"level":"info","message":"✅ 認證路由已載入","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:54"}
+{"level":"info","message":"✅ 用戶路由已載入","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:54"}
+{"level":"info","message":"✅ 查詢路由已載入","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:54"}
+{"level":"info","message":"✅ 聊天路由已載入","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:54"}
+{"level":"info","message":"🚀 主API路由配置完成","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:54"}
+{"level":"info","message":"🔄 正在連接MongoDB數據庫...","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:54"}
+{"level":"info","message":"數據庫地址: mongodb://***@dbconn.sealosgzg.site:46203/ai_law_advisor_dev?directConnection=true&authSource=admin","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:54"}
+{"level":"info","message":"✅ MongoDB數據庫連接成功","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:56"}
+{"level":"info","message":"🚀 服務器運行在端口 7070","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:56"}
+{"level":"info","message":"🌐 API地址: http://localhost:7070","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:56"}
+{"level":"info","message":"📚 API文檔: http://localhost:7070/api/v1/docs","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:56"}
+{"level":"info","message":"🏥 健康檢查: http://localhost:7070/api/v1/health","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:56"}
+{"level":"info","message":"🧪 測試頁面: http://localhost:7070/test-api.html","service":"ai-labor-advisor","timestamp":"2025-07-05 08:32:56"}
