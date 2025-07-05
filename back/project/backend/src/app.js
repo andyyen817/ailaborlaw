@@ -22,6 +22,23 @@ const { handleMongoDBErrors } = require('./middlewares/error-handlers.middleware
 
 const app = express();
 
+// 數據庫連接狀態
+let dbConnected = false;
+
+// 異步初始化數據庫連接（不阻塞應用啟動）
+async function initializeDatabase() {
+  try {
+    logger.info('🔄 正在初始化數據庫連接...');
+    await connectDatabase();
+    dbConnected = true;
+    logger.info('✅ 數據庫連接初始化成功');
+  } catch (error) {
+    logger.error('❌ 數據庫連接初始化失敗:', error);
+    dbConnected = false;
+    // 不退出進程，讓Express應用繼續運行
+  }
+}
+
 // 中間件配置
 app.use(helmet());
 app.use(cors({
@@ -84,9 +101,10 @@ app.get('/', (req, res) => {
     status: 'running',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
-    database: 'MongoDB (Connected)',
+    database: dbConnected ? 'MongoDB (Connected)' : 'MongoDB (Disconnected)',
     api_docs: '/api/v1/docs',
-    health_check: '/api/v1/health'
+    health_check: '/api/v1/health',
+    diagnosis: '/api/v1/diagnosis'
   });
 });
 
@@ -100,6 +118,50 @@ app.get('/api/v1/health', (req, res) => {
     memory: process.memoryUsage(),
     version: '1.0.0'
   });
+});
+
+// 診斷端點（不需要數據庫連接）
+app.get('/api/v1/diagnosis', (req, res) => {
+  res.json({
+    success: true,
+    timestamp: new Date().toISOString(),
+    status: {
+      express: '✅ 運行中',
+      database: dbConnected ? '✅ 已連接' : '❌ 未連接',
+      environment: process.env.NODE_ENV || 'development'
+    },
+    environment: {
+      NODE_ENV: process.env.NODE_ENV || 'undefined',
+      MONGODB_URI: process.env.MONGODB_URI ? '✅ 已設置' : '❌ 未設置',
+      JWT_SECRET: process.env.JWT_SECRET ? '✅ 已設置' : '❌ 未設置',
+      PORT: process.env.PORT || '7070 (default)'
+    },
+    routes: {
+      auth: '/api/v1/auth/login',
+      health: '/api/v1/health',
+      diagnosis: '/api/v1/diagnosis'
+    }
+  });
+});
+
+// 數據庫狀態檢查中間件（在API路由之前）
+app.use('/api/v1', (req, res, next) => {
+  // 診斷端點和健康檢查不需要數據庫連接
+  if (req.path === '/diagnosis' || req.path === '/health') {
+    return next();
+  }
+  
+  if (!dbConnected) {
+    return res.status(503).json({
+      success: false,
+      message: '數據庫連接未就緒，請稍後再試',
+      error: {
+        code: 'DATABASE_NOT_READY',
+        details: 'Database connection is not established yet.'
+      }
+    });
+  }
+  next();
 });
 
 // API 路由
@@ -188,9 +250,7 @@ app.use((error, req, res, next) => {
 // 資料庫連接和伺服器啟動
 async function startServer() {
   try {
-    // 連接資料庫
-    await connectDatabase();
-    
+    // 先啟動Express服務器
     const PORT = process.env.PORT || 7070;
     
     app.listen(PORT, () => {
@@ -199,7 +259,11 @@ async function startServer() {
       logger.info(`📚 API文檔: http://localhost:${PORT}/api/v1/docs`);
       logger.info(`🏥 健康檢查: http://localhost:${PORT}/api/v1/health`);
       logger.info(`🧪 測試頁面: http://localhost:${PORT}/test-api.html`);
+      logger.info(`🔍 診斷端點: http://localhost:${PORT}/api/v1/diagnosis`);
     });
+
+    // 然後異步初始化數據庫
+    await initializeDatabase();
 
   } catch (error) {
     logger.error('❌ 服務器啟動失敗:', error);
@@ -209,6 +273,12 @@ async function startServer() {
 
 // 為 Vercel 導出應用
 module.exports = app;
+
+// Vercel環境下立即初始化數據庫
+if (process.env.VERCEL) {
+  logger.info('🔍 檢測到Vercel環境，立即初始化數據庫');
+  initializeDatabase();
+}
 
 // 如果直接運行此文件，啟動服務器
 if (require.main === module) {
